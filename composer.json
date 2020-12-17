@@ -12,7 +12,7 @@
     }
   ],
   "require": {
-    "partymeister/core": "0.6.*",
+    "partymeister/core": "^1.0",
     "pusher/pusher-php-server": "^4.1",
     "php-webdriver/webdriver": "^1.8",
     "beyondcode/laravel-websockets": "^1.4"
