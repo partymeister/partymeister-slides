@@ -18,12 +18,11 @@
     "beyondcode/laravel-websockets": "^1.4"
   },
   "autoload": {
-    "classmap": [
-      "database"
-    ],
     "psr-4": {
       "Partymeister\\Slides\\": "src",
-      "Tests\\Partymeister\\Slides\\": "tests"
+      "Tests\\Partymeister\\Slides\\": "tests",
+      "Partymeister\\Slides\\Database\\Factories\\": "database/factories/",
+      "Partymeister\\Slides\\Database\\Seeders\\": "database/seeders/"
     }
   },
   "extra": {

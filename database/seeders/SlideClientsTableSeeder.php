@@ -1,8 +1,11 @@
 <?php
 
+namespace Partymeister\Slides\Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Partymeister\Competitions\Models\OptionGroup;
 use Partymeister\Core\Models\User;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class AccountsTableSeeder
