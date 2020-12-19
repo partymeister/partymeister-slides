@@ -41,9 +41,8 @@
         </li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="slidemeister-form" role="tabpanel">
-            <div class="container">
-                <br>
+        <div class="tab-pane active" id="slidemeister-form" style="position: relative; height: 88vh; overflow: scroll;" role="tabpanel">
+            <div class="container mt-3" style="position: absolute; top: 0;">
                 {!! form_start($form, ['id' => 'slide-template-form']) !!}
                 {!! form_row($form->name) !!}
                 {!! form_row($form->template_for) !!}
@@ -58,11 +57,13 @@
 
             </div>
         </div>
-        <div class="tab-pane" id="slidemeister-blocks" role="tabpanel">
+        <div class="tab-pane" id="slidemeister-blocks" style="position: relative; height: 88vh;" role="tabpanel">
             <motor-media-mediapool></motor-media-mediapool>
         </div>
     </div>
 @endsection
+@section('right-sidebar-header')<h5 class="pb-0 mb-0">Properties and Media</h5>@endsection
+
 
 @section('view_scripts')
     <script>

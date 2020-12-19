@@ -1,6 +1,6 @@
 <template>
     <div class="tab-pane active" id="partymeister-slides" role="tabpanel">
-        <div class="container" style="overflow:scroll; position: absolute; top: 50px; bottom: 0;">
+        <div class="container mt-3" style="overflow:scroll; position: absolute; top: 0; bottom: 0;">
             <div class="form-group">
                 <label class="control-label">
                     {{ $t('motor-backend.backend.categories.category') }}
@@ -35,17 +35,6 @@
 
 <script>
     import draggable from 'vuedraggable';
-    import {Ziggy} from 'ziggy-js';
-    import route from 'ziggy-js/src/js/route';
-
-    window.Ziggy = Ziggy;
-
-    Vue.mixin({
-        methods: {
-            route: route
-        }
-    });
-
 
     export default {
         name: 'partymeister-slides-mediapool',

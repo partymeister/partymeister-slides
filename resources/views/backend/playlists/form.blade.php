@@ -34,13 +34,14 @@
             <a class="nav-link" data-toggle="tab" href="#motor-mediapool" role="tab">Mediapool</a>
         </li>
     </ul>
-    <div class="tab-content">
+    <div class="tab-content" style="position: relative; height: 88vh; overflow: scroll;">
         <partymeister-slides-mediapool :preview-image="'{{url('/images/generating-preview.png')}}'"></partymeister-slides-mediapool>
         <div class="tab-pane" id="motor-mediapool" role="tabpanel">
             <motor-media-mediapool></motor-media-mediapool>
         </div>
     </div>
 @endsection
+@section('right-sidebar-header')<h5 class="pb-0 mb-0">Slides and Media</h5>@endsection
 @section('view_scripts')
     <script>
 

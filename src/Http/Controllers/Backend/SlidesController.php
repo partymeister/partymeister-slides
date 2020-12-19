@@ -83,7 +83,7 @@ class SlidesController extends Controller
      * @param Model $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create(Model $record)
+    public function create($record) // no type hint here because it can either be Slide or SlideTemplate and PHP doesn't support union types
     {
         if ($record instanceof SlideTemplate) {
             $record->slide_template_id = $record->id;

@@ -1,9 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use Partymeister\Slides\Models\Playlist;
-use Partymeister\Slides\Models\SlideClient;
-
 Route::get('slidemeister-web/{slide_client}',
     '\Partymeister\Slides\Http\Controllers\SlidemeisterWebController@index')->middleware([ 'bindings' ])->name('backend.slidemeister-web.show');
 
@@ -38,6 +34,7 @@ Route::group([
             'slides/{slide}/duplicate',
             'SlidesController@duplicate'
         )->name('slides.duplicate');
+
         Route::get('slides/create/{slide_template}', 'SlidesController@create')->name('slides.create');
 
         Route::resource('slide_templates', 'SlideTemplatesController')->except('show');

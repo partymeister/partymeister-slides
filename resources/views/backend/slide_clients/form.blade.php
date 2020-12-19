@@ -38,6 +38,7 @@
 @section ('right-sidebar')
     <motor-media-mediapool></motor-media-mediapool>
 @endsection
+@section('right-sidebar-header')<h5 class="pb-0 mb-0">Media</h5>@endsection
 @section('view_scripts')
     <link type="text/css" rel="stylesheet" href="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.css">
     <script type="application/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.js"></script>

@@ -1,6 +1,5 @@
 window.Vue = require('vue');
 
-
 Vue.prototype.$eventHub = new Vue();
 
 require('./main');
