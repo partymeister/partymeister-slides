@@ -59,7 +59,7 @@ class CreatePlaylistsTable extends Migration
      */
     public function down()
     {
+		Schema::dropIfExists('playlist_items');
         Schema::dropIfExists('playlists');
-        Schema::dropIfExists('playlist_items');
     }
 }

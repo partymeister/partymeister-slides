@@ -29,6 +29,7 @@ class AddSlideIdToPlaylistItems extends Migration
     public function down()
     {
         Schema::table('playlist_items', function (Blueprint $table) {
+        	$table->dropForeign(['slide_id']);
             $table->dropColumn('slide_id');
         });
     }

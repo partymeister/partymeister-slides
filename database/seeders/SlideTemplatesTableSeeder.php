@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Partymeister\Competitions\Models\OptionGroup;
 use Partymeister\Core\Models\User;
 
