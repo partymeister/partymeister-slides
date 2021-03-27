@@ -22,6 +22,7 @@ return [
         'timetable'           => 'Timetable',
         'participants'        => 'Participants',
         'prizegiving'         => 'Prizegiving',
-        'comments'            => 'Competition comments'
+        'comments'            => 'Competition comments',
+        'end_of_pg'           => 'End of prizegiving',
     ]
 ];

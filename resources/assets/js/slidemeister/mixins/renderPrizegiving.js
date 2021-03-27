@@ -36,8 +36,8 @@ export default {
                     entryElement = baseEntryElement;
                     rankElement = baseRankElement;
                 } else {
-                    entryElement = this.cloneElement(baseEntryElement, index, 60 * index);
-                    rankElement = this.cloneElement(baseRankElement, index, 60 * index);
+                    entryElement = this.cloneElement(baseEntryElement, index, 50 * index);
+                    rankElement = this.cloneElement(baseRankElement, index, 50 * index);
                 }
 
                 this.replaceContent(entryElement, ['title', 'author'], [row.title, row.author], true);
