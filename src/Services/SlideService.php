@@ -64,15 +64,21 @@ class SlideService extends BaseService
 
     protected function generatePreview()
     {
-        $browser = new ScreenshotHelper();
-        $browser->screenshot(config('app.url').route('backend.slides.show', [ $this->record->id ], false).'?preview=true',
-            storage_path().'/preview_'.$this->record->id.'.png');
+        if (config('partymeister-slides.screenshots')) {
+            $browser = new ScreenshotHelper();
+        }
+
+        if (isset($browser)) {
+            $browser->screenshot(config('app.url').route('backend.slides.show', [ $this->record->id ], false).'?preview=true',
+                storage_path().'/preview_'.$this->record->id.'.png');
+        }
 
         $this->record->clearMediaCollection('preview');
         $this->record->clearMediaCollection('final');
 
-        $this->record->addMedia(storage_path() . '/preview_' . $this->record->id . '.png')
-                     ->toMediaCollection('preview', 'media');
+        if (is_file(storage_path().'/preview_'.$this->record->id.'.png')) {
+            $this->record->addMedia(storage_path().'/preview_'.$this->record->id.'.png')->toMediaCollection('preview', 'media');
+        }
     }
 
 
