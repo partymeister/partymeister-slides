@@ -64,7 +64,7 @@ export default {
         addListeners() {
             this.server.channel('partymeister.slidemeister-web.' + this.serverConfiguration.client)
                 .listen('.Partymeister\\Slides\\Events\\PlayNowRequest', (e) => {
-                    // console.log('PlayNowRequest incoming');
+                    console.log('PlayNowRequest incoming');
                     if (this.playlist.id != undefined) {
                         // console.log('Playlist is running - saving position and playlist');
                         this.playlistSaved = this.playlist;
@@ -89,7 +89,7 @@ export default {
                     this.seekToPlayNow();
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistNextRequest', (e) => {
-                    // console.log('PlaylistNextRequest incoming');
+                    console.log('PlaylistNextRequest incoming');
                     if (this.playlist.id == undefined) {
                         // console.log('No playlist is running, aborting');
                     } else {
@@ -99,7 +99,7 @@ export default {
                     this.updateStatus();
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistPreviousRequest', (e) => {
-                    // console.log('PlaylistPreviousRequest incoming');
+                    console.log('PlaylistPreviousRequest incoming');
                     if (this.playlist.id == undefined) {
                         // console.log('No playlist is running, aborting');
                     } else {
@@ -119,7 +119,7 @@ export default {
                     }, 2000);
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistRequest', (e) => {
-                    // console.log('PlaylistRequest incoming');
+                    console.log('PlaylistRequest incoming');
 
                     let found = false;
                     for (const [index, p] of this.cachedPlaylists.entries()) {
@@ -149,14 +149,14 @@ export default {
                         }
                     }
                     if (!found) {
-                        // console.log('Playlist does not exist yet. Caching it');
+                        console.log('Playlist does not exist yet. Caching it');
                         this.cachedPlaylists.push(e.playlist);
                         localStorage.setItem('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
                     }
                     this.updateStatus();
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistSeekRequest', (e) => {
-                    // console.log('PlaylistSeekRequest incoming');
+                    console.log('PlaylistSeekRequest incoming');
 
                     let found = false;
                     for (const [index, p] of this.cachedPlaylists.entries()) {
@@ -180,7 +180,7 @@ export default {
                         }
                     }
                     if (!found) {
-                        // console.log('Playlist not found, cannot seek to index ' + e.index);
+                        console.log('Playlist not found, cannot seek to index ' + e.index);
                     }
                     this.updateStatus();
                 });

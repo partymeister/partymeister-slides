@@ -7,6 +7,9 @@
                 gl_Position = vec4( position, 1.0 );
             }
         </script>
+      <div id="cables-container" :style="{'zoom': zoom/2}">
+        <canvas id="glcanvas" style="margin-top: 0 !important;"/>
+      </div>
         <div id="shader-container" :style="{'zoom': zoom/2}"></div>
         <div class="debug alert alert-danger d-none">
             CachedPlaylists: {{ cachedPlaylists.length }}<br>
@@ -22,7 +25,7 @@
 
         <template v-if="(currentItem != null || this.playNow) && current != undefined">
             <img v-if="current.type == 'image' && current.cached_html_final == undefined"
-                 :src="current.file.file_original" class="img-fluid slide current" :style="{'opacity': currentOpacity}">
+                 :src="current.file ? current.file.file_original : ''" class="img-fluid slide current" :style="{'opacity': currentOpacity}">
             <div v-if="current.type == 'image' && current.cached_html_final != ''"
                  v-html="current.cached_html_final" class="slidemeister-instance slide current"
                  :style="{'opacity': currentOpacity, 'zoom': zoom}"></div>
@@ -33,7 +36,7 @@
         </template>
         <template v-if="(previousItem != null || this.playNow) && previous != undefined">
             <img v-if="previous.type == 'image' && previous.cached_html_final === undefined"
-                 :src="previous.file.file_original" class="img-fluid slide previous">
+                 :src="current.file ? current.file.file_original : ''" class="img-fluid slide previous">
             <div v-if="previous.type == 'image' && previous.cached_html_final != ''"
                  v-html="previous.cached_html_final" class="slidemeister-instance slide previous"
                  :style="{'zoom': zoom}"></div>
@@ -43,7 +46,7 @@
         </template>
         <template class="next-item" v-if="(nextItem != null || this.playNow) && next != undefined">
             <img v-if="next.type == 'image' && next.cached_html_final === undefined"
-                 :src="next.file.file_original" class="img-fluid slide next" :style="{'opacity': nextOpacity}">
+                 :src="current.file ? current.file.file_original : ''" class="img-fluid slide next" :style="{'opacity': nextOpacity}">
             <div v-if="next.type == 'image' && next.cached_html_final != ''"
                  v-html="next.cached_html_final" class="slidemeister-instance slide next"
                  :style="{'opacity': nextOpacity, 'zoom': zoom}"></div>
@@ -128,10 +131,10 @@
             };
         },
         mounted() {
-            let shader = new Bonzo();
-            setTimeout(() => {
-                shader.animate();
-            }, 1000);
+          // Cables code goes here
+          //   setTimeout(() => {
+          //     shader.animate();
+          //   }, 1000);
         },
         computed: {
             // a computed getter
@@ -266,7 +269,7 @@
                 this.prepareTransition(currentItem, hard);
             },
             checkVideo() {
-                if (this.current.type === 'video') {
+                if (this.current && this.current.type === 'video') {
                     setTimeout(() => {
                         let currentVideo = document.getElementById("video-current");
                         if (currentVideo != null) {
@@ -321,7 +324,7 @@
                 });
             },
             setSlideTimeout() {
-                if (this.playNow) {
+                if (this.playNow || !this.currentItem) {
                     return;
                 }
                 if (!this.items[this.currentItem].is_advanced_manually) {
@@ -355,6 +358,9 @@
                 window.clearTimeout(this.slideTimeout);
             },
             animateBackground() {
+              if (!this.currentItem) {
+                return;
+              }
                 if (parseInt(this.items[this.currentItem].midi_note) > 0) {
                     if (WebMidi.outputs.length > 0) {
                         WebMidi.outputs[0].playNote(parseInt(this.items[this.currentItem].midi_note), 1, {
@@ -467,7 +473,7 @@
                     element.style.zIndex = 0;
                 });
                 this.fragmentShader = '';
-                this.unloadScene();
+                // this.unloadScene();
 
                 localStorage.clear();
                 this.updateStatus();
@@ -665,6 +671,11 @@
         /*background-color: red;*/
         position: absolute;
         visibility: hidden;
+    }
+    #cables-container {
+      position: absolute;
+      width: 1920px;
+      height: 1080px;
     }
     #shader-container {
         position: absolute;

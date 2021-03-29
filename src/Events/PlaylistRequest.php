@@ -59,6 +59,7 @@ class PlaylistRequest implements ShouldBroadcastNow
         }
         $this->playlist          = $playlistData['data'];
         $this->playlist['items'] = $playlistItems;
+        var_dump($this->playlist);
     }
 
 

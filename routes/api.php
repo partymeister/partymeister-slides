@@ -69,7 +69,7 @@ Route::group([
     'prefix' => 'ajax',
     'as' => 'ajax.',
 ], function () {
-    Route::post('slide_clients/{slide_client}/communication/skip', static function (
+    Route::post('slide_clients/{slide_client}/communication/skip-for-revision', static function (
         Request $request,
         \Partymeister\Slides\Models\SlideClient $client
     ) {
@@ -110,7 +110,7 @@ Route::group([
     'prefix' => 'ajax',
     'as' => 'ajax.',
 ], function () {
-    Route::post('slide_clients/{slide_client}/communication/prizegiving', static function (
+    Route::post('slide_clients/{slide_client}/communication/prizegiving-for-revision', static function (
         Request $request,
         \Partymeister\Slides\Models\SlideClient $client
     ) {
