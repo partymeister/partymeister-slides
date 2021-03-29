@@ -2,12 +2,16 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Partymeister\Slides\Events\PlaylistNextRequest;
+use Partymeister\Slides\Events\PlaylistPreviousRequest;
+use Partymeister\Slides\Events\SiegmeisterRequest;
+use Partymeister\Slides\Services\XMLService;
 
 Route::group([
-    'middleware' => [ 'auth:api', 'bindings', 'permission' ],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix'     => 'api',
-    'as'         => 'api.',
+    'middleware' => ['auth:api', 'bindings', 'permission'],
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'api',
+    'as' => 'api.',
 ], function () {
     Route::resource('slides', 'SlidesController');
     Route::resource('slide_templates', 'SlideTemplatesController');
@@ -16,10 +20,10 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => [ 'bindings' ],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix'     => 'api',
-    'as'         => 'api.',
+    'middleware' => ['bindings'],
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'api',
+    'as' => 'api.',
 ], function () {
     Route::resource('slide_clients', 'SlideClientsController');
 });
@@ -30,10 +34,10 @@ Route::post('ajax/slidemeister-web/{slide_client}/status', function (Request $re
 })->name('ajax.slidemeister-web.status.update');
 
 Route::group([
-    'middleware' => [ 'web', 'web_auth', 'bindings', 'permission' ],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix'     => 'ajax',
-    'as'         => 'ajax.',
+    'middleware' => ['web', 'web_auth', 'bindings', 'permission'],
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'ajax',
+    'as' => 'ajax.',
 ], function () {
     Route::get('transitions', 'TransitionsController@index')->name('transitions.index');
     Route::get('playlists', 'PlaylistsController@show')->name('playlists.index');
@@ -50,11 +54,78 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => [ 'bindings' ],
+    'middleware' => ['bindings'],
     //'namespace'  => '',
-    'prefix'     => 'ajax',
-    'as'         => 'ajax.frontend.',
+    'prefix' => 'ajax',
+    'as' => 'ajax.frontend.',
 ], function () {
-    Route::post('slide_clients/communication/skip-for-revision', 'SlideClients\CommunicationController@skip')->name('slide_clients.communication.skipforrevision');
+    //Route::post('slide_clients/communication/skip-for-revision', 'SlideClients\CommunicationController@skip')->name('slide_clients.communication.skipforrevision');
     Route::get('frontend-playlists/{playlist}', 'Partymeister\Slides\Http\Controllers\Api\PlaylistsController@show')->name('playlists.show');
+});
+
+Route::group([
+    'middleware' => ['bindings'],
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'ajax',
+    'as' => 'ajax.',
+], function () {
+    Route::post('slide_clients/{slide_client}/communication/skip', static function (
+        Request $request,
+        \Partymeister\Slides\Models\SlideClient $client
+    ) {
+
+        session(['screens.active' => $client->id]);
+        if (is_null($client)) {
+            return response()->json(['message' => 'No slide client active'], 400);
+        }
+
+        switch ($client->type) {
+            case 'screens':
+                $result = XMLService::send($request->get('direction'), ['hard' => $request->get('hard')]);
+                if (! $result) {
+                    return response()->json(['result' => $result], 400);
+                } else {
+                    return response()->json(['result' => $result]);
+                }
+            // no break
+            case 'slidemeister-web':
+                switch ($request->get('direction')) {
+                    case 'previous':
+                        event(new PlaylistPreviousRequest($request->get('hard', false)));
+                        break;
+                    case 'next':
+                        event(new PlaylistNextRequest($request->get('hard', false)));
+                        break;
+                }
+
+                return response()->json(['result' => 'Skip event sent']);
+                break;
+        }
+    });
+});
+
+Route::group([
+    'middleware' => ['bindings'],
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'ajax',
+    'as' => 'ajax.',
+], function () {
+    Route::post('slide_clients/{slide_client}/communication/prizegiving', static function (
+        Request $request,
+        \Partymeister\Slides\Models\SlideClient $client
+    ) {
+
+        session(['screens.active' => $client->id]);
+        if (is_null($client)) {
+            return response()->json(['message' => 'No slide client active'], 400);
+        }
+
+        switch ($client->type) {
+            case 'slidemeister-web':
+                event(new SiegmeisterRequest());
+
+                return response()->json(['result' => 'Siegmeister event sent']);
+                break;
+        }
+    });
 });
