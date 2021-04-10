@@ -25,7 +25,7 @@
 
         <template v-if="(currentItem != null || this.playNow) && current != undefined">
             <img v-if="current.type == 'image' && current.cached_html_final == undefined"
-                 :src="current.file ? current.file.file_original : ''" class="img-fluid slide current" :style="{'opacity': currentOpacity}">
+                 :src="playlistImages[this.currentItem] ? playlistImages[this.currentItem].src : current.file.file_original" class="img-fluid slide current" :style="{'opacity': currentOpacity}">
             <div v-if="current.type == 'image' && current.cached_html_final != ''"
                  v-html="current.cached_html_final" class="slidemeister-instance slide current"
                  :style="{'opacity': currentOpacity, 'zoom': zoom}"></div>
@@ -36,7 +36,7 @@
         </template>
         <template v-if="(previousItem != null || this.playNow) && previous != undefined">
             <img v-if="previous.type == 'image' && previous.cached_html_final === undefined"
-                 :src="current.file ? current.file.file_original : ''" class="img-fluid slide previous">
+                 :src="playlistImages[this.previousItem] ? playlistImages[this.previousItem].src : previous.file.file_original" class="img-fluid slide previous">
             <div v-if="previous.type == 'image' && previous.cached_html_final != ''"
                  v-html="previous.cached_html_final" class="slidemeister-instance slide previous"
                  :style="{'zoom': zoom}"></div>
@@ -46,7 +46,7 @@
         </template>
         <template class="next-item" v-if="(nextItem != null || this.playNow) && next != undefined">
             <img v-if="next.type == 'image' && next.cached_html_final === undefined"
-                 :src="current.file ? current.file.file_original : ''" class="img-fluid slide next" :style="{'opacity': nextOpacity}">
+                 :src="playlistImages[this.nextItem] ? playlistImages[this.nextItem].src : next.file.file_original" class="img-fluid slide next" :style="{'opacity': nextOpacity}">
             <div v-if="next.type == 'image' && next.cached_html_final != ''"
                  v-html="next.cached_html_final" class="slidemeister-instance slide next"
                  :style="{'opacity': nextOpacity, 'zoom': zoom}"></div>
@@ -107,6 +107,7 @@
 
                 playlistSaved: {},
                 playlist: {},
+                playlistImages: [],
                 items: [],
                 currentItem: null,
                 previousItem: null,
@@ -196,6 +197,7 @@
                     this.nextItem = 0;
                 }
                 if (this.currentItem === null) {
+                  console.log("set current item");
                     this.currentItem = 0;
                     this.nextItem = 0;
                 }
@@ -219,6 +221,7 @@
                     }, 0);
                 } else {
                     this.currentItem = this.nextItem;
+
                     this.currentOpacity = 1;
                     this.nextOpacity = 0;
                     this.afterSeek();
@@ -324,10 +327,13 @@
                 });
             },
             setSlideTimeout() {
-                if (this.playNow || !this.currentItem) {
+                if (this.playNow || this.currentItem === null) {
+                  console.log("is this playnow?");
+                  console.log(this.currentItem);
                     return;
                 }
                 if (!this.items[this.currentItem].is_advanced_manually) {
+                  console.log("there should be a timeout starting now");
                     // console.log('Setting timeout to ' + this.items[this.currentItem].duration);
                     this.slideTimeout = setTimeout(() => {
                         this.seekToNextItem();
@@ -336,6 +342,7 @@
             },
             setCallbackDelay() {
                 if (this.currentItem === 'playnow') {
+                  console.log("playnow?");
                     return;
                 }
                 if (this.playlist.callbacks !== undefined && this.playlist.callbacks) {
@@ -468,6 +475,7 @@
                 this.cachedPlaylists = [];
                 this.playlist = {};
                 this.items = [];
+                this.playlistImages = [];
                 this.currentItem = null;
                 document.querySelectorAll('canvas').forEach((element) => {
                     element.style.zIndex = 0;
@@ -516,6 +524,19 @@
                 if (playlist !== undefined && playlist != null) {
                     this.playlist = JSON.parse(playlist);
                     this.items = this.playlist.items;
+
+                    // preload images
+                  this.items.forEach((item) => {
+                    if (item.type === 'image') {
+                      let i = new Image();
+                      i.src = item.file.file_original;
+                      this.playlistImages.push(i);
+                      console.log('image preloaded');
+                      console.log(this.playlistImages);
+                    }
+                    this.playlistImages = [];
+                  });
+
                 }
             }
 

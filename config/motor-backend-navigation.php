@@ -8,7 +8,7 @@ return [
             'icon'        => 'fa fa-image',
             'route'       => null,
             'roles'       => [ 'SuperAdmin' ],
-            'permissions' => [ 'partymeister-slides.read' ],
+            'permissions' => [ 'slides.read' ],
             'items'       => [
                 100 => [ // <-- !!! replace 277 with your own sort position !!!
                     'slug'        => 'playlists',
