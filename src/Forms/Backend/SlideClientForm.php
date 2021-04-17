@@ -3,17 +3,13 @@
 namespace Partymeister\Slides\Forms\Backend;
 
 use Kris\LaravelFormBuilder\Form;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
 /**
  * Class SlideClientForm
  * @package Partymeister\Slides\Forms\Backend
  */
-class SlideClientForm extends Form implements HasMedia
+class SlideClientForm extends Form
 {
-    use HasMediaTrait;
-
     /**
      * @return mixed|void
      */

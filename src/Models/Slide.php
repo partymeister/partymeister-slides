@@ -19,9 +19,9 @@ use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
 use Motor\Core\Traits\Searchable;
 use Spatie\Image\Exceptions\InvalidManipulation;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Partymeister\Slides\Models\Slide
@@ -71,7 +71,7 @@ class Slide extends Model implements HasMedia
     use Searchable;
     use Filterable;
     use Blameable, CreatedBy, UpdatedBy, DeletedBy;
-    use HasMediaTrait;
+    use InteractsWithMedia;
 
     /**
      * Columns for the Blameable trait
@@ -119,7 +119,7 @@ class Slide extends Model implements HasMedia
     /**
      * @param Media|null $media
      */
-    public function registerMediaConversions(Media $media = null)
+    public function registerMediaConversions(Media $media = null): void
     {
         try {
             $this->addMediaConversion('thumb')->width(400)->height(400)->nonQueued();
