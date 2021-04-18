@@ -48,6 +48,11 @@ class SlideTemplatesTableSeeder extends Seeder
                 'definitions'  => file_get_contents(__DIR__.'/slide_templates/end.json')
             ],
             [
+                'name'         => 'End of Prizegiving',
+                'template_for' => 'end_of_pg',
+                'definitions'  => file_get_contents(__DIR__.'/slide_templates/prizegiving_end.json')
+            ],
+            [
                 'name'         => 'Competition Entry',
                 'template_for' => 'competition',
                 'definitions'  => file_get_contents(__DIR__.'/slide_templates/competition_entry-2-n.json')
