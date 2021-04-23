@@ -448,6 +448,9 @@ class PlaylistService extends BaseService
      */
     protected function getType($item)
     {
+        if (is_array($item->file)) {
+            return "image";
+        }
         if (in_array($item->file->mime_type, [
             'image/png',
             'image/jpg',
