@@ -13,10 +13,10 @@ Route::group([
     'prefix' => 'api',
     'as' => 'api.',
 ], function () {
-    Route::resource('slides', 'SlidesController');
-    Route::resource('slide_templates', 'SlideTemplatesController');
-    Route::resource('playlists', 'PlaylistsController');
-    Route::resource('transitions', 'TransitionsController');
+    Route::apiResource('slides', 'SlidesController');
+    Route::apiResource('slide_templates', 'SlideTemplatesController');
+    Route::apiResource('playlists', 'PlaylistsController');
+    Route::apiResource('transitions', 'TransitionsController');
 });
 
 Route::group([
@@ -25,7 +25,7 @@ Route::group([
     'prefix' => 'api',
     'as' => 'api.',
 ], function () {
-    Route::resource('slide_clients', 'SlideClientsController');
+    Route::apiResource('slide_clients', 'SlideClientsController');
 });
 
 // FIXME: put this in a controller so we can use route caching
