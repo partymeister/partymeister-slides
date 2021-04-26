@@ -6,20 +6,55 @@ use Motor\Backend\Http\Requests\Request;
 
 /**
  * Class SlideClientRequest
+ *
  * @package Partymeister\Slides\Http\Requests\Backend
  */
 class SlideClientRequest extends Request
 {
-
     /**
      * @OA\Schema(
      *   schema="SlideClientRequest",
      *   @OA\Property(
      *     property="name",
      *     type="string",
-     *     example="Example data"
+     *     example="Main screen"
      *   ),
-     *   required={"name"},
+     *   @OA\Property(
+     *     property="type",
+     *     type="string",
+     *     example="slidemeister-web"
+     *   ),
+     *   @OA\Property(
+     *     property="ip_address",
+     *     type="string",
+     *     example="10.10.10.10"
+     *   ),
+     *   @OA\Property(
+     *     property="port",
+     *     type="string",
+     *     example="80"
+     *   ),
+     *   @OA\Property(
+     *     property="sort_position",
+     *     type="integer",
+     *     example="1"
+     *   ),
+     *   @OA\Property(
+     *     property="configuration",
+     *     type="json",
+     *     example="{}}"
+     *   ),
+     *   @OA\Property(
+     *     property="playlist_id",
+     *     type="integer",
+     *     example="1"
+     *   ),
+     *   @OA\Property(
+     *     property="playlist_item_id",
+     *     type="integer",
+     *     example="1"
+     *   ),
+     *   required={"name", "type"},
      * )
      */
 
@@ -33,7 +68,6 @@ class SlideClientRequest extends Request
         return true;
     }
 
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -42,7 +76,14 @@ class SlideClientRequest extends Request
     public function rules()
     {
         return [
-
+            'name'             => 'required',
+            'type'             => 'required|in:'.trans('partymeister-slides::backend/slide_clients.types'),
+            'ip_address'       => 'nullable',
+            'port'             => 'nullable',
+            'sort_position'    => 'nullable|integer',
+            'configuration'    => 'nullable|json',
+            'playlist_id'      => 'nullable|integer',
+            'playlist_item_id' => 'nullable|integer',
         ];
     }
 }

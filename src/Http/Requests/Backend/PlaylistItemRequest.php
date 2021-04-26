@@ -5,31 +5,21 @@ namespace Partymeister\Slides\Http\Requests\Backend;
 use Motor\Backend\Http\Requests\Request;
 
 /**
- * Class PlaylistRequest
- *
+ * Class PlaylistItemRequest
  * @package Partymeister\Slides\Http\Requests\Backend
  */
-class PlaylistRequest extends Request
+class PlaylistItemRequest extends Request
 {
+
     /**
      * @OA\Schema(
-     *   schema="PlaylistRequest",
+     *   schema="PlaylistItemRequest",
      *   @OA\Property(
      *     property="name",
      *     type="string",
-     *     example="Main rotation"
+     *     example="Example data"
      *   ),
-     *   @OA\Property(
-     *     property="type",
-     *     type="string",
-     *     example="video"
-     *   ),
-     *   @OA\Property(
-     *     property="is_competition",
-     *     type="boolean",
-     *     example="false"
-     *   ),
-     *   required={"name", "type"},
+     *   required={"name"},
      * )
      */
 
@@ -43,6 +33,7 @@ class PlaylistRequest extends Request
         return true;
     }
 
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -51,9 +42,7 @@ class PlaylistRequest extends Request
     public function rules()
     {
         return [
-            'name'           => 'required',
-            'type'           => 'required|in:'.trans('partymeister-slides::backend/playlists.types'),
-            'is_competition' => 'nullable|boolean',
+
         ];
     }
 }

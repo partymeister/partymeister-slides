@@ -6,20 +6,48 @@ use Motor\Backend\Http\Requests\Request;
 
 /**
  * Class SlideRequest
+ *
  * @package Partymeister\Slides\Http\Requests\Backend
  */
 class SlideRequest extends Request
 {
-
     /**
      * @OA\Schema(
      *   schema="SlideRequest",
      *   @OA\Property(
      *     property="name",
      *     type="string",
-     *     example="Example data"
+     *     example="My first slide"
      *   ),
-     *   required={"name"},
+     *   @OA\Property(
+     *     property="slide_template_id",
+     *     type="integer",
+     *     example="1"
+     *   ),
+     *   @OA\Property(
+     *     property="slide_type",
+     *     type="string",
+     *     example="announce"
+     *   ),
+     *   @OA\Property(
+     *     property="category_id",
+     *     type="integer",
+     *     example="1"
+     *   ),
+     *   @OA\Property(
+     *     property="definitions",
+     *     type="json",
+     *     example="{}"
+     *   ),
+     *   @OA\Property(
+     *     property="cached_html_preview",
+     *     type="text",
+     *   ),
+     *   @OA\Property(
+     *     property="cached_html_final",
+     *     type="text",
+     *   ),
+     *   required={"name", "slide_type", "category_id"},
      * )
      */
 
@@ -33,7 +61,6 @@ class SlideRequest extends Request
         return true;
     }
 
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -42,7 +69,13 @@ class SlideRequest extends Request
     public function rules()
     {
         return [
-
+            'name'                => 'required',
+            'slide_template_id'   => 'nullable|integer',
+            'slide_type'          => 'required|in:'.trans('partymeister-slides::backend/slides.slide_types'),
+            'category_id'         => 'required|integer',
+            'definitions'         => 'nullable|json',
+            'cached_html_preview' => 'nullable',
+            'cached_html_final'   => 'nullable',
         ];
     }
 }
