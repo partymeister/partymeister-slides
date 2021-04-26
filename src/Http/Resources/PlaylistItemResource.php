@@ -99,9 +99,12 @@ class PlaylistItemResource extends JsonResource
      */
     public function toArray($request)
     {
+        $comesFromPlaylistEndpoint = ($request->route()
+                                              ->uri() === 'api/playlists') ? true : false;
+
         return [
             'id'                      => (int) $this->id,
-            'playlist'                => new PlaylistResource($this->playlist),
+            'playlist'                => $this->when(! $comesFromPlaylistEndpoint, new PlaylistResource($this->playlist)),
             'type'                    => $this->type,
             'slide_type'              => $this->slide_type,
             'slide'                   => new SlideResource($this->slide),

@@ -44,6 +44,7 @@ class PlaylistResource extends JsonResource
             'name'           => $this->name,
             'type'           => $this->type,
             'is_competition' => (boolean) $this->is_competition,
+            'items'          => PlaylistItemResource::collection($this->items),
         ];
     }
 }
