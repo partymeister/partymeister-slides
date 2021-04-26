@@ -42,7 +42,7 @@ class SlideClientRequest extends Request
      *   @OA\Property(
      *     property="configuration",
      *     type="json",
-     *     example="{}}"
+     *     example="{}"
      *   ),
      *   @OA\Property(
      *     property="playlist_id",

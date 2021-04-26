@@ -45,7 +45,7 @@ class PlaylistItemRequest extends Request
      *     example="1"
      *   ),
      *   @OA\Property(
-     *     property="slide_slidemeister_id",
+     *     property="transition_slidemeister_id",
      *     type="integer",
      *     example="1"
      *   ),
