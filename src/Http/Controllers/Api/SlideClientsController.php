@@ -17,7 +17,7 @@ use Partymeister\Slides\Http\Resources\SlideClientCollection;
 class SlideClientsController extends ApiController
 {
 
-    protected string $modelResource = 'slide_client';
+    //protected string $modelResource = 'slide_client';
 
     /**
      * @OA\Get (

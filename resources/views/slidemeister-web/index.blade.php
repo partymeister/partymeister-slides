@@ -18,20 +18,9 @@
     <slidemeister-connector></slidemeister-connector>
     <slidemeister-viewer :standalone="false"></slidemeister-viewer>
 </div>
-<script type="text/javascript" src="/cables/js/patch.js" async="true"></script>
-<script src="{{mix('js/partymeister-slidemeister-web.js')}}"></script>
 <script>
-    setTimeout(() => {
-        CABLES.patch = new CABLES.Patch(
-            {
-                patch: CABLES.exportedPatch,
-                prefixAssetPath: '/cables/',
-                glCanvasId: 'glcanvas',
-                glCanvasResizeToParent: true,
-                onError: err => alert(err),
-            });
-
-    }, 100);
+    const TOKEN = '{{$api_token}}';
 </script>
+<script src="{{mix('js/partymeister-slidemeister-web.js')}}"></script>
 </body>
 </html>

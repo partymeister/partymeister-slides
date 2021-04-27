@@ -18,16 +18,15 @@ use Partymeister\Slides\Models\Transition;
 
 /**
  * Class PlaylistService
+ *
  * @package Partymeister\Slides\Services
  */
 class PlaylistService extends BaseService
 {
-
     /**
      * @var string
      */
     protected $model = Playlist::class;
-
 
     /**
      * @param $data
@@ -39,7 +38,8 @@ class PlaylistService extends BaseService
     {
         ini_set('max_execution_time', 1200);
         // 1. find out if we have an existing playlist and delete it
-        $playlists = Playlist::where('name', 'Prizegiving: Actual prizegiving with winners')->get();
+        $playlists = Playlist::where('name', 'Prizegiving: Actual prizegiving with winners')
+                             ->get();
         foreach ($playlists as $playlist) {
             foreach ($playlist->items as $item) {
                 if ($item->slide != null) {
@@ -50,9 +50,13 @@ class PlaylistService extends BaseService
         }
 
         // 2. create a slide category for this competition in case it does not exist yet
-        $category = Category::where('scope', 'slides')->where('name', 'Prizegiving (actual)')->first();
+        $category = Category::where('scope', 'slides')
+                            ->where('name', 'Prizegiving (actual)')
+                            ->first();
         if (is_null($category)) {
-            $rootNode = Category::where('scope', 'slides')->where('_lft', 1)->first();
+            $rootNode = Category::where('scope', 'slides')
+                                ->where('_lft', 1)
+                                ->first();
             if (is_null($rootNode)) {
                 die("Root node for slide category tree does not exist");
             }
@@ -60,11 +64,14 @@ class PlaylistService extends BaseService
             $c->scope = 'slides';
             $c->name = 'Prizegiving (actual)';
             $rootNode->appendNode($c);
-            $category = Category::where('scope', 'slides')->where('name', 'Prizegiving (actual)')->first();
+            $category = Category::where('scope', 'slides')
+                                ->where('name', 'Prizegiving (actual)')
+                                ->first();
         }
 
         // 4. create playlist
-        $playlist = Playlist::where('name', 'Prizegiving: Actual prizegiving with winners')->first();
+        $playlist = Playlist::where('name', 'Prizegiving: Actual prizegiving with winners')
+                            ->first();
         if (is_null($playlist)) {
             $playlist = new Playlist();
         }
@@ -92,7 +99,8 @@ class PlaylistService extends BaseService
             $duration = config('partymeister-competitions-slides.'.$type.'.duration', 20);
             $isAdvancedManually = config('partymeister-competitions-slides.'.$type.'.is_advanced_manually', true);
 
-            $transition = Transition::where('identifier', $transitionIdentifier)->first();
+            $transition = Transition::where('identifier', $transitionIdentifier)
+                                    ->first();
 
             $callback = null;
 
@@ -140,16 +148,16 @@ class PlaylistService extends BaseService
 
             // 7. generate slides
             if (isset($browser)) {
-                $browser->screenshot(config('app.url').route('backend.slides.show', [ $s->id ], false).'?preview=true',
-                    storage_path().'/preview_'.$slideName.'.png');
-                $browser->screenshot(config('app.url').route('backend.slides.show', [ $s->id ], false),
-                    storage_path().'/final_'.$slideName.'.png');
+                $browser->screenshot(config('app.url').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png');
+                $browser->screenshot(config('app.url').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png');
             }
 
             $s->clearMediaCollection('preview');
             $s->clearMediaCollection('final');
-            $s->addMedia(storage_path().'/preview_'.$slideName.'.png')->toMediaCollection('preview', 'media');
-            $s->addMedia(storage_path() . '/final_' . $slideName . '.png')->toMediaCollection('final', 'media');
+            $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
+              ->toMediaCollection('preview', 'media');
+            $s->addMedia(storage_path().'/final_'.$slideName.'.png')
+              ->toMediaCollection('final', 'media');
 
             $slideIds[] = $s->id;
         }
@@ -158,7 +166,6 @@ class PlaylistService extends BaseService
         //    event(new SlideCollectionSaved(collect($chunk), 'slides'));
         //}
     }
-
 
     /**
      * @param $competition
@@ -172,7 +179,8 @@ class PlaylistService extends BaseService
         ini_set('max_execution_time', 1200);
 
         // 1. find out if we have an existing playlist and delete it
-        $playlists = Playlist::where('name', 'Competition: '.$competition->name)->get();
+        $playlists = Playlist::where('name', 'Competition: '.$competition->name)
+                             ->get();
         foreach ($playlists as $playlist) {
             foreach ($playlist->items as $item) {
                 if ($item->slide != null) {
@@ -183,9 +191,13 @@ class PlaylistService extends BaseService
         }
 
         // 2. create a slide category for this competition in case it does not exist yet
-        $competitionCategory = Category::where('scope', 'slides')->where('name', 'Competitions')->first();
+        $competitionCategory = Category::where('scope', 'slides')
+                                       ->where('name', 'Competitions')
+                                       ->first();
         if (is_null($competitionCategory)) {
-            $rootNode = Category::where('scope', 'slides')->where('_lft', 1)->first();
+            $rootNode = Category::where('scope', 'slides')
+                                ->where('_lft', 1)
+                                ->first();
             if (is_null($rootNode)) {
                 die("Root node for slide category tree does not exist");
             }
@@ -194,9 +206,13 @@ class PlaylistService extends BaseService
             $c->name = 'Competitions';
             $rootNode->appendNode($c);
         }
-        $category = Category::where('scope', 'slides')->where('name', $competition->name)->first();
+        $category = Category::where('scope', 'slides')
+                            ->where('name', $competition->name)
+                            ->first();
         if (is_null($category)) {
-            $rootNode = Category::where('scope', 'slides')->where('name', 'Competitions')->first();
+            $rootNode = Category::where('scope', 'slides')
+                                ->where('name', 'Competitions')
+                                ->first();
             $category = new Category();
             $category->scope = 'slides';
             $category->name = $competition->name;
@@ -230,7 +246,12 @@ class PlaylistService extends BaseService
             $duration = config('partymeister-competitions-slides.'.$type.'.duration', 20);
             $isAdvancedManually = config('partymeister-competitions-slides.'.$type.'.is_advanced_manually', true);
 
-            $transition = Transition::where('identifier', $transitionIdentifier)->first();
+            $transition = Transition::where('identifier', $transitionIdentifier)
+                                    ->first();
+
+            $transitionSlidemeister = Transition::where('client_type', 'slidemeister-web')
+                                                ->where('identifier', 255)
+                                                ->first();
 
             $callback = null;
 
@@ -282,6 +303,9 @@ class PlaylistService extends BaseService
                     if (! is_null($transition)) {
                         $i->transition_id = $transition->id;
                     }
+                    if (! is_null($transitionSlidemeister)) {
+                        $i->transition_slidemeister_id = $transitionSlidemeister->id;
+                    }
                     $i->transition_duration = $transitionDuration;
                     $i->duration = $duration;
                     if (! is_null($callback)) {
@@ -294,20 +318,20 @@ class PlaylistService extends BaseService
 
                     // 7. generate slides
                     if (isset($browser)) {
-                        $browser->screenshot(config('app.url').route('backend.slides.show', [ $s->id ], false).'?preview=true',
-                            storage_path().'/preview_'.$slideName.'.png');
-                        $browser->screenshot(config('app.url').route('backend.slides.show', [ $s->id ], false),
-                            storage_path().'/final_'.$slideName.'.png');
+                        $browser->screenshot(config('app.url').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png');
+                        $browser->screenshot(config('app.url').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png');
                     }
 
                     $s->clearMediaCollection('preview');
                     $s->clearMediaCollection('final');
 
                     if (is_file(storage_path().'/preview_'.$slideName.'.png')) {
-                        $s->addMedia(storage_path().'/preview_'.$slideName.'.png')->toMediaCollection('preview', 'media');
+                        $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
+                          ->toMediaCollection('preview', 'media');
                     }
                     if (is_file(storage_path().'/final_'.$slideName.'.png')) {
-                        $s->addMedia(storage_path().'/final_'.$slideName.'.png')->toMediaCollection('final', 'media');
+                        $s->addMedia(storage_path().'/final_'.$slideName.'.png')
+                          ->toMediaCollection('final', 'media');
                     }
                     break;
                 case 'video_1':
@@ -329,12 +353,14 @@ class PlaylistService extends BaseService
                     //}
 
                     // Load file and check mime type
-                    $file = File::find($d[ 'file_id' ]);
+                    $file = File::find($d['file_id']);
                     if (is_null($file)) {
                         break;
                     }
 
-                    if ($file->media()->first() != null && $file->media()->first()->mime_type == 'video/mp4') {
+                    if ($file->media()
+                             ->first() != null && $file->media()
+                                                       ->first()->mime_type == 'video/mp4') {
                         $type = 'video';
                     } else {
                         $type = 'image';
@@ -355,7 +381,7 @@ class PlaylistService extends BaseService
 
                     // Create file association
                     $fa = new FileAssociation();
-                    $fa->file_id = $d[ 'file_id' ];
+                    $fa->file_id = $d['file_id'];
                     $fa->model_type = get_class($i);
                     $fa->model_id = $i->id;
                     $fa->identifier = 'playlist_item';
@@ -365,29 +391,28 @@ class PlaylistService extends BaseService
         }
     }
 
-
     public function filters()
     {
         $this->filter->add(new SelectRenderer('type'))
-            ->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))
-            ->setEmptyOption('-- '.trans('partymeister-slides::backend/playlists.type').' --')
-            ->setOptions(trans('partymeister-slides::backend/playlists.types'));
+                     ->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))
+                     ->setEmptyOption('-- '.trans('partymeister-slides::backend/playlists.type').' --')
+                     ->setOptions(trans('partymeister-slides::backend/playlists.types'));
     }
-
 
     public function afterCreate()
     {
         $this->savePlaylistItems();
     }
 
-
     protected function savePlaylistItems()
     {
         $items = json_decode($this->request->get('playlist_items'));
 
         // Delete all playlist items for this playlist
-        foreach ($this->record->items()->get() as $item) {
-            $item->file_association()->delete();
+        foreach ($this->record->items()
+                              ->get() as $item) {
+            $item->file_association()
+                 ->delete();
             $item->delete();
         }
 
@@ -397,8 +422,10 @@ class PlaylistService extends BaseService
             $i->playlist_id = $this->record->id;
             $i->type = (isset($item->type) ? $item->type : $this->getType($item));
 
-            $transition = Transition::where('identifier', $item->transition_identifier)->first();
-            $transitionSlidemeister = Transition::where('identifier', $item->transition_slidemeister_identifier)->first();
+            $transition = Transition::where('identifier', $item->transition_identifier)
+                                    ->first();
+            $transitionSlidemeister = Transition::where('identifier', $item->transition_slidemeister_identifier)
+                                                ->first();
 
             if (isset($item->overwrite_slide_type) && $item->overwrite_slide_type != '') {
                 $i->type = $item->overwrite_slide_type;
@@ -441,7 +468,6 @@ class PlaylistService extends BaseService
      * @param $data
      */
 
-
     /**
      * @param $item
      * @return string
@@ -459,19 +485,17 @@ class PlaylistService extends BaseService
             return 'image';
         }
 
-        if (in_array($item->file->mime_type, [ 'video/mp4' ])) {
+        if (in_array($item->file->mime_type, ['video/mp4'])) {
             return 'video';
         }
 
         return '';
     }
 
-
     public function beforeUpdate()
     {
         $this->record->updated_at = date('Y-m-d H:i:s');
     }
-
 
     public function afterUpdate()
     {

@@ -25,10 +25,9 @@ class SlideClientsController extends Controller
 
     /**
      * @param SlideClient        $record
-     * @param SlideClientRequest $request
      * @return RedirectResponse|Redirector
      */
-    public function activate(SlideClient $record, SlideClientRequest $request)
+    public function activate(Request $request, SlideClient $record)
     {
         session([ 'screens.active' => $record->id ]);
 

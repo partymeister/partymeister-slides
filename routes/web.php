@@ -1,7 +1,8 @@
 <?php
 
-Route::get('slidemeister-web/{slide_client}',
-    '\Partymeister\Slides\Http\Controllers\SlidemeisterWebController@index')->middleware([ 'bindings' ])->name('backend.slidemeister-web.show');
+Route::get('slidemeister-web/{slide_client}', '\Partymeister\Slides\Http\Controllers\SlidemeisterWebController@index')
+     ->middleware(['bindings'])
+     ->name('backend.slidemeister-web.show');
 
 Route::group([
     'as'         => 'component.',
@@ -9,13 +10,17 @@ Route::group([
     'namespace'  => 'Partymeister\Slides\Http\Controllers\Backend\Component',
     'middleware' => [
         'web',
-    ]
+    ],
 ], function () {
     // You only need this part if you already have a component group for the given namespace
-    Route::get('playlist-viewers', 'ComponentPlaylistViewersController@create')->name('playlist-viewers.create');
-    Route::post('playlist-viewers', 'ComponentPlaylistViewersController@store')->name('playlist-viewers.store');
-    Route::get('playlist-viewers/{component_playlist_viewer}', 'ComponentPlaylistViewersController@edit')->name('playlist-viewers.edit');
-    Route::patch('playlist-viewers/{component_playlist_viewer}', 'ComponentPlaylistViewersController@update')->name('playlist-viewers.update');
+    Route::get('playlist-viewers', 'ComponentPlaylistViewersController@create')
+         ->name('playlist-viewers.create');
+    Route::post('playlist-viewers', 'ComponentPlaylistViewersController@store')
+         ->name('playlist-viewers.store');
+    Route::get('playlist-viewers/{component_playlist_viewer}', 'ComponentPlaylistViewersController@edit')
+         ->name('playlist-viewers.edit');
+    Route::patch('playlist-viewers/{component_playlist_viewer}', 'ComponentPlaylistViewersController@update')
+         ->name('playlist-viewers.update');
 });
 
 Route::group([
@@ -25,40 +30,42 @@ Route::group([
     'middleware' => [
         'web',
         'web_auth',
-        'navigation'
-    ]
+        'navigation',
+    ],
 ], function () {
-    Route::group([ 'middleware' => [ 'permission' ] ], function () {
-        Route::resource('slides', 'SlidesController')->except([ 'create', 'show' ]);
-        Route::get(
-            'slides/{slide}/duplicate',
-            'SlidesController@duplicate'
-        )->name('slides.duplicate');
+    Route::group(['middleware' => ['permission']], function () {
+        Route::resource('slides', 'SlidesController')
+             ->except(['create', 'show']);
+        Route::get('slides/{slide}/duplicate', 'SlidesController@duplicate')
+             ->name('slides.duplicate');
 
-        Route::get('slides/create/{slide_template}', 'SlidesController@create')->name('slides.create');
+        Route::get('slides/create/{slide_template}', 'SlidesController@create')
+             ->name('slides.create');
 
-        Route::resource('slide_templates', 'SlideTemplatesController')->except('show');
-        Route::get(
-            'slide_templates/{slide_template}/duplicate',
-            'SlideTemplatesController@duplicate'
-        )->name('slide_templates.duplicate');
+        Route::resource('slide_templates', 'SlideTemplatesController')
+             ->except('show');
+        Route::get('slide_templates/{slide_template}/duplicate', 'SlideTemplatesController@duplicate')
+             ->name('slide_templates.duplicate');
 
         Route::resource('playlists', 'PlaylistsController');
         Route::resource('transitions', 'TransitionsController');
         Route::resource('slide_clients', 'SlideClientsController');
-        Route::get('slide_clients/{slide_client}/activate',
-            'SlideClientsController@activate')->name('slide_clients.activate');
+        Route::get('slide_clients/{slide_client}/activate', 'SlideClientsController@activate')
+             ->name('slide_clients.activate');
 
         Route::resource('files', 'FilesController');
     });
 });
 
-Route::get('backend/slide_templates/{slide_template}.html',
-    'Partymeister\Slides\Http\Controllers\Backend\SlideTemplatesController@show')->middleware([ 'bindings' ])->name('backend.slide_templates.show');
-Route::get('backend/slides/{slide}.html',
-    'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')->middleware([
-    'bindings', 'cache.headers:etag'
-])->name('backend.slides.show');
+Route::get('backend/slide_templates/{slide_template}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlideTemplatesController@show')
+     ->middleware(['bindings'])
+     ->name('backend.slide_templates.show');
+Route::get('backend/slides/{slide}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')
+     ->middleware([
+         'bindings',
+         'cache.headers:etag',
+     ])
+     ->name('backend.slides.show');
 
 // FIXME: put these in controllers so we can use the Route caching
 //Route::get('test-prizegiving', function() {

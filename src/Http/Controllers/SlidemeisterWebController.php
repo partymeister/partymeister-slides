@@ -3,6 +3,8 @@
 namespace Partymeister\Slides\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Motor\Backend\Models\User;
 use Partymeister\Slides\Models\SlideClient;
 
 /**
@@ -20,6 +22,9 @@ class SlidemeisterWebController extends Controller
      */
     public function index(SlideClient $record)
     {
-        return view('partymeister-slides::slidemeister-web/index');
+        // FIXME: this needs to be improved
+        // Master api_token
+        $apiToken = User::first()->api_token;
+        return view('partymeister-slides::slidemeister-web/index', ['api_token' => $apiToken]);
     }
 }

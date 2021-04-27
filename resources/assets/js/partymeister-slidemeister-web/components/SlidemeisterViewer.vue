@@ -332,6 +332,9 @@
                   console.log(this.currentItem);
                     return;
                 }
+                if (this.items.length === 0) {
+                  return;
+                }
                 if (!this.items[this.currentItem].is_advanced_manually) {
                   console.log("there should be a timeout starting now");
                     // console.log('Setting timeout to ' + this.items[this.currentItem].duration);

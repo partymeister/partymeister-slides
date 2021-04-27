@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Motor\Media\Http\Resources\FileResource;
 
 /**
  * @OA\Schema(
@@ -99,18 +100,15 @@ class PlaylistItemResource extends JsonResource
      */
     public function toArray($request)
     {
-        $comesFromPlaylistEndpoint = ($request->route()
-                                              ->uri() === 'api/playlists') ? true : false;
-
         return [
             'id'                      => (int) $this->id,
-            'playlist'                => $this->when(! $comesFromPlaylistEndpoint, new PlaylistResource($this->playlist)),
+            'playlist'                => new PlaylistResource($this->whenLoaded('playlist')),
             'type'                    => $this->type,
             'slide_type'              => $this->slide_type,
             'slide'                   => new SlideResource($this->slide),
             'duration'                => (int) $this->duration,
             'transition'              => new TransitionResource($this->transition),
-            'transition_slidemeister' => new TransitionResource($this->transition_slidemeiste),
+            'transition_slidemeister' => new TransitionResource($this->transition_slidemeister),
             'transition_duration'     => (int) $this->transition_duration,
             'is_advanced_manually'    => (boolean) $this->is_advanced_manually,
             'is_muted'                => (boolean) $this->is_muted,
@@ -119,6 +117,7 @@ class PlaylistItemResource extends JsonResource
             'callback_hash'           => $this->callback_hash,
             'callback_delay'          => (int) $this->callback_delay,
             'sort_position'           => (int) $this->sort_position,
+            'file_association'        => new FileResource($this->file_association),
         ];
     }
 }

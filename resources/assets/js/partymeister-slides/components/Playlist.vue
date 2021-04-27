@@ -13,7 +13,7 @@
                     <div>{{ filetype(file) }}</div>
                     <img :src="file.file.preview" class="img-fluid">
                 </div>
-                <div v-else> {{ file.file.file_name }}</div>
+                <div v-else> {{ getFileType(file).file_name }}</div>
                 <div>
                     <div>
                         {{ $t('partymeister-slides.backend.playlists.duration') }} <input type="text" name="duration" v-model="file.duration" size="4"> {{ $t('partymeister-slides.backend.playlists.seconds') }}
@@ -21,12 +21,12 @@
                     </div>
                     <div>
                         {{ $t('partymeister-slides.backend.playlists.transition') }}
-                        <select name="transition_id" v-model="file.transition_identifier">
+                        <select name="transition_id" v-model="file.transition.identifier">
                             <option v-for="(transition, index) in transitions" :value="transition.identifier">
                                 {{ transition.name }}
                             </option>
                         </select>
-                        <select name="transition_slidemeister_id" v-model="file.transition_slidemeister_identifier">
+                        <select name="transition_slidemeister_id" v-model="file.transition_slidemeister.identifier">
                             <option v-for="(transition, index) in slidemeisterTransitions" :value="transition.identifier">
                                 {{ transition.name }}
                             </option>
@@ -54,7 +54,7 @@
                         {{ $t('partymeister-slides.backend.playlists.callback_delay') }}
                         <input type="text" name="callback_delay" v-model="file.callback_delay" size="4"> {{ $t('partymeister-slides.backend.playlists.seconds') }}
 
-                        <div><strong>Filename: {{ file.file.file_name }}</strong></div>
+                        <div><strong>Filename: {{ getFileType(file).file_name }}</strong></div>
                     </div>
                 </div>
             </div>
@@ -104,22 +104,36 @@
                 Vue.set(this.droppedFiles[event.newIndex], 'is_advanced_manually', false);
             },
             filetype: function(file) {
-                if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg' || file.file.mime_type == 'image/jpeg') {
+              let data = this.getFileType(file);
+              if (data === null) {
+                return 'unknown';
+              }
+                if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg') {
                     return 'Image';
-                } else if (file.file.mime_type == 'video/mp4') {
+                } else if (data.mime_type === 'video/mp4') {
                     return 'Video';
                 }
-                return 'unknown';
+              return 'unknown';
             },
             isImage: function (file) {
-                if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg' || file.file.mime_type == 'image/jpeg' || file.file.mime_type == 'video/mp4') {
+              let data = this.getFileType(file);
+                if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg' || data.mime_type === 'video/mp4') {
                     return true;
                 }
                 return false;
             },
             deleteFile: function (file) {
                 this.droppedFiles.splice(this.droppedFiles.indexOf(file), 1);
+            },
+          getFileType(file) {
+            let data = { file_name: 'unknown'};
+            if (file.slide !== null && file.slide.file_final !== null) {
+              data = file.slide.file_final;
+            } else if (file.file_association !== null) {
+              data = file.file_association
             }
+            return data;
+          }
         },
         mounted: function () {
             let files = [];

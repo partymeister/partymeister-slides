@@ -33,7 +33,7 @@
             getConfigFromServer() {
                 let url = window.location.protocol + '//' + window.location.hostname + '/api/slide_clients/' + window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
                 // Get data from partymeister server (jingles etc.)
-                axios.get(url).then(result => {
+                axios.get(url+'?api_token='+TOKEN).then(result => {
                     localStorage.setItem('slideClientConfiguration', JSON.stringify(result.data.data));
                     this.$eventHub.$emit('slide-client-loaded');
                     this.error = false;
