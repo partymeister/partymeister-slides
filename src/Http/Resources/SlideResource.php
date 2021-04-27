@@ -4,6 +4,7 @@ namespace Partymeister\Slides\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Motor\Backend\Http\Resources\CategoryResource;
+use Motor\Backend\Http\Resources\MediaResource;
 
 /**
  * @OA\Schema(
@@ -40,11 +41,21 @@ use Motor\Backend\Http\Resources\CategoryResource;
  *   ),
  *   @OA\Property(
  *     property="cached_html_preview",
- *     type="text",
+ *     type="string"
  *   ),
  *   @OA\Property(
  *     property="cached_html_final",
- *     type="text",
+ *     type="string"
+ *   ),
+ *   @OA\Property(
+ *     property="file_final",
+ *     type="object",
+ *     ref="#/components/schemas/MediaResource"
+ *   ),
+ *   @OA\Property(
+ *     property="file_preview",
+ *     type="object",
+ *     ref="#/components/schemas/MediaResource"
  *   ),
  * )
  */
@@ -67,6 +78,8 @@ class SlideResource extends JsonResource
             'definitions'         => $this->definitions,
             'cached_html_preview' => $this->cached_html_preview,
             'cached_html_final'   => $this->cached_html_final,
+            'file_final'          => new MediaResource($this->getFirstMedia('final')),
+            'file_preview'        => new MediaResource($this->getFirstMedia('preview')),
         ];
     }
 }

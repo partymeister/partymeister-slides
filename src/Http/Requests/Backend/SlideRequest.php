@@ -41,11 +41,11 @@ class SlideRequest extends Request
      *   ),
      *   @OA\Property(
      *     property="cached_html_preview",
-     *     type="text",
+     *     type="string"
      *   ),
      *   @OA\Property(
      *     property="cached_html_final",
-     *     type="text",
+     *     type="string"
      *   ),
      *   required={"name", "slide_type", "category_id"},
      * )

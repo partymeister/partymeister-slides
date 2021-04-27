@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Motor\Backend\Http\Resources\MediaResource;
 
 /**
  * @OA\Schema(
@@ -52,6 +53,39 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     type="object",
  *     ref="#/components/schemas/PlaylistItemResource"
  *   ),
+ *   @OA\Property(
+ *     property="jingles",
+ *     type="array",
+ *     @OA\Items(
+ *       ref="#/components/schemas/MediaResource"
+ *     ),
+ *   ),
+ *   @OA\Property(
+ *     property="websocket",
+ *     type="array",
+ *     @OA\Items(
+ *       @OA\Property(
+ *         property="key",
+ *         type="string",
+ *         example="123456"
+ *       ),
+ *       @OA\Property(
+ *         property="host",
+ *         type="string",
+ *         example="https://slides.partymeister.org"
+ *       ),
+ *       @OA\Property(
+ *         property="port",
+ *         type="string",
+ *         example="80"
+ *       ),
+ *       @OA\Property(
+ *         property="path",
+ *         type="string",
+ *         example="https://slides.partymeister.org"
+ *       ),
+ *     ),
+ *   ),
  * )
  */
 class SlideClientResource extends JsonResource
@@ -64,6 +98,16 @@ class SlideClientResource extends JsonResource
      */
     public function toArray($request)
     {
+        $jingles = [];
+        foreach ($this->file_associations as $file) {
+            $jingles[] = new MediaResource($file->file->getFirstMedia('file'));
+        }
+
+        $configuration = $this->configuration;
+
+        $configuration['server'] = config('app.url');
+        $configuration['client'] = $this->id;
+
         return [
             'id'            => (int) $this->id,
             'name'          => $this->name,
@@ -71,9 +115,16 @@ class SlideClientResource extends JsonResource
             'ip_address'    => $this->ip_address,
             'port'          => $this->port,
             'sort_position' => (int) $this->sort_position,
-            'configuration' => $this->configuration,
             'playlist'      => new PlaylistResource($this->playlist),
             'slide'         => new SlideResource($this->slide),
+            'configuration' => $configuration,
+            'jingles'       => $jingles,
+            'websocket'     => [
+                'key'  => config('broadcasting.connections.pusher.key'),
+                'host' => config('broadcasting.connections.pusher.options.host'),
+                'port' => config('broadcasting.connections.pusher.options.port'),
+                'path' => config('broadcasting.connections.pusher.options.path'),
+            ],
         ];
     }
 }

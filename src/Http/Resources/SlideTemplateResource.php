@@ -29,11 +29,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   ),
  *   @OA\Property(
  *     property="cached_html_preview",
- *     type="text",
+ *     type="string"
  *   ),
  *   @OA\Property(
  *     property="cached_html_final",
- *     type="text",
+ *     type="string"
  *   ),
  * )
  */
