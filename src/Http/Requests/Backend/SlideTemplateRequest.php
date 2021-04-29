@@ -60,8 +60,8 @@ class SlideTemplateRequest extends Request
     {
         return [
             'name'                => 'required',
-            'template_for'        => 'required|in:'.trans('partymeister-slides::backend/slide_templates.template_for_types'),
-            'definitions'         => 'nullable|json',
+            'template_for'        => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slide_templates.template_for_types'))),
+            'definitions'         => 'nullable|string',
             'cached_html_preview' => 'nullable',
             'cached_html_final'   => 'nullable',
         ];

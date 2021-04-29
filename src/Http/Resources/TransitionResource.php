@@ -2,7 +2,7 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Motor\Backend\Http\Resources\BaseResource;
 
 /**
  * @OA\Schema(
@@ -29,7 +29,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *   ),
  * )
  */
-class TransitionResource extends JsonResource
+class TransitionResource extends BaseResource
 {
     /**
      * Transform the resource into an array.

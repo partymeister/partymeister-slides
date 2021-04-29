@@ -77,11 +77,11 @@ class SlideClientRequest extends Request
     {
         return [
             'name'             => 'required',
-            'type'             => 'required|in:'.implode(',', trans('partymeister-slides::backend/slide_clients.types')),
+            'type'             => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slide_clients.types'))),
             'ip_address'       => 'nullable',
             'port'             => 'nullable',
             'sort_position'    => 'nullable|integer',
-            'configuration'    => 'nullable|json',
+            'configuration'    => 'nullable|array',
             'playlist_id'      => 'nullable|integer',
             'playlist_item_id' => 'nullable|integer',
         ];

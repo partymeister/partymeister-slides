@@ -16,7 +16,7 @@ use Partymeister\Slides\Http\Resources\PlaylistItemCollection;
  */
 class PlaylistItemsController extends ApiController
 {
-
+    protected string $model = 'Partymeister\Slides\Models\PlaylistItem';
     protected string $modelResource = 'playlist_item';
 
     /**

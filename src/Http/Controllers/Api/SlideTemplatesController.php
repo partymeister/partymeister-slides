@@ -16,7 +16,7 @@ use Partymeister\Slides\Http\Resources\SlideTemplateCollection;
  */
 class SlideTemplatesController extends ApiController
 {
-
+    protected string $model = 'Partymeister\Slides\Models\SlideTemplate';
     protected string $modelResource = 'slide_template';
 
     /**

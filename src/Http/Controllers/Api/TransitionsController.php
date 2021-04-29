@@ -16,7 +16,7 @@ use Partymeister\Slides\Http\Resources\TransitionCollection;
  */
 class TransitionsController extends ApiController
 {
-
+    protected string $model = 'Partymeister\Slides\Models\Transition';
     protected string $modelResource = 'transition';
 
     /**

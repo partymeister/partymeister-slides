@@ -2,7 +2,7 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Motor\Backend\Http\Resources\BaseResource;
 use Motor\Backend\Http\Resources\MediaResource;
 
 /**
@@ -88,7 +88,7 @@ use Motor\Backend\Http\Resources\MediaResource;
  *   ),
  * )
  */
-class SlideClientResource extends JsonResource
+class SlideClientResource extends BaseResource
 {
     /**
      * Transform the resource into an array.

@@ -2,9 +2,9 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Motor\Backend\Http\Resources\BaseCollection;
 
-class SlideCollection extends ResourceCollection
+class SlideCollection extends BaseCollection
 {
     /**
      * Transform the resource collection into an array.

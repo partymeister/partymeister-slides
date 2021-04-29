@@ -52,7 +52,7 @@ class PlaylistRequest extends Request
     {
         return [
             'name'           => 'required',
-            'type'           => 'required|in:'.trans('partymeister-slides::backend/playlists.types'),
+            'type'           => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/playlists.types'))),
             'is_competition' => 'nullable|boolean',
         ];
     }

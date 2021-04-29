@@ -6,7 +6,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 use Motor\Backend\Models\User;
 use Partymeister\Slides\Models\SlideTemplate;
 
-class SlideTemplateRequest
+class SlideTemplatePolicy
 {
     use HandlesAuthorization;
 

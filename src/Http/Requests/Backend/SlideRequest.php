@@ -71,9 +71,9 @@ class SlideRequest extends Request
         return [
             'name'                => 'required',
             'slide_template_id'   => 'nullable|integer',
-            'slide_type'          => 'required|in:'.trans('partymeister-slides::backend/slides.slide_types'),
+            'slide_type'          => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slides.slide_types'))),
             'category_id'         => 'required|integer',
-            'definitions'         => 'nullable|json',
+            'definitions'         => 'nullable|string',
             'cached_html_preview' => 'nullable',
             'cached_html_final'   => 'nullable',
         ];

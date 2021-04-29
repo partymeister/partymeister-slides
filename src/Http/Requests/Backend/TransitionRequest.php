@@ -52,7 +52,7 @@ class TransitionRequest extends Request
     {
         return [
             'name'             => 'required',
-            'client_type'      => 'required|in:'.trans('partymeister-slides::backend/slide_clients.types'),
+            'client_type'      => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slide_clients.types'))),
             'identifier'       => 'required',
             'default_duration' => 'nullable|integer',
         ];
