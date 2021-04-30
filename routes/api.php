@@ -21,6 +21,7 @@ Route::group([
     Route::apiResource('playlists', 'PlaylistsController');
     Route::apiResource('playlist_items', 'PlaylistItemsController');
     Route::apiResource('transitions', 'TransitionsController');
+    Route::apiResource('slide_clients', 'SlideClientsController');
 });
 
 /**
@@ -32,7 +33,6 @@ Route::group([
     'prefix' => 'api',
     'as' => 'api.',
 ], function () {
-    Route::apiResource('slide_clients', 'SlideClientsController');
 });
 
 // FIXME: put this in a controller so we can use route caching

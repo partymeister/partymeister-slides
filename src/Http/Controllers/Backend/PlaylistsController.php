@@ -4,19 +4,15 @@ namespace Partymeister\Slides\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use League\Fractal\Manager;
 use Motor\Backend\Http\Controllers\Controller;
-use Motor\Media\Transformers\FileTransformer;
 use Partymeister\Slides\Forms\Backend\PlaylistForm;
 use Partymeister\Slides\Grids\PlaylistGrid;
 use Partymeister\Slides\Http\Requests\Backend\PlaylistRequest;
 use Partymeister\Slides\Http\Resources\PlaylistItemResource;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Services\PlaylistService;
-use Partymeister\Slides\Transformers\PlaylistItemTransformer;
-use Partymeister\Slides\Transformers\SlideTransformer;
 
 /**
  * Class PlaylistsController
@@ -48,7 +44,7 @@ class PlaylistsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
@@ -122,32 +118,7 @@ class PlaylistsController extends Controller
         $this->fractal = new Manager();
 
         $playlistItemCollection = PlaylistItemResource::collection($record->items);
-        $playlistItemResponse = $playlistItemCollection->toResponse($request);
-        $playlistItems = Arr::get(json_decode($playlistItemResponse->getContent(), true), 'data');
-        //
-        //foreach ($record->items as $item) {
-        //    $playlistItems = EntryResource::collection($competition->qualified_entries->load('competition'));
-        //
-        //
-        //
-        //
-        //    $f = null;
-        //    $i = new PlaylistItemResource($item);
-        //    dd($i->toArray($request));
-        //    //$i = fractal($item, new PlaylistItemTransformer())->toArray();
-        //    if ($item->slide_id != null) {
-        //        $f = fractal($item->slide, new SlideTransformer())->toArray();
-        //    } elseif ($item->file_association != null) {
-        //        $f = fractal($item->file_association->file, new FileTransformer())->toArray();
-        //    }
-        //
-        //    if ($f != null) {
-        //        $i['data'] = array_merge($i['data'], $f['data']);
-        //        //$i['data']['file'] = $f['data'];
-        //        $playlistItems[] = $i['data'];
-        //    }
-        //}
-
+        $playlistItems = $playlistItemCollection->toArrayRecursive();
         $playlistItems = json_encode($playlistItems, JSON_UNESCAPED_SLASHES);
 
         return view(

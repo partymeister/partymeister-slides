@@ -422,10 +422,20 @@ class PlaylistService extends BaseService
             $i->playlist_id = $this->record->id;
             $i->type = (isset($item->type) ? $item->type : $this->getType($item));
 
-            $transition = Transition::where('identifier', $item->transition_identifier)
-                                    ->first();
-            $transitionSlidemeister = Transition::where('identifier', $item->transition_slidemeister_identifier)
-                                                ->first();
+            if (isset($item->transition_identifier)) {
+                $transition = Transition::where('identifier', $item->transition_identifier)
+                                        ->first();
+            } else {
+                $transition = Transition::where('identifier', 255)
+                                        ->first();
+            }
+            if (isset($item->transition_slidemeister_identifier)) {
+                $transitionSlidemeister = Transition::where('identifier', $item->transition_slidemeister_identifier)
+                                                    ->first();
+            } else {
+                $transitionSlidemeister = Transition::where('identifier', 255)
+                                                    ->first();
+            }
 
             if (isset($item->overwrite_slide_type) && $item->overwrite_slide_type != '') {
                 $i->type = $item->overwrite_slide_type;
@@ -443,7 +453,7 @@ class PlaylistService extends BaseService
             $i->sort_position = $key;
 
             if (property_exists($item, 'slide_type')) {
-                $i->slide_id = $item->id;
+                $i->slide_id = $item->slide->id;
                 $i->slide_type = $item->slide_type;
             }
 

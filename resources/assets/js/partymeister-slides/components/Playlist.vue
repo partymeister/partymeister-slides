@@ -9,9 +9,14 @@
                     <button type="button" @click="deleteFile(file)"><i class="fa fa-trash-alt"></i>
                     </button>
                 </div>
+              <div v-if="isHtmlSlide(file)" class="image-wrapper">
+                HTML SLIDE - CANNOT PREVIEW CURRENTLY
+<!--                <div v-html="file.slide.cached_html_preview"></div>-->
+              </div>
                 <div v-if="isImage(file)" class="image-wrapper">
                     <div>{{ filetype(file) }}</div>
-                    <img :src="file.file.preview" class="img-fluid">
+                    <img v-if="file.file" :src="file.file.conversions.preview" class="img-fluid">
+                  <img v-if="file.file_association" :src="file.file_association.file.conversions.preview" class="img-fluid">
                 </div>
                 <div v-else> {{ getFileType(file).file_name }}</div>
                 <div>
@@ -92,16 +97,27 @@
         methods: {
             onAdd: function (event) {
                 let fakeObject = Object.assign({}, this.droppedFiles[event.newIndex]);
+                fakeObject.duration = 20;
+                fakeObject.midi_note = 0;
+                fakeObject.transition_identifier = 255;
+                fakeObject.transition = { identifier: 255};
+                fakeObject.transition_slidemeister_identifier = 255;
+                fakeObject.transition_slidemeister = { identifier: 255};
+                fakeObject.transition_duration = 2000;
+                fakeObject.callback_hash = '';
+                fakeObject.overwrite_slide_type = '';
+                fakeObject.callback_delay = 20;
+                fakeObject.is_advanced_manually = false;
                 Vue.set(this.droppedFiles, event.newIndex, fakeObject);
-                Vue.set(this.droppedFiles[event.newIndex], 'duration', 20);
-                Vue.set(this.droppedFiles[event.newIndex], 'midi_note', 0);
-                Vue.set(this.droppedFiles[event.newIndex], 'transition_identifier', 255);
-                Vue.set(this.droppedFiles[event.newIndex], 'transition_slidemeister_identifier', 255);
-                Vue.set(this.droppedFiles[event.newIndex], 'transition_duration', 2000);
-                Vue.set(this.droppedFiles[event.newIndex], 'callback_hash', '');
-                Vue.set(this.droppedFiles[event.newIndex], 'overwrite_slide_type', '');
-                Vue.set(this.droppedFiles[event.newIndex], 'callback_delay', 20);
-                Vue.set(this.droppedFiles[event.newIndex], 'is_advanced_manually', false);
+                // Vue.set(this.droppedFiles[event.newIndex], 'duration', 20);
+                // Vue.set(this.droppedFiles[event.newIndex], 'midi_note', 0);
+                // Vue.set(this.droppedFiles[event.newIndex], 'transition', {identifier: 255})
+                // Vue.set(this.droppedFiles[event.newIndex], 'transition_slidemeister', {identifier: 255});
+                // Vue.set(this.droppedFiles[event.newIndex], 'transition_duration', 2000);
+                // Vue.set(this.droppedFiles[event.newIndex], 'callback_hash', '');
+                // Vue.set(this.droppedFiles[event.newIndex], 'overwrite_slide_type', '');
+                // Vue.set(this.droppedFiles[event.newIndex], 'callback_delay', 20);
+                // Vue.set(this.droppedFiles[event.newIndex], 'is_advanced_manually', false);
             },
             filetype: function(file) {
               let data = this.getFileType(file);
@@ -115,7 +131,16 @@
                 }
               return 'unknown';
             },
+          isHtmlSlide: (file) => {
+              if (file.slide && file.slide.cached_html_preview !== '') {
+                return true;
+              }
+          },
             isImage: function (file) {
+              if (!file.transition) {
+                file.transition = { identifier: 255};
+                file.transition_slidemeister = { identifier: 255};
+              }
               let data = this.getFileType(file);
                 if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg' || data.mime_type === 'video/mp4') {
                     return true;
@@ -126,11 +151,14 @@
                 this.droppedFiles.splice(this.droppedFiles.indexOf(file), 1);
             },
           getFileType(file) {
-            let data = { file_name: 'unknown'};
-            if (file.slide !== null && file.slide.file_final !== null) {
+            let data = { file_name: 'unknown', mime_type: 'unknown'};
+            if (file.slide && file.slide.file_final !== null) {
               data = file.slide.file_final;
-            } else if (file.file_association !== null) {
-              data = file.file_association
+            } else if (file.file) {
+              data = file.file
+            } else if (file.file_association) {
+              console.log(file.file_association);
+              data = file.file_association.file;
             }
             return data;
           }

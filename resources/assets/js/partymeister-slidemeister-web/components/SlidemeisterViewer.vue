@@ -7,9 +7,6 @@
                 gl_Position = vec4( position, 1.0 );
             }
         </script>
-      <div id="cables-container" :style="{'zoom': zoom/2}">
-        <canvas id="glcanvas" style="margin-top: 0 !important;"/>
-      </div>
         <div id="shader-container" :style="{'zoom': zoom/2}"></div>
         <div class="debug alert alert-danger d-none">
             CachedPlaylists: {{ cachedPlaylists.length }}<br>
@@ -23,37 +20,40 @@
             <vue-audio style="display: none;" id="jingle-player" :file="jingle"/>
         </div>
 
-        <template v-if="(currentItem != null || this.playNow) && current != undefined">
-            <img v-if="current.type == 'image' && current.cached_html_final == undefined"
-                 :src="playlistImages[this.currentItem] ? playlistImages[this.currentItem].src : current.file.file_original" class="img-fluid slide current" :style="{'opacity': currentOpacity}">
-            <div v-if="current.type == 'image' && current.cached_html_final != ''"
-                 v-html="current.cached_html_final" class="slidemeister-instance slide current"
+        <template v-if="(currentItem != null || this.playNow) && current !== undefined">
+            <img v-if="current.type === 'image' && current.file_association !== null"
+                 :src="playlistImages[this.currentItem] ? playlistImages[this.currentItem].src : current.file_association.file.url" class="img-fluid slide current" :style="{'opacity': currentOpacity}">
+            <div v-if="current.type === 'image' && current.slide && current.slide.cached_html_final !== ''"
+                 v-html="current.slide.cached_html_final" class="slidemeister-instance slide current"
                  :style="{'opacity': currentOpacity, 'zoom': zoom}"></div>
-            <video v-if="current.type == 'video'" id="video-current" class="slide current"
+            <video v-if="current.type === 'video'" id="video-current" class="slide current"
                    :style="{'opacity': currentOpacity}">
-                <source :src="current.file.file_original" type="video/mp4">
+                <source :src="current.file_association.file.url" type="video/mp4">
             </video>
         </template>
-        <template v-if="(previousItem != null || this.playNow) && previous != undefined">
-            <img v-if="previous.type == 'image' && previous.cached_html_final === undefined"
-                 :src="playlistImages[this.previousItem] ? playlistImages[this.previousItem].src : previous.file.file_original" class="img-fluid slide previous">
-            <div v-if="previous.type == 'image' && previous.cached_html_final != ''"
-                 v-html="previous.cached_html_final" class="slidemeister-instance slide previous"
+
+        <template v-if="(previousItem != null || this.playNow) && previous !== undefined">
+            <img v-if="previous.type === 'image' && previous.file_association !== null"
+                 :src="playlistImages[this.previousItem] ? playlistImages[this.previousItem].src : previous.file_association.file.url" class="img-fluid slide previous">
+            <div v-if="previous.type === 'image' && previous.slide && previous.slide.cached_html_final !== ''"
+                 v-html="previous.slide.cached_html_final" class="slidemeister-instance slide previous"
                  :style="{'zoom': zoom}"></div>
-            <video v-if="previous.type == 'video'" id="video-previous" class="slide previous">
-                <source :src="previous.file.file_original" type="video/mp4">
+            <video v-if="previous.type === 'video'" id="video-previous" class="slide previous">
+                <source :src="previous.file_association.file.url" type="video/mp4">
             </video>
         </template>
-        <template class="next-item" v-if="(nextItem != null || this.playNow) && next != undefined">
-            <img v-if="next.type == 'image' && next.cached_html_final === undefined"
-                 :src="playlistImages[this.nextItem] ? playlistImages[this.nextItem].src : next.file.file_original" class="img-fluid slide next" :style="{'opacity': nextOpacity}">
-            <div v-if="next.type == 'image' && next.cached_html_final != ''"
-                 v-html="next.cached_html_final" class="slidemeister-instance slide next"
+
+        <template class="next-item" v-if="(nextItem != null || this.playNow) && next !== undefined">
+            <img v-if="next.type === 'image' && next.file_association !== null"
+                 :src="playlistImages[this.nextItem] ? playlistImages[this.nextItem].src : next.file_association.file.url" class="img-fluid slide next" :style="{'opacity': nextOpacity}">
+            <div v-if="next.type === 'image' && next.slide && next.slide.cached_html_final !== ''"
+                 v-html="next.slide.cached_html_final" class="slidemeister-instance slide next"
                  :style="{'opacity': nextOpacity, 'zoom': zoom}"></div>
-            <video v-if="next.type == 'video'" id="video-next" class="slide next" :style="{'opacity': nextOpacity}">
-                <source :src="next.file.file_original" type="video/mp4">
+            <video v-if="next.type === 'video'" id="video-next" class="slide next" :style="{'opacity': nextOpacity}">
+                <source :src="next.file_association.file.url" type="video/mp4">
             </video>
         </template>
+
     </main>
 </template>
 
@@ -532,12 +532,14 @@
                   this.items.forEach((item) => {
                     if (item.type === 'image') {
                       let i = new Image();
-                      i.src = item.file.file_original;
+                      if (item.file_association !== null) {
+                        i.src = item.file_association.file.url;
+                      }
                       this.playlistImages.push(i);
                       console.log('image preloaded');
                       console.log(this.playlistImages);
                     }
-                    this.playlistImages = [];
+                    // this.playlistImages = [];
                   });
 
                 }

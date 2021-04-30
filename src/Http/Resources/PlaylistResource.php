@@ -45,6 +45,7 @@ class PlaylistResource extends BaseResource
             'type'           => $this->type,
             'is_competition' => (boolean) $this->is_competition,
             'items'          => PlaylistItemResource::collection($this->items),
+            'updated_at'     => $this->updated_at,
         ];
     }
 }

@@ -24,7 +24,7 @@
                         <div class="card-body" data-toggle="tooltip" data-placement="top" :title="file.description">
                             <p class="card-text">
                                 {{ file.name }}<br>
-                                <span class="badge badge-secondary badge-pill">{{ file.file.mime_type }}</span>
+                                <span v-if="file.file" class="badge badge-secondary badge-pill">{{ file.file.mime_type }}</span>
                             </p>
                         </div>
                     </div>
@@ -76,12 +76,22 @@
                     this.pagination = response.data.meta.pagination;
                 });
             },
-            isImage: function(file) {
-                if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg' || file.file.mime_type == 'image/jpeg' || file.file.mime_type == 'video/mp4') {
-                    return true;
-                }
-                return false;
+          isImage: function (file) {
+            let data = this.getFileType(file);
+            if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg' || data.mime_type === 'video/mp4') {
+              return true;
             }
+            return false;
+          },
+          getFileType(file) {
+            let data = { file_name: 'unknown'};
+            if (file.slide !== undefined && file.slide.file_final !== null) {
+              data = file.slide.file_final;
+            } else if (file.file_association !== undefined) {
+              data = file.file_association
+            }
+            return data;
+          }
         },
         mounted: function () {
 

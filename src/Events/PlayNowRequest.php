@@ -7,13 +7,14 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Motor\Media\Http\Resources\FileResource;
 use Motor\Media\Models\File;
-use Motor\Media\Transformers\FileTransformer;
+use Partymeister\Slides\Http\Resources\SlideResource;
 use Partymeister\Slides\Models\Slide;
-use Partymeister\Slides\Transformers\SlideTransformer;
 
 /**
  * Class PlayNowRequest
+ *
  * @package Partymeister\Slides\Events
  */
 class PlayNowRequest implements ShouldBroadcastNow
@@ -25,11 +26,11 @@ class PlayNowRequest implements ShouldBroadcastNow
      */
     public $item;
 
-
     /**
      * Create a new event instance.
      *
      * PlayNowRequest constructor.
+     *
      * @param $type
      * @param $item
      */
@@ -37,25 +38,23 @@ class PlayNowRequest implements ShouldBroadcastNow
     {
         switch ($type) {
             case 'file':
-                $file                       = File::find($item);
-                $data                       = fractal($file, new FileTransformer())->toArray();
-                $data['data']['type']       = 'image';
-                $data['data']['slide_type'] = 'default';
+                $file = File::find($item);
+                $data = (new FileResource($file))->toArrayRecursive();
+                $data['type'] = 'image';
+                $data['slide_type'] = 'default';
                 if ($file->getFirstMedia('file')->mime_type == 'video/mp4') {
-                    $data['data']['type'] = 'video';
+                    $data['type'] = 'video';
                 }
-                //dd($data);
-                $this->item = $data['data'];
+                $this->item = $data;
                 break;
             case 'slide':
-                $file                 = Slide::find($item);
-                $data                 = fractal($file, new SlideTransformer())->toArray();
-                $data['data']['type'] = 'image';
-                $this->item           = $data['data'];
+                $file = Slide::find($item);
+                $data = (new SlideResource($file))->toArrayRecursive();
+                $data['type'] = 'image';
+                $this->item = $data;
                 break;
         }
     }
-
 
     /**
      * Get the channels the event should broadcast on.
@@ -64,6 +63,6 @@ class PlayNowRequest implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel(config('cache.prefix') . '.slidemeister-web.' . session('screens.active'));
+        return new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'));
     }
 }
