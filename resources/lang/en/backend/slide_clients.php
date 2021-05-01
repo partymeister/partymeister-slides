@@ -28,7 +28,7 @@ return [
     'type'                        => 'Type',
     'types'                       => [
         'screens'          => 'Screens',
-        'slidemeister-web' => 'Slidemeister-Web'
+        'slidemeister-web' => 'Slidemeister-Web',
     ],
     'open_client'                 => 'Open client window',
     'jingle'                      => 'Jingle',
@@ -36,4 +36,5 @@ return [
     'prizegiving_bar_color'       => 'Prizegiving bar color',
     'prizegiving_bar_blink_color' => 'Prizegiving bar blink color',
     'fragment'                    => 'Fragment shader for :type',
+    'restart_playlist'            => '(restart playlist)',
 ];

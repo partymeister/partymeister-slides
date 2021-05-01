@@ -21,7 +21,7 @@
         </div>
 
         <template v-if="(currentItem != null || this.playNow) && current !== undefined">
-            <img v-if="current.type === 'image' && current.file_association !== null"
+            <img v-if="current.type === 'image' && (current.file_association !== null && current.file_association !== undefined)"
                  :src="playlistImages[this.currentItem] ? playlistImages[this.currentItem].src : current.file_association.file.url" class="img-fluid slide current" :style="{'opacity': currentOpacity}">
             <div v-if="current.type === 'image' && current.slide && current.slide.cached_html_final !== ''"
                  v-html="current.slide.cached_html_final" class="slidemeister-instance slide current"
@@ -33,7 +33,7 @@
         </template>
 
         <template v-if="(previousItem != null || this.playNow) && previous !== undefined">
-            <img v-if="previous.type === 'image' && previous.file_association !== null"
+            <img v-if="previous.type === 'image' && (previous.file_association !== null && previous.file_association !== undefined)"
                  :src="playlistImages[this.previousItem] ? playlistImages[this.previousItem].src : previous.file_association.file.url" class="img-fluid slide previous">
             <div v-if="previous.type === 'image' && previous.slide && previous.slide.cached_html_final !== ''"
                  v-html="previous.slide.cached_html_final" class="slidemeister-instance slide previous"
@@ -44,7 +44,7 @@
         </template>
 
         <template class="next-item" v-if="(nextItem != null || this.playNow) && next !== undefined">
-            <img v-if="next.type === 'image' && next.file_association !== null"
+            <img v-if="next.type === 'image' && (next.file_association !== null && next.file_association !== undefined)"
                  :src="playlistImages[this.nextItem] ? playlistImages[this.nextItem].src : next.file_association.file.url" class="img-fluid slide next" :style="{'opacity': nextOpacity}">
             <div v-if="next.type === 'image' && next.slide && next.slide.cached_html_final !== ''"
                  v-html="next.slide.cached_html_final" class="slidemeister-instance slide next"
@@ -191,7 +191,12 @@
                 this.clearTimeouts();
 
                 if (this.items[index] !== undefined) {
-                    this.nextItem = index;
+                  if ((index+1) > this.items.length) {
+                    this.nextItem = 0;
+                  } else {
+                    this.nextItem = index+1;
+                  }
+                  this.currentItem = index;
                 } else {
                     this.currentItem = 0;
                     this.nextItem = 0;
@@ -203,7 +208,7 @@
                 }
                 if (!hard) {
                     setTimeout(() => {
-                        this.playTransition(this.current.transition_slidemeister_identifier, this.current.transition_duration);
+                        this.playTransition(this.current.transition_slidemeister.identifier, this.current.transition_duration);
                     }, 10);
                 } else {
                     this.previousItem = null;
@@ -217,7 +222,7 @@
                         if (this.next.slide_type !== 'slidemeister_winners') {
                             this.deleteBars();
                         }
-                        this.playTransition(this.current.transition_slidemeister_identifier, this.current.transition_duration);
+                        this.playTransition(this.current.transition_slidemeister.identifier, this.current.transition_duration);
                     }, 0);
                 } else {
                     this.currentItem = this.nextItem;
@@ -328,8 +333,6 @@
             },
             setSlideTimeout() {
                 if (this.playNow || this.currentItem === null) {
-                  console.log("is this playnow?");
-                  console.log(this.currentItem);
                     return;
                 }
                 if (this.items.length === 0) {
@@ -529,15 +532,14 @@
                     this.items = this.playlist.items;
 
                     // preload images
+                  // FIXME: actually preload images
                   this.items.forEach((item) => {
                     if (item.type === 'image') {
                       let i = new Image();
                       if (item.file_association !== null) {
                         i.src = item.file_association.file.url;
                       }
-                      this.playlistImages.push(i);
-                      console.log('image preloaded');
-                      console.log(this.playlistImages);
+                      // this.playlistImages.push(i);
                     }
                     // this.playlistImages = [];
                   });

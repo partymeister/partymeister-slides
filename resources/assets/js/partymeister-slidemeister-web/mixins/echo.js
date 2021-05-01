@@ -10,6 +10,7 @@ export default {
         return {
             server: null,
             serverConfiguration: {},
+            listening: false,
         };
     },
     created() {
@@ -20,6 +21,9 @@ export default {
 
                 Vue.set(this, 'serverConfiguration', serverConfiguration);
 
+                if (this.listening) {
+                    this.removeListeners();
+                }
                 this.createServer();
                 this.addListeners();
             }
@@ -32,6 +36,9 @@ export default {
             serverConfiguration = JSON.parse(serverConfiguration);
 
             Vue.set(this, 'serverConfiguration', serverConfiguration);
+            if (this.listening) {
+                this.removeListeners();
+            }
             this.createServer();
             this.addListeners();
         }
@@ -61,27 +68,57 @@ export default {
                 this.$eventHub.$emit('socket-connected');
             });
         },
+        removeListeners() {
+            console.log("LEAVING CHANNEL");
+            this.server.leaveChannel('partymeister.slidemeister-web.' + this.serverConfiguration.client);
+        },
         addListeners() {
+            console.log("LISTENING TO CHANNEL");
+            this.listening = true;
             this.server.channel('partymeister.slidemeister-web.' + this.serverConfiguration.client)
                 .listen('.Partymeister\\Slides\\Events\\PlayNowRequest', (e) => {
                     console.log('PlayNowRequest incoming');
-                    if (this.playlist.id != undefined) {
+                    if (this.playlist.id !== undefined) {
                         // console.log('Playlist is running - saving position and playlist');
                         this.playlistSaved = this.playlist;
                         this.currentItemSaved = this.currentItem;
                     }
 
-                    e.item.duration = 20;
-                    e.item.is_advanced_manually = true;
-                    e.item.transition_identifier = 0;
-                    e.item.transition_duration = 2000;
-                    e.item.callback_hash = '';
-                    e.item.callback_delay = 20;
+                    let item = {};
+
+                    if (e.item.playnow_type === 'slide') {
+                        item = {
+                            duration: 20,
+                            is_advanced_manually: true,
+                            transition_slidemeister: {
+                                identifier: "255"
+                            },
+                            transition_duration: 2000,
+                            callback_hash: '',
+                            callback_delay: 20,
+                            slide: e.item,
+                            type: e.item.type,
+                        }
+                    } else {
+                        item = {
+                            duration: 20,
+                            is_advanced_manually: true,
+                            transition_slidemeister: {
+                                identifier: "255"
+                            },
+                            transition_duration: 2000,
+                            callback_hash: '',
+                            callback_delay: 20,
+                            file_association: e.item,
+                            type: e.item.type,
+                        }
+                    }
+
 
                     if (this.playNow === true) {
-                        this.playNowItems.push(e.item);
+                        this.playNowItems.push(item);
                     } else {
-                        this.playNowItems = [e.item];
+                        this.playNowItems = [item]
                     }
                     // this.playNow = true;
                     this.nextPlayNowItem = this.playNowItems.length - 1;
@@ -119,18 +156,18 @@ export default {
                     }, 2000);
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistRequest', (e) => {
-                    console.log('PlaylistRequest incoming');
+                    // console.log('PlaylistRequest incoming');
 
                     let found = false;
                     for (const [index, p] of this.cachedPlaylists.entries()) {
-                        if (p.id == e.playlist.id) {
+                        if (p.id === e.playlist.id) {
                             // console.log('Playlist exists, checking if it needs to be updated');
                             // Update callback status
                             this.cachedPlaylists[index].callbacks = e.playlist.callbacks;
-                            if (p.updated_at != e.playlist.updated_at.date) {
+                            if (p.updated_at !== e.playlist.updated_at.date) {
                                 // console.log('Playlist outdated, checking if it is currently playing');
                                 this.cachedPlaylists[index] = e.playlist;
-                                if (this.playlist.id == p.id) {
+                                if (this.playlist.id === p.id) {
                                     // console.log('Playlist is currently playing. Updating');
                                     if (this.currentItem > (e.playlist.items.length - 1)) {
                                         // console.log('Updated playlist has fewer items, resetting index of currently playing item');
@@ -160,9 +197,9 @@ export default {
 
                     let found = false;
                     for (const [index, p] of this.cachedPlaylists.entries()) {
-                        if (p.id == e.playlist_id) {
+                        if (p.id === e.playlist_id) {
                             // console.log('Playlist exists, seeking to item ' + e.index);
-                            if (this.playlist.id == e.playlist_id) {
+                            if (this.playlist.id === e.playlist_id) {
                                 // console.log('Playlist is running, seeking to item ' + e.index);
                                 this.seekToIndex(parseInt(e.index));
                             } else {

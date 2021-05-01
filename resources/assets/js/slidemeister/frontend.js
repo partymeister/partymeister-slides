@@ -1,4 +1,4 @@
-window.Vue = require('vue');
+window.Vue = require('vue').default;
 
 
 Vue.prototype.$eventHub = new Vue();

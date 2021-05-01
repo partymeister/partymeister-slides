@@ -75,10 +75,16 @@
 
                 $('.playlist-' + currentPlaylist + '-playing').removeClass('d-none');
 
-                axios.get('/ajax/playlists/items/' + currentItem).then(function (response) {
+                axios.get('/ajax/playlist_items/' + currentItem).then(function (response) {
                     $('.playlist-preview').addClass('d-none');
-                    $('.playlist-' + currentPlaylist + '-preview').removeClass('d-none');
-                    $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.file.preview);
+                    if (response.data.data.file_association && response.data.data.file_association.exists) {
+                        $('.playlist-' + currentPlaylist + '-preview').removeClass('d-none');
+                        $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.file_association.file.conversions.preview);
+                    }
+                    if (response.data.data.slide && response.data.data.slide.file_preview) {
+                        $('.playlist-' + currentPlaylist + '-preview').removeClass('d-none');
+                        $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.slide.file_preview);
+                    }
                 }).catch(function (error) {
                     console.log('UpdatePlaylists: Playlist item not found');
                     console.log(error);
@@ -109,7 +115,7 @@
 
             let action = $(this).data('action');
 
-            if (data.callbacks == 1) {
+            if (data.callbacks === 1) {
                 if (!confirm('{{ trans('partymeister-slides::backend/slide_clients.callback_question') }}')) {
                     return false;
                 }
@@ -117,7 +123,7 @@
 
             axios.post('{{route('ajax.slide_clients.communication.playlist')}}', data).then(function (response) {
 
-                if (action == 'seek') {
+                if (action === 'seek') {
                     let seekData = {
                         playlist_id: data.playlist_id,
                         hard: false,

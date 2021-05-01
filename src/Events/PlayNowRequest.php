@@ -7,6 +7,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Motor\Media\Http\Resources\FileResource;
 use Motor\Media\Models\File;
 use Partymeister\Slides\Http\Resources\SlideResource;
@@ -41,6 +42,7 @@ class PlayNowRequest implements ShouldBroadcastNow
                 $file = File::find($item);
                 $data = (new FileResource($file))->toArrayRecursive();
                 $data['type'] = 'image';
+                $data['playnow_type'] = 'file';
                 $data['slide_type'] = 'default';
                 if ($file->getFirstMedia('file')->mime_type == 'video/mp4') {
                     $data['type'] = 'video';
@@ -51,6 +53,7 @@ class PlayNowRequest implements ShouldBroadcastNow
                 $file = Slide::find($item);
                 $data = (new SlideResource($file))->toArrayRecursive();
                 $data['type'] = 'image';
+                $data['playnow_type'] = 'slide';
                 $this->item = $data;
                 break;
         }
@@ -63,6 +66,7 @@ class PlayNowRequest implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
+        Log::info('PlayNowEventSent');
         return new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'));
     }
 }
