@@ -11,11 +11,11 @@ use SimpleXMLElement;
 
 /**
  * Class Generator
+ *
  * @package Partymeister\Slides\Services\XMLService
  */
 class Generator
 {
-
     /**
      * @param $parameters
      * @return mixed
@@ -26,7 +26,6 @@ class Generator
 
         return self::add_encoding($xml->asXML());
     }
-
 
     /**
      * @param $xml
@@ -43,7 +42,6 @@ class Generator
      * @return bool|string
      */
 
-
     /**
      * @param $parameters
      * @return bool|mixed
@@ -55,7 +53,9 @@ class Generator
         if (is_null($playlist)) {
             return false;
         }
-        $playlist_items              = $playlist->items()->orderBy('sort_position', 'ASC')->get();
+        $playlist_items = $playlist->items()
+                                   ->orderBy('sort_position', 'ASC')
+                                   ->get();
         $parameters['date_modified'] = strtotime($playlist->updated_at);
 
         $xml = new SimpleXMLElement('<xml></xml>');
@@ -68,7 +68,7 @@ class Generator
         $param->addAttribute('name', 'name');
 
         // FIXME status url is still from pm2
-        $param = $xml->addChild('parameter', config('partymeister-slides.screens_url') . '/backend/screens/status');
+        $param = $xml->addChild('parameter', config('partymeister-slides.screens_url').'/backend/screens/status');
         $param->addAttribute('name', 'callback');
 
         //$param = $xml->addChild('parameter', $playlist->type);
@@ -99,7 +99,7 @@ class Generator
             }
 
             $item = $data->addChild('item');
-            $item->addAttribute('name', $parameters['playlist_id'] . "_" . $playlist_item->id);
+            $item->addAttribute('name', $parameters['playlist_id']."_".$playlist_item->id);
 
             if ($playlist_item->type == 'now' || $playlist_item->type == 'end' || $playlist_item->type == 'comingup') {
                 // FIXME: this does not happen
@@ -116,11 +116,8 @@ class Generator
 
             // Add callback if available
             if ((string) $playlist_item->callback_hash != '') {
-                $callback = $item->addChild(
-                    'callback',
-                    config('partymeister-slides.screens_url') . '/api/callback/' . $playlist_item->callback_hash
-                );
-                $callback->addAttribute('delay', $playlist_item->callback_delay . '.0');
+                $callback = $item->addChild('callback', config('partymeister-slides.screens_url').'/api/callback/'.$playlist_item->callback_hash);
+                $callback->addAttribute('delay', $playlist_item->callback_delay.'.0');
             }
 
             // Hack for type = web
@@ -134,13 +131,9 @@ class Generator
             //	$item->addChild('path', config('partymeister-slides.screens_url').$attachment->file->getUrl() . $attachment->file->filename);
             //}
             if ($playlist_item->slide_id != null) {
-                $item->addChild('path', config('partymeister-slides.screens_url') . route(
-                    'backend.slides.show',
-                    [ $playlist_item->slide->id ],
-                    false
-                ));
+                $item->addChild('path', config('partymeister-slides.screens_url').route('backend.slides.show', [$playlist_item->slide->id], false));
             } else {
-                $item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
+                $item->addChild('path', config('partymeister-slides.screens_url').$attachment->getUrl());
             }
 
             if ($playlist_item->type == 'siegmeister_bars') {
@@ -172,14 +165,8 @@ class Generator
             if ($playlist_item->slide_type == 'siegmeister_bars' || $playlist_item->slide_type == 'siegmeister_winners') {
                 $siegmeister = $item->addChild('siegmeister');
                 $siegmeister->addChild('bar_color', config('partymeister-slides-prizegiving.bar_color'));
-                $siegmeister->addChild(
-                    'bar_blink_color_1',
-                    config('partymeister-slides-prizegiving.bar_blink_color_1')
-                );
-                $siegmeister->addChild(
-                    'bar_blink_color_2',
-                    config('partymeister-slides-prizegiving.bar_blink_color_2')
-                );
+                $siegmeister->addChild('bar_blink_color_1', config('partymeister-slides-prizegiving.bar_blink_color_1'));
+                $siegmeister->addChild('bar_blink_color_2', config('partymeister-slides-prizegiving.bar_blink_color_2'));
                 $siegmeister->addChild('bar_alpha', config('partymeister-slides-prizegiving.bar_alpha'));
 
                 $metadata = json_decode($playlist_item->metadata);
@@ -221,7 +208,6 @@ class Generator
      * @return bool|mixed
      */
 
-
     /**
      * @param $parameters
      * @return bool|string
@@ -231,22 +217,22 @@ class Generator
         if (isset($parameters['slide_id'])) {
             $parameters = [
                 'playnow'       => true,
-                'playlist_id'   => 'playnow_slide_' . $parameters['slide_id'],
+                'playlist_id'   => 'playnow_slide_'.$parameters['slide_id'],
                 'slide_id'      => $parameters['slide_id'],
                 'date_modified' => time(),
-                'loop'          => 0
+                'loop'          => 0,
             ];
-            $slide      = Slide::find($parameters['slide_id']);
+            $slide = Slide::find($parameters['slide_id']);
             $attachment = $slide->getFirstMedia('final');
         } else {
             $parameters = [
                 'playnow'       => true,
-                'playlist_id'   => 'playnow_file_' . $parameters['file_id'],
+                'playlist_id'   => 'playnow_file_'.$parameters['file_id'],
                 'slide_id'      => $parameters['file_id'],
                 'date_modified' => time(),
-                'loop'          => 0
+                'loop'          => 0,
             ];
-            $file       = File::find($parameters['slide_id']);
+            $file = File::find($parameters['slide_id']);
             $attachment = $file->getFirstMedia('file');
         }
 
@@ -270,7 +256,7 @@ class Generator
         $data = $xml->addChild('data');
 
         $item = $data->addChild('item');
-        $item->addAttribute('name', $parameters['playlist_id'] . "_" . $parameters['slide_id']);
+        $item->addAttribute('name', $parameters['playlist_id']."_".$parameters['slide_id']);
 
         if (in_array($attachment->mime_type, config('motor-backend-mimetypes.video'))) {
             $item->addAttribute('type', 'video');
@@ -280,12 +266,9 @@ class Generator
 
         //$item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
         if (isset($slide) && ! is_null($slide)) {
-            $item->addChild(
-                'path',
-                config('partymeister-slides.screens_url') . route('backend.slides.show', [ $slide->id ], false)
-            );
+            $item->addChild('path', config('partymeister-slides.screens_url').route('backend.slides.show', [$slide->id], false));
         } else {
-            $item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
+            $item->addChild('path', config('partymeister-slides.screens_url').$attachment->getUrl());
         }
         $item->addChild('duration', '2000');
 
@@ -307,7 +290,7 @@ class Generator
 
         $xml = self::seek([
             'playlist_id' => $parameters['playlist_id'],
-            'slide_id'    => $parameters['slide_id']
+            'slide_id'    => $parameters['slide_id'],
         ]);
 
         return XMLService::_send($xml);
@@ -318,7 +301,6 @@ class Generator
      * @param $parameters
      * @return mixed
      */
-
 
     /**
      * @param $parameters
@@ -332,7 +314,9 @@ class Generator
             if ($playlist == null) {
                 return false;
             }
-            $playlist_item          = $playlist->items()->orderBy('sort_position', 'ASC')->first();
+            $playlist_item = $playlist->items()
+                                      ->orderBy('sort_position', 'ASC')
+                                      ->first();
             $parameters['slide_id'] = $playlist_item->id;
         }
 
@@ -349,7 +333,7 @@ class Generator
         $param = $xml->addChild('parameter', $parameters['playlist_id']);
         $param->addAttribute('name', 'playlist');
 
-        $param = $xml->addChild('parameter', $parameters['playlist_id'] . '_' . $parameters['slide_id']);
+        $param = $xml->addChild('parameter', $parameters['playlist_id'].'_'.$parameters['slide_id']);
         $param->addAttribute('name', 'slide');
 
         $param = $xml->addChild('parameter', (int) $parameters['hard']);
@@ -363,7 +347,6 @@ class Generator
      * @param $parameters
      * @return mixed
      */
-
 
     /**
      * @param $parameters
@@ -389,7 +372,6 @@ class Generator
      * @return mixed
      */
 
-
     /**
      * @param $parameters
      * @return mixed
@@ -414,7 +396,6 @@ class Generator
      * @return mixed
      */
 
-
     /**
      * @param $parameters
      * @return mixed
@@ -434,7 +415,6 @@ class Generator
      * @param $xml
      * @return mixed
      */
-
 
     /**
      * @param $parameters

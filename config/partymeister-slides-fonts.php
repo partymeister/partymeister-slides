@@ -5,12 +5,12 @@ return [
         [
             'name'   => 'exo2',
             'path'   => '/fonts/exo2.css',
-            'family' => '\'Exo 2\''
+            'family' => '\'Exo 2\'',
         ],
         [
             'name'   => 'poppins',
             'path'   => '/fonts/poppins.css',
-            'family' => '\'Poppins\''
+            'family' => '\'Poppins\'',
         ],
     ],
 ];

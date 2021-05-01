@@ -3,15 +3,14 @@
 namespace Partymeister\Slides\Listeners;
 
 use Partymeister\Slides\Events\SlideCollectionSaved;
-use Partymeister\Slides\Events\SlideSaved;
 
 /**
  * Class GenerateSlideCollection
+ *
  * @package Partymeister\Slides\Listeners
  */
 class GenerateSlideCollection
 {
-
     /**
      * Create the event listener.
      *
@@ -21,7 +20,6 @@ class GenerateSlideCollection
     {
         //
     }
-
 
     /**
      * Handle the event.

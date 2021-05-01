@@ -68,14 +68,21 @@ class SlideRequest extends Request
      */
     public function rules()
     {
-        return [
-            'name'                => 'required',
-            'slide_template_id'   => 'nullable|integer',
-            'slide_type'          => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slides.slide_types'))),
-            'category_id'         => 'required|integer',
-            'definitions'         => 'nullable|string',
-            'cached_html_preview' => 'nullable',
-            'cached_html_final'   => 'nullable',
-        ];
+        if ($this->method() === 'POST') {
+
+            return [
+                'name'                => 'required',
+                'slide_template_id'   => 'nullable|integer',
+                'slide_type'          => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slides.slide_types'))),
+                'category_id'         => 'required|integer',
+                'definitions'         => 'nullable|string',
+                'cached_html_preview' => 'nullable',
+                'cached_html_final'   => 'nullable',
+            ];
+        }
+
+        // FIXME: we need this for the slide preview
+
+        return [];
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class SlideSaved
+ *
  * @package Partymeister\Slides\Events
  */
 class SlideSaved
@@ -27,20 +28,19 @@ class SlideSaved
      */
     public $namePrefix = '';
 
-
     /**
      * Create a new event instance.
      *
      * SlideSaved constructor.
+     *
      * @param Model $slide
      * @param       $namePrefix
      */
     public function __construct(Model $slide, $namePrefix)
     {
-        $this->slide      = $slide;
+        $this->slide = $slide;
         $this->namePrefix = $namePrefix;
     }
-
 
     /**
      * Get the channels the event should broadcast on.

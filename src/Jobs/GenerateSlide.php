@@ -12,6 +12,7 @@ use Partymeister\Slides\Helpers\Browsershot;
 
 /**
  * Class GenerateSlide
+ *
  * @package Partymeister\Slides\Jobs
  */
 class GenerateSlide implements ShouldQueue
@@ -28,7 +29,6 @@ class GenerateSlide implements ShouldQueue
      */
     public $namePrefix;
 
-
     /**
      * Create a new job instance.
      *
@@ -37,10 +37,9 @@ class GenerateSlide implements ShouldQueue
      */
     public function __construct(Model $slide, $namePrefix)
     {
-        $this->slide      = $slide;
+        $this->slide = $slide;
         $this->namePrefix = $namePrefix;
     }
-
 
     /**
      * Execute the job.
@@ -49,18 +48,18 @@ class GenerateSlide implements ShouldQueue
      */
     public function handle()
     {
-        $filenameForPreview = base_path() . '/storage/app/temp/' . $this->namePrefix . '_preview_' . $this->slide->id . '.png';
-        $filenameForFinal   = base_path() . '/storage/app/temp/' . $this->namePrefix . '_final_' . $this->slide->id . '.png';
+        $filenameForPreview = base_path().'/storage/app/temp/'.$this->namePrefix.'_preview_'.$this->slide->id.'.png';
+        $filenameForFinal = base_path().'/storage/app/temp/'.$this->namePrefix.'_final_'.$this->slide->id.'.png';
 
-        Browsershot::url(url('/backend/' . $this->namePrefix . '/' . $this->slide->id))
-                   ->setBinPath(__DIR__ . '/../../resources/assets/bin/browser.js')
+        Browsershot::url(url('/backend/'.$this->namePrefix.'/'.$this->slide->id))
+                   ->setBinPath(__DIR__.'/../../resources/assets/bin/browser.js')
                    ->waitUntilNetworkIdle()
                    ->windowSize(1920, 1080)//->debug()
             //->fit(Manipulations::FIT_CONTAIN, 1920, 1080)
                    ->save($filenameForFinal);
 
-        Browsershot::url(url('/backend/' . $this->namePrefix . '/' . $this->slide->id . '?preview=true'))
-                   ->setBinPath(__DIR__ . '/../../resources/assets/bin/browser.js')
+        Browsershot::url(url('/backend/'.$this->namePrefix.'/'.$this->slide->id.'?preview=true'))
+                   ->setBinPath(__DIR__.'/../../resources/assets/bin/browser.js')
                    ->waitUntilNetworkIdle()
                    ->windowSize(1920, 1080)//->debug()
             //->fit(Manipulations::FIT_CONTAIN, 1920, 1080)
@@ -68,7 +67,9 @@ class GenerateSlide implements ShouldQueue
 
         $this->slide->clearMediaCollection('preview');
         $this->slide->clearMediaCollection('final');
-        $this->slide->addMedia($filenameForPreview)->toMediaCollection('preview', 'media');
-        $this->slide->addMedia($filenameForFinal)->toMediaCollection('final', 'media');
+        $this->slide->addMedia($filenameForPreview)
+                    ->toMediaCollection('preview', 'media');
+        $this->slide->addMedia($filenameForFinal)
+                    ->toMediaCollection('final', 'media');
     }
 }

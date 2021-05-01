@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class PlaylistPreviousRequest
+ *
  * @package Partymeister\Slides\Events
  */
 class PlaylistPreviousRequest implements ShouldBroadcastNow
@@ -21,18 +22,17 @@ class PlaylistPreviousRequest implements ShouldBroadcastNow
      */
     public $hard = false;
 
-
     /**
      * Create a new event instance.
      *
      * PlaylistPreviousRequest constructor.
+     *
      * @param bool $hard
      */
     public function __construct($hard = false)
     {
         $this->hard = $hard;
     }
-
 
     /**
      * Get the channels the event should broadcast on.
@@ -41,6 +41,6 @@ class PlaylistPreviousRequest implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel(config('cache.prefix') . '.slidemeister-web.' . session('screens.active'));
+        return new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'));
     }
 }

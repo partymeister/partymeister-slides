@@ -8,11 +8,11 @@ use Partymeister\Slides\Models\PlaylistItem;
 
 /**
  * Class ItemsController
+ *
  * @package Partymeister\Slides\Http\Controllers\Api\Playlists
  */
 class ItemsController extends Controller
 {
-
     /**
      * Display the specified resource.
      *
@@ -23,6 +23,6 @@ class ItemsController extends Controller
     {
         $this->playlist = (new PlaylistItemResource($record))->toArrayRecursive();
 
-        return response()->json([ 'error' => 'Not found' ], 404);
+        return response()->json(['error' => 'Not found'], 404);
     }
 }

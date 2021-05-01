@@ -21,58 +21,58 @@ use Motor\Media\Models\FileAssociation;
 /**
  * Partymeister\Slides\Models\PlaylistItem
  *
- * @property int                                              $id
- * @property int                                              $playlist_id
- * @property string                                           $type
- * @property int                                              $sort_position
- * @property string                                           $slide_type
- * @property int|null                                         $slide_id
- * @property int                                              $duration
- * @property int|null                                         $transition_id
- * @property int                                              $transition_duration
- * @property int                                              $is_advanced_manually
- * @property int                                              $is_muted
- * @property int                                              $midi_note
- * @property mixed                                            $metadata
- * @property string                                           $callback_hash
- * @property int                             $callback_delay
- * @property int                             $created_by
- * @property int                             $updated_by
- * @property int|null                        $deleted_by
+ * @property int $id
+ * @property int $playlist_id
+ * @property string $type
+ * @property int $sort_position
+ * @property string $slide_type
+ * @property int|null $slide_id
+ * @property int $duration
+ * @property int|null $transition_id
+ * @property int $transition_duration
+ * @property int $is_advanced_manually
+ * @property int $is_muted
+ * @property int $midi_note
+ * @property mixed $metadata
+ * @property string $callback_hash
+ * @property int $callback_delay
+ * @property int $created_by
+ * @property int $updated_by
+ * @property int|null $deleted_by
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User                       $creator
- * @property-read User|null                  $eraser
- * @property-read FileAssociation            $file_association
- * @property-read Slide|null                 $slide
- * @property-read Transition|null            $transition
- * @property-read User                       $updater
- * @method static Builder|PlaylistItem filteredBy( Filter $filter, $column )
- * @method static Builder|PlaylistItem filteredByMultiple( Filter $filter )
+ * @property-read User $creator
+ * @property-read User|null $eraser
+ * @property-read FileAssociation $file_association
+ * @property-read Slide|null $slide
+ * @property-read Transition|null $transition
+ * @property-read User $updater
+ * @method static Builder|PlaylistItem filteredBy(Filter $filter, $column)
+ * @method static Builder|PlaylistItem filteredByMultiple(Filter $filter)
  * @method static Builder|PlaylistItem newModelQuery()
  * @method static Builder|PlaylistItem newQuery()
  * @method static Builder|PlaylistItem query()
- * @method static Builder|PlaylistItem search( $q, $full_text = false )
- * @method static Builder|PlaylistItem whereCallbackDelay( $value )
- * @method static Builder|PlaylistItem whereCallbackHash( $value )
- * @method static Builder|PlaylistItem whereCreatedAt( $value )
- * @method static Builder|PlaylistItem whereCreatedBy( $value )
- * @method static Builder|PlaylistItem whereDeletedBy( $value )
- * @method static Builder|PlaylistItem whereDuration( $value )
- * @method static Builder|PlaylistItem whereId( $value )
- * @method static Builder|PlaylistItem whereIsAdvancedManually( $value )
- * @method static Builder|PlaylistItem whereIsMuted( $value )
- * @method static Builder|PlaylistItem whereMetadata( $value )
- * @method static Builder|PlaylistItem whereMidiNote( $value )
- * @method static Builder|PlaylistItem wherePlaylistId( $value )
- * @method static Builder|PlaylistItem whereSlideId( $value )
- * @method static Builder|PlaylistItem whereSlideType( $value )
- * @method static Builder|PlaylistItem whereSortPosition( $value )
- * @method static Builder|PlaylistItem whereTransitionDuration( $value )
- * @method static Builder|PlaylistItem whereTransitionId( $value )
- * @method static Builder|PlaylistItem whereType( $value )
- * @method static Builder|PlaylistItem whereUpdatedAt( $value )
- * @method static Builder|PlaylistItem whereUpdatedBy( $value )
+ * @method static Builder|PlaylistItem search($q, $full_text = false)
+ * @method static Builder|PlaylistItem whereCallbackDelay($value)
+ * @method static Builder|PlaylistItem whereCallbackHash($value)
+ * @method static Builder|PlaylistItem whereCreatedAt($value)
+ * @method static Builder|PlaylistItem whereCreatedBy($value)
+ * @method static Builder|PlaylistItem whereDeletedBy($value)
+ * @method static Builder|PlaylistItem whereDuration($value)
+ * @method static Builder|PlaylistItem whereId($value)
+ * @method static Builder|PlaylistItem whereIsAdvancedManually($value)
+ * @method static Builder|PlaylistItem whereIsMuted($value)
+ * @method static Builder|PlaylistItem whereMetadata($value)
+ * @method static Builder|PlaylistItem whereMidiNote($value)
+ * @method static Builder|PlaylistItem wherePlaylistId($value)
+ * @method static Builder|PlaylistItem whereSlideId($value)
+ * @method static Builder|PlaylistItem whereSlideType($value)
+ * @method static Builder|PlaylistItem whereSortPosition($value)
+ * @method static Builder|PlaylistItem whereTransitionDuration($value)
+ * @method static Builder|PlaylistItem whereTransitionId($value)
+ * @method static Builder|PlaylistItem whereType($value)
+ * @method static Builder|PlaylistItem whereUpdatedAt($value)
+ * @method static Builder|PlaylistItem whereUpdatedBy($value)
  * @mixin Eloquent
  */
 class PlaylistItem extends Model
@@ -86,7 +86,7 @@ class PlaylistItem extends Model
      *
      * @var array
      */
-    protected $blameable = [ 'created', 'updated', 'deleted' ];
+    protected $blameable = ['created', 'updated', 'deleted'];
 
     /**
      * Searchable columns for the searchable trait

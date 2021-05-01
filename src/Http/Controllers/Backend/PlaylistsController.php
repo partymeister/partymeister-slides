@@ -3,7 +3,6 @@
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use League\Fractal\Manager;
 use Motor\Backend\Http\Controllers\Controller;
@@ -16,12 +15,12 @@ use Partymeister\Slides\Services\PlaylistService;
 
 /**
  * Class PlaylistsController
+ *
  * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class PlaylistsController extends Controller
 {
     use FormBuilderTrait;
-
 
     /**
      * Display a listing of the resource.
@@ -40,7 +39,6 @@ class PlaylistsController extends Controller
         return view('partymeister-slides::backend.playlists.index', compact('paginator', 'grid'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -51,18 +49,14 @@ class PlaylistsController extends Controller
         $form = $this->form(PlaylistForm::class, [
             'method'  => 'POST',
             'route'   => 'backend.playlists.store',
-            'enctype' => 'multipart/form-data'
+            'enctype' => 'multipart/form-data',
         ]);
 
         $motorShowRightSidebar = true;
-        $playlistItems         = [];
+        $playlistItems = [];
 
-        return view(
-            'partymeister-slides::backend.playlists.create',
-            compact('form', 'motorShowRightSidebar', 'playlistItems')
-        );
+        return view('partymeister-slides::backend.playlists.create', compact('form', 'motorShowRightSidebar', 'playlistItems'));
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -76,7 +70,10 @@ class PlaylistsController extends Controller
 
         // It will automatically use current request, get the rules, and do the validation
         if (! $form->isValid()) {
-            return redirect()->back()->withErrors($form->getErrors())->withInput();
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
         }
 
         PlaylistService::createWithForm($request, $form);
@@ -85,7 +82,6 @@ class PlaylistsController extends Controller
 
         return redirect('backend/playlists');
     }
-
 
     /**
      * Display the specified resource.
@@ -97,7 +93,6 @@ class PlaylistsController extends Controller
         //
     }
 
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -108,9 +103,9 @@ class PlaylistsController extends Controller
     {
         $form = $this->form(PlaylistForm::class, [
             'method'  => 'PATCH',
-            'url'     => route('backend.playlists.update', [ $record->id ]),
+            'url'     => route('backend.playlists.update', [$record->id]),
             'enctype' => 'multipart/form-data',
-            'model'   => $record
+            'model'   => $record,
         ]);
 
         $motorShowRightSidebar = true;
@@ -121,18 +116,14 @@ class PlaylistsController extends Controller
         $playlistItems = $playlistItemCollection->toArrayRecursive();
         $playlistItems = json_encode($playlistItems, JSON_UNESCAPED_SLASHES);
 
-        return view(
-            'partymeister-slides::backend.playlists.edit',
-            compact('form', 'motorShowRightSidebar', 'playlistItems')
-        );
+        return view('partymeister-slides::backend.playlists.edit', compact('form', 'motorShowRightSidebar', 'playlistItems'));
     }
-
 
     /**
      * Update the specified resource in storage.
      *
      * @param PlaylistRequest $request
-     * @param Playlist        $record
+     * @param Playlist $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(PlaylistRequest $request, Playlist $record)
@@ -141,7 +132,10 @@ class PlaylistsController extends Controller
 
         // It will automatically use current request, get the rules, and do the validation
         if (! $form->isValid()) {
-            return redirect()->back()->withErrors($form->getErrors())->withInput();
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
         }
 
         PlaylistService::updateWithForm($record, $request, $form);
@@ -150,7 +144,6 @@ class PlaylistsController extends Controller
 
         return redirect('backend/playlists');
     }
-
 
     /**
      * Remove the specified resource from storage.

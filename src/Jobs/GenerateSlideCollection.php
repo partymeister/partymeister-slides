@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Class GenerateSlideCollection
+ *
  * @package Partymeister\Slides\Jobs
  */
 class GenerateSlideCollection implements ShouldQueue
@@ -27,7 +28,6 @@ class GenerateSlideCollection implements ShouldQueue
      */
     public $namePrefix;
 
-
     /**
      * Create a new job instance.
      *
@@ -36,10 +36,9 @@ class GenerateSlideCollection implements ShouldQueue
      */
     public function __construct(Collection $slideIds, $namePrefix)
     {
-        $this->slideIds   = $slideIds;
+        $this->slideIds = $slideIds;
         $this->namePrefix = $namePrefix;
     }
-
 
     /**
      * Execute the job.
@@ -53,7 +52,7 @@ class GenerateSlideCollection implements ShouldQueue
         //    $filenameForFinal   = base_path() . '/storage/app/' . $this->namePrefix . '_final_' . $slideId . '.png';
         //}
 
-        $command = 'node ' . __DIR__ . '/../../resources/assets/bin/hack.js \'' . json_encode([ 'slides' => $this->slideIds ]) . '\'';
+        $command = 'node '.__DIR__.'/../../resources/assets/bin/hack.js \''.json_encode(['slides' => $this->slideIds]).'\'';
 
         exec($command);
 

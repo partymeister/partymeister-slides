@@ -20,13 +20,13 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class CommunicationController
+ *
  * @package Partymeister\Slides\Http\Controllers\Api\SlideClients
  */
 class CommunicationController extends Controller
 {
-
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function playlist(Request $request)
@@ -40,7 +40,7 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('playlist', $request->all());
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json(['result' => $result], 400);
                 } else {
                     return response()->json(['result' => $result]);
@@ -58,9 +58,8 @@ class CommunicationController extends Controller
         }
     }
 
-
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function playnow(Request $request)
@@ -74,7 +73,7 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('playnow', $request->all());
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json(['result' => $result], 400);
                 } else {
                     return response()->json(['result' => $result]);
@@ -96,9 +95,8 @@ class CommunicationController extends Controller
         }
     }
 
-
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function seek(Request $request)
@@ -112,7 +110,7 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('seek', $request->all());
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json(['result' => $result], 400);
                 } else {
                     return response()->json(['result' => $result]);
@@ -132,11 +130,11 @@ class CommunicationController extends Controller
 
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function skip(Request $request)
@@ -150,7 +148,7 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send($request->get('direction'), ['hard' => $request->get('hard')]);
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json(['result' => $result], 400);
                 } else {
                     return response()->json(['result' => $result]);
@@ -173,11 +171,11 @@ class CommunicationController extends Controller
 
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function siegmeister(Request $request)
@@ -201,17 +199,17 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function get_system_info(Request $request)
     {
         $result = XMLService::send('get_system_info');
-        if ( ! $result) {
+        if (! $result) {
             return response()->json(['result' => $result], 400);
         } else {
             return response()->json(['result' => $result]);
@@ -220,12 +218,12 @@ class CommunicationController extends Controller
 
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      * @throws InvalidArgumentException
      */
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      * @throws InvalidArgumentException
      */
@@ -240,7 +238,7 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('get_playlists');
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json(['result' => $result], 400);
                 } else {
                     return response()->json(['result' => $result]);
@@ -249,7 +247,7 @@ class CommunicationController extends Controller
             case 'slidemeister-web':
                 $result = Cache::store('redis')
                                ->get(config('cache.prefix').':slidemeister-web.'.session('screens.active'));
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json(['result' => $result], 400);
                 } else {
                     return response()->json(['result' => $result]);

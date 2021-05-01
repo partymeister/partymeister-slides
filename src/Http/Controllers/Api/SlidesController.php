@@ -3,20 +3,21 @@
 namespace Partymeister\Slides\Http\Controllers\Api;
 
 use Motor\Backend\Http\Controllers\ApiController;
-
-use Partymeister\Slides\Models\Slide;
 use Partymeister\Slides\Http\Requests\Backend\SlideRequest;
-use Partymeister\Slides\Services\SlideService;
-use Partymeister\Slides\Http\Resources\SlideResource;
 use Partymeister\Slides\Http\Resources\SlideCollection;
+use Partymeister\Slides\Http\Resources\SlideResource;
+use Partymeister\Slides\Models\Slide;
+use Partymeister\Slides\Services\SlideService;
 
 /**
  * Class SlidesController
+ *
  * @package Partymeister\Slides\Http\Controllers\Api
  */
 class SlidesController extends ApiController
 {
     protected string $model = 'Partymeister\Slides\Models\Slide';
+
     protected string $modelResource = 'slide';
 
     /**
@@ -69,7 +70,9 @@ class SlidesController extends ApiController
      */
     public function index()
     {
-        $paginator = SlideService::collection()->getPaginator();
+        $paginator = SlideService::collection()
+                                 ->getPaginator();
+
         return (new SlideCollection($paginator))->additional(['message' => 'Slide collection read']);
     }
 
@@ -124,10 +127,13 @@ class SlidesController extends ApiController
      */
     public function store(SlideRequest $request)
     {
-        $result = SlideService::create($request)->getResult();
-        return (new SlideResource($result))->additional(['message' => 'Slide created'])->response()->setStatusCode(201);
-    }
+        $result = SlideService::create($request)
+                              ->getResult();
 
+        return (new SlideResource($result))->additional(['message' => 'Slide created'])
+                                           ->response()
+                                           ->setStatusCode(201);
+    }
 
     /**
      * @OA\Get (
@@ -184,10 +190,11 @@ class SlidesController extends ApiController
      */
     public function show(Slide $record)
     {
-        $result = SlideService::show($record)->getResult();
+        $result = SlideService::show($record)
+                              ->getResult();
+
         return (new SlideResource($result))->additional(['message' => 'Slide read']);
     }
-
 
     /**
      * @OA\Put (
@@ -243,15 +250,16 @@ class SlidesController extends ApiController
      * Update the specified resource in storage.
      *
      * @param SlideRequest $request
-     * @param Slide        $record
+     * @param Slide $record
      * @return SlideResource
      */
     public function update(SlideRequest $request, Slide $record)
     {
-        $result = SlideService::update($record, $request)->getResult();
+        $result = SlideService::update($record, $request)
+                              ->getResult();
+
         return (new SlideResource($result))->additional(['message' => 'Slide updated']);
     }
-
 
     /**
      * @OA\Delete (
@@ -314,11 +322,13 @@ class SlidesController extends ApiController
      */
     public function destroy(Slide $record)
     {
-        $result = SlideService::delete($record)->getResult();
+        $result = SlideService::delete($record)
+                              ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'Slide deleted']);
         }
+
         return response()->json(['message' => 'Problem deleting Slide'], 404);
     }
 }

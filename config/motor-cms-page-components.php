@@ -19,7 +19,7 @@ return [
             'permissions'     => [
 
             ],
-            'group'           => 'partymeister-slides'
+            'group'           => 'partymeister-slides',
         ],
     ],
 ];

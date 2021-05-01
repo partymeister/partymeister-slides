@@ -3,20 +3,21 @@
 namespace Partymeister\Slides\Http\Controllers\Api;
 
 use Motor\Backend\Http\Controllers\ApiController;
-
-use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Http\Requests\Backend\PlaylistRequest;
-use Partymeister\Slides\Services\PlaylistService;
-use Partymeister\Slides\Http\Resources\PlaylistResource;
 use Partymeister\Slides\Http\Resources\PlaylistCollection;
+use Partymeister\Slides\Http\Resources\PlaylistResource;
+use Partymeister\Slides\Models\Playlist;
+use Partymeister\Slides\Services\PlaylistService;
 
 /**
  * Class PlaylistsController
+ *
  * @package Partymeister\Slides\Http\Controllers\Api
  */
 class PlaylistsController extends ApiController
 {
     protected string $model = 'Partymeister\Slides\Models\Playlist';
+
     protected string $modelResource = 'playlist';
 
     /**
@@ -69,7 +70,9 @@ class PlaylistsController extends ApiController
      */
     public function index()
     {
-        $paginator = PlaylistService::collection()->getPaginator();
+        $paginator = PlaylistService::collection()
+                                    ->getPaginator();
+
         return (new PlaylistCollection($paginator))->additional(['message' => 'Playlist collection read']);
     }
 
@@ -124,10 +127,13 @@ class PlaylistsController extends ApiController
      */
     public function store(PlaylistRequest $request)
     {
-        $result = PlaylistService::create($request)->getResult();
-        return (new PlaylistResource($result))->additional(['message' => 'Playlist created'])->response()->setStatusCode(201);
-    }
+        $result = PlaylistService::create($request)
+                                 ->getResult();
 
+        return (new PlaylistResource($result))->additional(['message' => 'Playlist created'])
+                                              ->response()
+                                              ->setStatusCode(201);
+    }
 
     /**
      * @OA\Get (
@@ -184,10 +190,11 @@ class PlaylistsController extends ApiController
      */
     public function show(Playlist $record)
     {
-        $result = PlaylistService::show($record)->getResult();
+        $result = PlaylistService::show($record)
+                                 ->getResult();
+
         return (new PlaylistResource($result))->additional(['message' => 'Playlist read']);
     }
-
 
     /**
      * @OA\Put (
@@ -243,15 +250,16 @@ class PlaylistsController extends ApiController
      * Update the specified resource in storage.
      *
      * @param PlaylistRequest $request
-     * @param Playlist        $record
+     * @param Playlist $record
      * @return PlaylistResource
      */
     public function update(PlaylistRequest $request, Playlist $record)
     {
-        $result = PlaylistService::update($record, $request)->getResult();
+        $result = PlaylistService::update($record, $request)
+                                 ->getResult();
+
         return (new PlaylistResource($result))->additional(['message' => 'Playlist updated']);
     }
-
 
     /**
      * @OA\Delete (
@@ -314,11 +322,13 @@ class PlaylistsController extends ApiController
      */
     public function destroy(Playlist $record)
     {
-        $result = PlaylistService::delete($record)->getResult();
+        $result = PlaylistService::delete($record)
+                                 ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'Playlist deleted']);
         }
+
         return response()->json(['message' => 'Problem deleting Playlist'], 404);
     }
 }

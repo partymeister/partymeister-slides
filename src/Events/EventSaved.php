@@ -10,12 +10,12 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class EventSaved
+ *
  * @package Partymeister\Slides\Events
  */
 class EventSaved
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
 
     /**
      * Create a new event instance.
@@ -26,7 +26,6 @@ class EventSaved
     {
         //
     }
-
 
     /**
      * Get the channels the event should broadcast on.

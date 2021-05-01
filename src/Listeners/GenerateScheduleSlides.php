@@ -4,11 +4,11 @@ namespace Partymeister\Slides\Listeners;
 
 /**
  * Class GenerateScheduleSlides
+ *
  * @package Partymeister\Slides\Listeners
  */
 class GenerateScheduleSlides
 {
-
     /**
      * Create the event listener.
      *
@@ -18,7 +18,6 @@ class GenerateScheduleSlides
     {
         //
     }
-
 
     /**
      * Handle the event.

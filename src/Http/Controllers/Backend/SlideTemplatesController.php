@@ -2,8 +2,6 @@
 
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Motor\Backend\Http\Controllers\Controller;
 use Partymeister\Slides\Forms\Backend\SlideTemplateForm;
@@ -14,12 +12,12 @@ use Partymeister\Slides\Services\SlideTemplateService;
 
 /**
  * Class SlideTemplatesController
+ *
  * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class SlideTemplatesController extends Controller
 {
     use FormBuilderTrait;
-
 
     /**
      * Display a listing of the resource.
@@ -38,7 +36,6 @@ class SlideTemplatesController extends Controller
         return view('partymeister-slides::backend.slide_templates.index', compact('paginator', 'grid'));
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -51,7 +48,10 @@ class SlideTemplatesController extends Controller
 
         // It will automatically use current request, get the rules, and do the validation
         if (! $form->isValid()) {
-            return redirect()->back()->withErrors($form->getErrors())->withInput();
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
         }
 
         SlideTemplateService::createWithForm($request, $form);
@@ -61,19 +61,17 @@ class SlideTemplatesController extends Controller
         return redirect('backend/slide_templates');
     }
 
-
     /**
      * @param SlideTemplate $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function duplicate(SlideTemplate $record)
     {
-        $newRecord       = $record->replicate();
-        $newRecord->name = 'Duplicate of ' . $newRecord->name;
+        $newRecord = $record->replicate();
+        $newRecord->name = 'Duplicate of '.$newRecord->name;
 
         return $this->create($newRecord);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -87,7 +85,7 @@ class SlideTemplatesController extends Controller
             'method'  => 'POST',
             'route'   => 'backend.slide_templates.store',
             'enctype' => 'multipart/form-data',
-            'model'   => $record
+            'model'   => $record,
         ]);
 
         $motorShowRightSidebar = true;
@@ -95,12 +93,11 @@ class SlideTemplatesController extends Controller
         return view('partymeister-slides::backend.slide_templates.create', compact('form', 'motorShowRightSidebar'));
     }
 
-
     /**
      * Display the specified resource.
      *
      * @param SlideTemplateRequest $request
-     * @param SlideTemplate        $record
+     * @param SlideTemplate $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(SlideTemplateRequest $request, SlideTemplate $record)
@@ -109,12 +106,8 @@ class SlideTemplatesController extends Controller
 
         $placeholderData = json_encode([]);
 
-        return view(
-            'partymeister-slides::backend.slide_templates.show',
-            compact('record', 'preview', 'placeholderData')
-        );
+        return view('partymeister-slides::backend.slide_templates.show', compact('record', 'preview', 'placeholderData'));
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -126,9 +119,9 @@ class SlideTemplatesController extends Controller
     {
         $form = $this->form(SlideTemplateForm::class, [
             'method'  => 'PATCH',
-            'url'     => route('backend.slide_templates.update', [ $record->id ]),
+            'url'     => route('backend.slide_templates.update', [$record->id]),
             'enctype' => 'multipart/form-data',
-            'model'   => $record
+            'model'   => $record,
         ]);
 
         $motorShowRightSidebar = true;
@@ -136,12 +129,11 @@ class SlideTemplatesController extends Controller
         return view('partymeister-slides::backend.slide_templates.edit', compact('form', 'motorShowRightSidebar'));
     }
 
-
     /**
      * Update the specified resource in storage.
      *
      * @param SlideTemplateRequest $request
-     * @param SlideTemplate        $record
+     * @param SlideTemplate $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(SlideTemplateRequest $request, SlideTemplate $record)
@@ -150,7 +142,10 @@ class SlideTemplatesController extends Controller
 
         // It will automatically use current request, get the rules, and do the validation
         if (! $form->isValid()) {
-            return redirect()->back()->withErrors($form->getErrors())->withInput();
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
         }
 
         SlideTemplateService::updateWithForm($record, $request, $form);
@@ -159,7 +154,6 @@ class SlideTemplatesController extends Controller
 
         return redirect('backend/slide_templates');
     }
-
 
     /**
      * Remove the specified resource from storage.

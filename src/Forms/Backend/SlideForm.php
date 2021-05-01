@@ -7,47 +7,49 @@ use Motor\Backend\Models\Category;
 
 /**
  * Class SlideForm
+ *
  * @package Partymeister\Slides\Forms\Backend
  */
 class SlideForm extends Form
 {
-
     /**
      * @return mixed|void
      */
     public function buildForm()
     {
         $categoryChoices = [];
-        $categories      = Category::where('scope', 'slides')->where('_lft', '>', 1)->orderBy('_lft', 'ASC')->get();
+        $categories = Category::where('scope', 'slides')
+                              ->where('_lft', '>', 1)
+                              ->orderBy('_lft', 'ASC')
+                              ->get();
         foreach ($categories as $category) {
-            $indent    = '';
-            $ancestors = (int) $category->ancestors()->count();
+            $indent = '';
+            $ancestors = (int) $category->ancestors()
+                                        ->count();
             while ($ancestors > 1) {
                 $indent .= '&nbsp;&nbsp;&nbsp;';
                 $ancestors--;
             }
 
-            $categoryChoices[$category->id] = $indent . $category->name;
+            $categoryChoices[$category->id] = $indent.$category->name;
         }
 
-        $this->add('name', 'text', [ 'label' => trans('motor-backend::backend/global.name'), 'rules' => 'required' ])
-             ->add(
-                 'category_id',
-                 'select',
-                 [ 'label' => trans('motor-backend::backend/categories.category'), 'choices' => $categoryChoices ]
-             )
+        $this->add('name', 'text', ['label' => trans('motor-backend::backend/global.name'), 'rules' => 'required'])
+             ->add('category_id', 'select', ['label'   => trans('motor-backend::backend/categories.category'),
+                                             'choices' => $categoryChoices,
+                 ])
              ->add('slide_type', 'select', [
                  'label'   => trans('partymeister-slides::backend/slides.slide_type'),
-                 'choices' => (trans('partymeister-slides::backend/slides.slide_types'))
+                 'choices' => (trans('partymeister-slides::backend/slides.slide_types')),
              ])
              ->add('slide_template_id', 'hidden')
-             ->add('definitions', 'hidden', [ 'attr' => [ 'v-pre' => true ] ])
-             ->add('cached_html_preview', 'hidden', [ 'attr' => [ 'v-pre' => true ] ])
-             ->add('cached_html_final', 'hidden', [ 'attr' => [ 'v-pre' => true ] ])
+             ->add('definitions', 'hidden', ['attr' => ['v-pre' => true]])
+             ->add('cached_html_preview', 'hidden', ['attr' => ['v-pre' => true]])
+             ->add('cached_html_final', 'hidden', ['attr' => ['v-pre' => true]])
              ->add('image_data', 'hidden')
              ->add('submit', 'submit', [
-                 'attr'  => [ 'class' => 'btn btn-primary btn-block slidemeister-save' ],
-                 'label' => trans('partymeister-slides::backend/slides.save')
+                 'attr'  => ['class' => 'btn btn-primary btn-block slidemeister-save'],
+                 'label' => trans('partymeister-slides::backend/slides.save'),
              ]);
     }
 }

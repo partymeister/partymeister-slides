@@ -2,7 +2,6 @@
 
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
-use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Motor\Media\Models\File;
 use Motor\Media\Services\FileService;
@@ -10,12 +9,12 @@ use Partymeister\Slides\Grids\FileGrid;
 
 /**
  * Class FilesController
+ *
  * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class FilesController extends \Motor\Media\Http\Controllers\Backend\FilesController
 {
     use FormBuilderTrait;
-
 
     /**
      * Display a listing of the resource.

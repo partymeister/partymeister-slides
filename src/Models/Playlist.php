@@ -20,35 +20,35 @@ use Motor\Core\Traits\Searchable;
 /**
  * Partymeister\Slides\Models\Playlist
  *
- * @property int                                                                                      $id
- * @property string                                                                                   $name
- * @property string                                                                                   $type
- * @property int                                                                                      $is_competition
- * @property int                                                                                      $created_by
- * @property int                                                                                      $updated_by
- * @property int|null                                                                                 $deleted_by
- * @property Carbon|null                              $created_at
- * @property Carbon|null                              $updated_at
- * @property-read User                                                    $creator
- * @property-read User|null                                               $eraser
- * @property-read mixed                                                   $item_count
+ * @property int $id
+ * @property string $name
+ * @property string $type
+ * @property int $is_competition
+ * @property int $created_by
+ * @property int $updated_by
+ * @property int|null $deleted_by
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User $creator
+ * @property-read User|null $eraser
+ * @property-read mixed $item_count
  * @property-read Collection|PlaylistItem[] $items
- * @property-read User                                                    $updater
- * @method static Builder|Playlist filteredBy( Filter $filter, $column )
- * @method static Builder|Playlist filteredByMultiple( Filter $filter )
+ * @property-read User $updater
+ * @method static Builder|Playlist filteredBy(Filter $filter, $column)
+ * @method static Builder|Playlist filteredByMultiple(Filter $filter)
  * @method static Builder|Playlist newModelQuery()
  * @method static Builder|Playlist newQuery()
  * @method static Builder|Playlist query()
- * @method static Builder|Playlist search( $q, $full_text = false )
- * @method static Builder|Playlist whereCreatedAt( $value )
- * @method static Builder|Playlist whereCreatedBy( $value )
- * @method static Builder|Playlist whereDeletedBy( $value )
- * @method static Builder|Playlist whereId( $value )
- * @method static Builder|Playlist whereIsCompetition( $value )
- * @method static Builder|Playlist whereName( $value )
- * @method static Builder|Playlist whereType( $value )
- * @method static Builder|Playlist whereUpdatedAt( $value )
- * @method static Builder|Playlist whereUpdatedBy( $value )
+ * @method static Builder|Playlist search($q, $full_text = false)
+ * @method static Builder|Playlist whereCreatedAt($value)
+ * @method static Builder|Playlist whereCreatedBy($value)
+ * @method static Builder|Playlist whereDeletedBy($value)
+ * @method static Builder|Playlist whereId($value)
+ * @method static Builder|Playlist whereIsCompetition($value)
+ * @method static Builder|Playlist whereName($value)
+ * @method static Builder|Playlist whereType($value)
+ * @method static Builder|Playlist whereUpdatedAt($value)
+ * @method static Builder|Playlist whereUpdatedBy($value)
  * @mixin Eloquent
  */
 class Playlist extends Model
@@ -62,7 +62,7 @@ class Playlist extends Model
      *
      * @var array
      */
-    protected $blameable = [ 'created', 'updated', 'deleted' ];
+    protected $blameable = ['created', 'updated', 'deleted'];
 
     /**
      * Searchable columns for the searchable trait
@@ -70,7 +70,7 @@ class Playlist extends Model
      * @var array
      */
     protected $searchableColumns = [
-        'name'
+        'name',
     ];
 
     /**
@@ -92,7 +92,8 @@ class Playlist extends Model
      */
     public function getItemCountAttribute()
     {
-        return $this->items()->count();
+        return $this->items()
+                    ->count();
     }
 
 

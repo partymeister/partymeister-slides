@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Class SlideCollectionSaved
+ *
  * @package Partymeister\Slides\Events
  */
 class SlideCollectionSaved
@@ -27,20 +28,19 @@ class SlideCollectionSaved
      */
     public $namePrefix = '';
 
-
     /**
      * Create a new event instance.
      *
      * SlideCollectionSaved constructor.
+     *
      * @param Collection $slideIds
      * @param            $namePrefix
      */
     public function __construct(Collection $slideIds, $namePrefix)
     {
-        $this->slideIds   = $slideIds;
+        $this->slideIds = $slideIds;
         $this->namePrefix = $namePrefix;
     }
-
 
     /**
      * Get the channels the event should broadcast on.

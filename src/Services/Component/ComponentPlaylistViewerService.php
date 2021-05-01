@@ -7,7 +7,6 @@ use Partymeister\Slides\Models\Component\ComponentPlaylistViewer;
 
 class ComponentPlaylistViewerService extends ComponentBaseService
 {
-
     protected $model = ComponentPlaylistViewer::class;
 
     protected $name = 'playlist-viewers';

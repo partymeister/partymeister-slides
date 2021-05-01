@@ -11,6 +11,7 @@ use Partymeister\Slides\Models\Playlist;
 
 /**
  * Class PlaylistSeekRequest
+ *
  * @package Partymeister\Slides\Events
  */
 class PlaylistSeekRequest implements ShouldBroadcastNow
@@ -27,20 +28,19 @@ class PlaylistSeekRequest implements ShouldBroadcastNow
      */
     public $index;
 
-
     /**
      * Create a new event instance.
      *
      * PlaylistSeekRequest constructor.
+     *
      * @param Playlist $playlist
      * @param          $index
      */
     public function __construct(Playlist $playlist, $index)
     {
         $this->playlist_id = $playlist->id;
-        $this->index       = $index;
+        $this->index = $index;
     }
-
 
     /**
      * Get the channels the event should broadcast on.
@@ -49,6 +49,6 @@ class PlaylistSeekRequest implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel(config('cache.prefix') . '.slidemeister-web.' . session('screens.active'));
+        return new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'));
     }
 }

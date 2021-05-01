@@ -16,24 +16,23 @@ use Partymeister\Slides\Services\SlideClientService;
 
 /**
  * Class SlideClientsController
+ *
  * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class SlideClientsController extends Controller
 {
     use FormBuilderTrait;
 
-
     /**
-     * @param SlideClient        $record
+     * @param SlideClient $record
      * @return RedirectResponse|Redirector
      */
     public function activate(Request $request, SlideClient $record)
     {
-        session([ 'screens.active' => $record->id ]);
+        session(['screens.active' => $record->id]);
 
         return redirect($request->server('HTTP_REFERER'));
     }
-
 
     /**
      * Display a listing of the resource.
@@ -52,7 +51,6 @@ class SlideClientsController extends Controller
         return view('partymeister-slides::backend.slide_clients.index', compact('paginator', 'grid'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -63,14 +61,13 @@ class SlideClientsController extends Controller
         $form = $this->form(SlideClientForm::class, [
             'method'  => 'POST',
             'route'   => 'backend.slide_clients.store',
-            'enctype' => 'multipart/form-data'
+            'enctype' => 'multipart/form-data',
         ]);
 
         $motorShowRightSidebar = true;
 
         return view('partymeister-slides::backend.slide_clients.create', compact('form', 'motorShowRightSidebar'));
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -84,7 +81,10 @@ class SlideClientsController extends Controller
 
         // It will automatically use current request, get the rules, and do the validation
         if (! $form->isValid()) {
-            return redirect()->back()->withErrors($form->getErrors())->withInput();
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
         }
 
         SlideClientService::createWithForm($request, $form);
@@ -93,7 +93,6 @@ class SlideClientsController extends Controller
 
         return redirect('backend/slide_clients');
     }
-
 
     /**
      * Display the specified resource.
@@ -105,7 +104,6 @@ class SlideClientsController extends Controller
         //
     }
 
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -116,9 +114,9 @@ class SlideClientsController extends Controller
     {
         $form = $this->form(SlideClientForm::class, [
             'method'  => 'PATCH',
-            'url'     => route('backend.slide_clients.update', [ $record->id ]),
+            'url'     => route('backend.slide_clients.update', [$record->id]),
             'enctype' => 'multipart/form-data',
-            'model'   => $record
+            'model'   => $record,
         ]);
 
         $motorShowRightSidebar = true;
@@ -126,12 +124,11 @@ class SlideClientsController extends Controller
         return view('partymeister-slides::backend.slide_clients.edit', compact('form', 'motorShowRightSidebar'));
     }
 
-
     /**
      * Update the specified resource in storage.
      *
      * @param SlideClientRequest $request
-     * @param SlideClient        $record
+     * @param SlideClient $record
      * @return RedirectResponse|Redirector
      */
     public function update(SlideClientRequest $request, SlideClient $record)
@@ -140,7 +137,10 @@ class SlideClientsController extends Controller
 
         // It will automatically use current request, get the rules, and do the validation
         if (! $form->isValid()) {
-            return redirect()->back()->withErrors($form->getErrors())->withInput();
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
         }
 
         SlideClientService::updateWithForm($record, $request, $form);
@@ -149,7 +149,6 @@ class SlideClientsController extends Controller
 
         return redirect('backend/slide_clients');
     }
-
 
     /**
      * Remove the specified resource from storage.

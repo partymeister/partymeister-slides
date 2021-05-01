@@ -2,18 +2,17 @@
 
 namespace Partymeister\Slides\Services;
 
-use Illuminate\Support\Arr;
 use Motor\Backend\Services\BaseService;
 use Motor\Media\Models\FileAssociation;
 use Partymeister\Slides\Models\SlideClient;
 
 /**
  * Class SlideClientService
+ *
  * @package Partymeister\Slides\Services
  */
 class SlideClientService extends BaseService
 {
-
     /**
      * @var string
      */
@@ -31,7 +30,8 @@ class SlideClientService extends BaseService
 
     protected function assignJingles()
     {
-        $this->record->file_associations()->delete();
+        $this->record->file_associations()
+                     ->delete();
         $this->addFileAssociation('jingle_1');
         $this->addFileAssociation('jingle_2');
         $this->addFileAssociation('jingle_3');

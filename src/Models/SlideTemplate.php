@@ -24,39 +24,39 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Partymeister\Slides\Models\SlideTemplate
  *
- * @property int                                                                               $id
- * @property string                                                                            $name
- * @property string                                                                            $template_for
- * @property mixed                                                                             $definitions
- * @property string                                                                            $cached_html_final
- * @property string                                                                            $cached_html_preview
- * @property int                                                                               $created_by
- * @property int                                                                               $updated_by
- * @property int|null                        $deleted_by
+ * @property int $id
+ * @property string $name
+ * @property string $template_for
+ * @property mixed $definitions
+ * @property string $cached_html_final
+ * @property string $cached_html_preview
+ * @property int $created_by
+ * @property int $updated_by
+ * @property int|null $deleted_by
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User                       $creator
- * @property-read User|null                  $eraser
- * @property-read Collection|Media[]         $media
- * @property-read Collection|Slide[]         $slides
- * @property-read User                       $updater
- * @method static Builder|SlideTemplate filteredBy( Filter $filter, $column )
- * @method static Builder|SlideTemplate filteredByMultiple( Filter $filter )
+ * @property-read User $creator
+ * @property-read User|null $eraser
+ * @property-read Collection|Media[] $media
+ * @property-read Collection|Slide[] $slides
+ * @property-read User $updater
+ * @method static Builder|SlideTemplate filteredBy(Filter $filter, $column)
+ * @method static Builder|SlideTemplate filteredByMultiple(Filter $filter)
  * @method static Builder|SlideTemplate newModelQuery()
  * @method static Builder|SlideTemplate newQuery()
  * @method static Builder|SlideTemplate query()
- * @method static Builder|SlideTemplate search( $q, $full_text = false )
- * @method static Builder|SlideTemplate whereCachedHtmlFinal( $value )
- * @method static Builder|SlideTemplate whereCachedHtmlPreview( $value )
- * @method static Builder|SlideTemplate whereCreatedAt( $value )
- * @method static Builder|SlideTemplate whereCreatedBy( $value )
- * @method static Builder|SlideTemplate whereDefinitions( $value )
- * @method static Builder|SlideTemplate whereDeletedBy( $value )
- * @method static Builder|SlideTemplate whereId( $value )
- * @method static Builder|SlideTemplate whereName( $value )
- * @method static Builder|SlideTemplate whereTemplateFor( $value )
- * @method static Builder|SlideTemplate whereUpdatedAt( $value )
- * @method static Builder|SlideTemplate whereUpdatedBy( $value )
+ * @method static Builder|SlideTemplate search($q, $full_text = false)
+ * @method static Builder|SlideTemplate whereCachedHtmlFinal($value)
+ * @method static Builder|SlideTemplate whereCachedHtmlPreview($value)
+ * @method static Builder|SlideTemplate whereCreatedAt($value)
+ * @method static Builder|SlideTemplate whereCreatedBy($value)
+ * @method static Builder|SlideTemplate whereDefinitions($value)
+ * @method static Builder|SlideTemplate whereDeletedBy($value)
+ * @method static Builder|SlideTemplate whereId($value)
+ * @method static Builder|SlideTemplate whereName($value)
+ * @method static Builder|SlideTemplate whereTemplateFor($value)
+ * @method static Builder|SlideTemplate whereUpdatedAt($value)
+ * @method static Builder|SlideTemplate whereUpdatedBy($value)
  * @mixin Eloquent
  */
 class SlideTemplate extends Model implements HasMedia
@@ -75,7 +75,7 @@ class SlideTemplate extends Model implements HasMedia
      *
      * @var array
      */
-    protected $blameable = [ 'created', 'updated', 'deleted' ];
+    protected $blameable = ['created', 'updated', 'deleted'];
 
     /**
      * Searchable columns for the searchable trait
@@ -83,7 +83,7 @@ class SlideTemplate extends Model implements HasMedia
      * @var array
      */
     protected $searchableColumns = [
-        'name'
+        'name',
     ];
 
     /**
@@ -99,15 +99,21 @@ class SlideTemplate extends Model implements HasMedia
         'cached_html_final',
     ];
 
-
     /**
      * @param Media|null $media
      * @throws InvalidManipulation
      */
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->width(400)->height(400)->nonQueued();
-        $this->addMediaConversion('preview')->width(400)->height(400)->format('png')->nonQueued();
+        $this->addMediaConversion('thumb')
+             ->width(400)
+             ->height(400)
+             ->nonQueued();
+        $this->addMediaConversion('preview')
+             ->width(400)
+             ->height(400)
+             ->format('png')
+             ->nonQueued();
     }
 
     ///**
@@ -122,7 +128,6 @@ class SlideTemplate extends Model implements HasMedia
     /**
      * @return HasMany
      */
-
 
     /**
      * @return HasMany

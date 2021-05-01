@@ -7,6 +7,7 @@ use Motor\Backend\Grid\Renderers\TranslateRenderer;
 
 /**
  * Class TransitionGrid
+ *
  * @package Partymeister\Slides\Grids
  */
 class TransitionGrid extends Grid
@@ -15,7 +16,7 @@ class TransitionGrid extends Grid
     {
         $this->addColumn('name', trans('motor-backend::backend/global.name'), true);
         $this->addColumn('client_type', trans('partymeister-slides::backend/slide_clients.type'))
-            ->renderer(TranslateRenderer::class, [ 'file' => 'partymeister-slides::backend/slide_clients.types' ]);
+             ->renderer(TranslateRenderer::class, ['file' => 'partymeister-slides::backend/slide_clients.types']);
         $this->addColumn('identifier', trans('partymeister-slides::backend/transitions.identifier'), true);
         $this->addColumn('default_duration', trans('partymeister-slides::backend/transitions.default_duration'), true);
         $this->setDefaultSorting('name', 'ASC');

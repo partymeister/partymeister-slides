@@ -12,8 +12,10 @@
                     </option>
                 </select>
             </div>
-            <button type="button" class="btn btn-sm btn-primary float-right" @click="next" v-if="pagination && pagination.total_pages > 1 && pagination.current_page < pagination.total_pages"> >> </button>
-            <button type="button" class="btn btn-sm btn-primary float-left" @click="previous" v-if="pagination && pagination.total_pages > 1 && (pagination.current_page >= pagination.total_pages || (pagination.current_page > 1 && pagination.current_page < pagination.total_pages))"> << </button>
+          <div class="flex">
+            <button type="button" class="btn btn-sm btn-primary flex-row-reverse" @click="next" v-if="pagination && pagination.last_page > 1 && pagination.current_page < pagination.last_page"> >> </button>
+            <button type="button" class="btn btn-sm btn-primary flex-row" @click="previous" v-if="pagination && pagination.last_page > 1 && (pagination.current_page >= pagination.last_page || (pagination.current_page > 1 && pagination.current_page < pagination.last_page))"> << </button>
+          </div>
             <div class="clearfix mb-2"></div>
             <draggable v-model="files" :options="{group:{ name:'files',  pull:'clone', put:false }, sort: false, dragClass: 'sortable-drag', ghostClass: 'sortable-ghost'}" @start="onStart" @end="onEnd">
                 <div v-for="file in files">
@@ -61,19 +63,19 @@
             refreshFiles: function() {
                 axios.get(route('ajax.slides.index')+'?sortable_field=created_at&sortable_direction=DESC&category_id='+this.category_id).then((response) => {
                     this.files = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.pagination = response.data.meta;
                 });
             },
             next: function() {
                 axios.get(route('ajax.slides.index')+'?sortable_field=created_at&sortable_direction=DESC&category_id='+this.category_id+'&page='+(this.pagination.current_page+1)).then((response) => {
                     this.files = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.pagination = response.data.meta;
                 });
             },
             previous: function() {
                 axios.get(route('ajax.slides.index')+'?sortable_field=created_at&sortable_direction=DESC&category_id='+this.category_id+'&page='+(this.pagination.current_page-1)).then((response) => {
                     this.files = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.pagination = response.data.meta;
                 });
             },
           isImage: function (file) {
@@ -100,7 +102,7 @@
             });
             axios.get(route('ajax.slides.index')+'?sortable_field=created_at&sortable_direction=DESC').then((response) => {
                 this.files = response.data.data;
-                this.pagination = response.data.meta.pagination;
+                this.pagination = response.data.meta;
             });
         }
     }

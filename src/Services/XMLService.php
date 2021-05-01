@@ -8,16 +8,16 @@ use Partymeister\Slides\Services\XMLService\Generator;
 
 /**
  * Class XMLService
+ *
  * @package Partymeister\Slides\Services
  */
 class XMLService
 {
-
     /**
      * @param       $method
      * @param array $parameters
-     * @param bool  $send
-     * @param bool  $debug
+     * @param bool $send
+     * @param bool $debug
      * @return bool|string
      */
     public static function send($method, $parameters = [], $send = true, $debug = false)
@@ -32,7 +32,6 @@ class XMLService
             return $xml;
         }
     }
-
 
     /**
      * @param      $xml
@@ -54,7 +53,7 @@ class XMLService
                 return "$errstr - $errno";
             } else {
                 $retval = '';
-                fwrite($fp, $xml . "\r\n\r\n");
+                fwrite($fp, $xml."\r\n\r\n");
                 while (! feof($fp)) {
                     $retval .= fgets($fp, 128);
                 }

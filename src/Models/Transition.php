@@ -18,33 +18,33 @@ use Motor\Core\Traits\Searchable;
 /**
  * Partymeister\Slides\Models\Transition
  *
- * @property int                                  $id
- * @property string                               $name
- * @property int                                  $identifier
- * @property int                                  $default_duration
- * @property int                                  $created_by
- * @property int                                  $updated_by
- * @property int|null                             $deleted_by
- * @property Carbon|null      $created_at
- * @property Carbon|null      $updated_at
- * @property-read User      $creator
+ * @property int $id
+ * @property string $name
+ * @property int $identifier
+ * @property int $default_duration
+ * @property int $created_by
+ * @property int $updated_by
+ * @property int|null $deleted_by
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User $creator
  * @property-read User|null $eraser
- * @property-read User      $updater
- * @method static Builder|Transition filteredBy( Filter $filter, $column )
- * @method static Builder|Transition filteredByMultiple( Filter $filter )
+ * @property-read User $updater
+ * @method static Builder|Transition filteredBy(Filter $filter, $column)
+ * @method static Builder|Transition filteredByMultiple(Filter $filter)
  * @method static Builder|Transition newModelQuery()
  * @method static Builder|Transition newQuery()
  * @method static Builder|Transition query()
- * @method static Builder|Transition search( $q, $full_text = false )
- * @method static Builder|Transition whereCreatedAt( $value )
- * @method static Builder|Transition whereCreatedBy( $value )
- * @method static Builder|Transition whereDefaultDuration( $value )
- * @method static Builder|Transition whereDeletedBy( $value )
- * @method static Builder|Transition whereId( $value )
- * @method static Builder|Transition whereIdentifier( $value )
- * @method static Builder|Transition whereName( $value )
- * @method static Builder|Transition whereUpdatedAt( $value )
- * @method static Builder|Transition whereUpdatedBy( $value )
+ * @method static Builder|Transition search($q, $full_text = false)
+ * @method static Builder|Transition whereCreatedAt($value)
+ * @method static Builder|Transition whereCreatedBy($value)
+ * @method static Builder|Transition whereDefaultDuration($value)
+ * @method static Builder|Transition whereDeletedBy($value)
+ * @method static Builder|Transition whereId($value)
+ * @method static Builder|Transition whereIdentifier($value)
+ * @method static Builder|Transition whereName($value)
+ * @method static Builder|Transition whereUpdatedAt($value)
+ * @method static Builder|Transition whereUpdatedBy($value)
  * @mixin Eloquent
  */
 class Transition extends Model
@@ -58,7 +58,7 @@ class Transition extends Model
      *
      * @var array
      */
-    protected $blameable = [ 'created', 'updated', 'deleted' ];
+    protected $blameable = ['created', 'updated', 'deleted'];
 
     /**
      * Searchable columns for the searchable trait
@@ -66,7 +66,7 @@ class Transition extends Model
      * @var array
      */
     protected $searchableColumns = [
-        'name'
+        'name',
     ];
 
     /**
@@ -78,6 +78,6 @@ class Transition extends Model
         'name',
         'client_type',
         'identifier',
-        'default_duration'
+        'default_duration',
     ];
 }

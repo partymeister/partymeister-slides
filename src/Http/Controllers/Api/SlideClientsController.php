@@ -3,20 +3,21 @@
 namespace Partymeister\Slides\Http\Controllers\Api;
 
 use Motor\Backend\Http\Controllers\ApiController;
-
-use Partymeister\Slides\Models\SlideClient;
 use Partymeister\Slides\Http\Requests\Backend\SlideClientRequest;
-use Partymeister\Slides\Services\SlideClientService;
-use Partymeister\Slides\Http\Resources\SlideClientResource;
 use Partymeister\Slides\Http\Resources\SlideClientCollection;
+use Partymeister\Slides\Http\Resources\SlideClientResource;
+use Partymeister\Slides\Models\SlideClient;
+use Partymeister\Slides\Services\SlideClientService;
 
 /**
  * Class SlideClientsController
+ *
  * @package Partymeister\Slides\Http\Controllers\Api
  */
 class SlideClientsController extends ApiController
 {
     protected string $model = 'Partymeister\Slides\Models\SlideClient';
+
     protected string $modelResource = 'slide_client';
 
     /**
@@ -69,7 +70,9 @@ class SlideClientsController extends ApiController
      */
     public function index()
     {
-        $paginator = SlideClientService::collection()->getPaginator();
+        $paginator = SlideClientService::collection()
+                                       ->getPaginator();
+
         return (new SlideClientCollection($paginator))->additional(['message' => 'SlideClient collection read']);
     }
 
@@ -124,10 +127,13 @@ class SlideClientsController extends ApiController
      */
     public function store(SlideClientRequest $request)
     {
-        $result = SlideClientService::create($request)->getResult();
-        return (new SlideClientResource($result))->additional(['message' => 'SlideClient created'])->response()->setStatusCode(201);
-    }
+        $result = SlideClientService::create($request)
+                                    ->getResult();
 
+        return (new SlideClientResource($result))->additional(['message' => 'SlideClient created'])
+                                                 ->response()
+                                                 ->setStatusCode(201);
+    }
 
     /**
      * @OA\Get (
@@ -184,10 +190,11 @@ class SlideClientsController extends ApiController
      */
     public function show(SlideClient $record)
     {
-        $result = SlideClientService::show($record)->getResult();
+        $result = SlideClientService::show($record)
+                                    ->getResult();
+
         return (new SlideClientResource($result))->additional(['message' => 'SlideClient read']);
     }
-
 
     /**
      * @OA\Put (
@@ -243,15 +250,16 @@ class SlideClientsController extends ApiController
      * Update the specified resource in storage.
      *
      * @param SlideClientRequest $request
-     * @param SlideClient        $record
+     * @param SlideClient $record
      * @return SlideClientResource
      */
     public function update(SlideClientRequest $request, SlideClient $record)
     {
-        $result = SlideClientService::update($record, $request)->getResult();
+        $result = SlideClientService::update($record, $request)
+                                    ->getResult();
+
         return (new SlideClientResource($result))->additional(['message' => 'SlideClient updated']);
     }
-
 
     /**
      * @OA\Delete (
@@ -314,11 +322,13 @@ class SlideClientsController extends ApiController
      */
     public function destroy(SlideClient $record)
     {
-        $result = SlideClientService::delete($record)->getResult();
+        $result = SlideClientService::delete($record)
+                                    ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'SlideClient deleted']);
         }
+
         return response()->json(['message' => 'Problem deleting SlideClient'], 404);
     }
 }

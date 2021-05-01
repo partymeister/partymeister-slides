@@ -15,16 +15,16 @@ class ComponentPlaylistViewer extends ComponentBaseModel
         'playlist_id',
     ];
 
-	/**
-	 * Preview function for the page editor
-	 *
-	 * @return mixed
-	 */
-	public function preview()
-	{
-		return [
-			'name'    => trans('partymeister-slides::component/playlist-viewers.component'),
-			'preview' => 'Preview for ComponentPlaylistViewer component'
-		];
-	}
+    /**
+     * Preview function for the page editor
+     *
+     * @return mixed
+     */
+    public function preview()
+    {
+        return [
+            'name'    => trans('partymeister-slides::component/playlist-viewers.component'),
+            'preview' => 'Preview for ComponentPlaylistViewer component',
+        ];
+    }
 }

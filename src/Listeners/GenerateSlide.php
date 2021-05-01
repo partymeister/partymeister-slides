@@ -6,11 +6,11 @@ use Partymeister\Slides\Events\SlideSaved;
 
 /**
  * Class GenerateSlide
+ *
  * @package Partymeister\Slides\Listeners
  */
 class GenerateSlide
 {
-
     /**
      * Create the event listener.
      *
@@ -20,7 +20,6 @@ class GenerateSlide
     {
         //
     }
-
 
     /**
      * Handle the event.

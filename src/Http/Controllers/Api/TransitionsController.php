@@ -3,20 +3,21 @@
 namespace Partymeister\Slides\Http\Controllers\Api;
 
 use Motor\Backend\Http\Controllers\ApiController;
-
-use Partymeister\Slides\Models\Transition;
 use Partymeister\Slides\Http\Requests\Backend\TransitionRequest;
-use Partymeister\Slides\Services\TransitionService;
-use Partymeister\Slides\Http\Resources\TransitionResource;
 use Partymeister\Slides\Http\Resources\TransitionCollection;
+use Partymeister\Slides\Http\Resources\TransitionResource;
+use Partymeister\Slides\Models\Transition;
+use Partymeister\Slides\Services\TransitionService;
 
 /**
  * Class TransitionsController
+ *
  * @package Partymeister\Slides\Http\Controllers\Api
  */
 class TransitionsController extends ApiController
 {
     protected string $model = 'Partymeister\Slides\Models\Transition';
+
     protected string $modelResource = 'transition';
 
     /**
@@ -69,7 +70,9 @@ class TransitionsController extends ApiController
      */
     public function index()
     {
-        $paginator = TransitionService::collection()->getPaginator();
+        $paginator = TransitionService::collection()
+                                      ->getPaginator();
+
         return (new TransitionCollection($paginator))->additional(['message' => 'Transition collection read']);
     }
 
@@ -124,10 +127,13 @@ class TransitionsController extends ApiController
      */
     public function store(TransitionRequest $request)
     {
-        $result = TransitionService::create($request)->getResult();
-        return (new TransitionResource($result))->additional(['message' => 'Transition created'])->response()->setStatusCode(201);
-    }
+        $result = TransitionService::create($request)
+                                   ->getResult();
 
+        return (new TransitionResource($result))->additional(['message' => 'Transition created'])
+                                                ->response()
+                                                ->setStatusCode(201);
+    }
 
     /**
      * @OA\Get (
@@ -184,10 +190,11 @@ class TransitionsController extends ApiController
      */
     public function show(Transition $record)
     {
-        $result = TransitionService::show($record)->getResult();
+        $result = TransitionService::show($record)
+                                   ->getResult();
+
         return (new TransitionResource($result))->additional(['message' => 'Transition read']);
     }
-
 
     /**
      * @OA\Put (
@@ -243,15 +250,16 @@ class TransitionsController extends ApiController
      * Update the specified resource in storage.
      *
      * @param TransitionRequest $request
-     * @param Transition        $record
+     * @param Transition $record
      * @return TransitionResource
      */
     public function update(TransitionRequest $request, Transition $record)
     {
-        $result = TransitionService::update($record, $request)->getResult();
+        $result = TransitionService::update($record, $request)
+                                   ->getResult();
+
         return (new TransitionResource($result))->additional(['message' => 'Transition updated']);
     }
-
 
     /**
      * @OA\Delete (
@@ -314,11 +322,13 @@ class TransitionsController extends ApiController
      */
     public function destroy(Transition $record)
     {
-        $result = TransitionService::delete($record)->getResult();
+        $result = TransitionService::delete($record)
+                                   ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'Transition deleted']);
         }
+
         return response()->json(['message' => 'Problem deleting Transition'], 404);
     }
 }

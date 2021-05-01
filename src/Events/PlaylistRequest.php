@@ -12,6 +12,7 @@ use Partymeister\Slides\Models\Playlist;
 
 /**
  * Class PlaylistRequest
+ *
  * @package Partymeister\Slides\Events
  */
 class PlaylistRequest implements ShouldBroadcastNow
@@ -23,11 +24,11 @@ class PlaylistRequest implements ShouldBroadcastNow
      */
     public $playlist;
 
-
     /**
      * Create a new event instance.
      *
      * PlaylistRequest constructor.
+     *
      * @param Playlist $playlist
      * @param          $callbacks
      */
@@ -35,9 +36,8 @@ class PlaylistRequest implements ShouldBroadcastNow
     {
         $this->playlist = (new PlaylistResource($playlist->load('items')))->toArrayRecursive();
         $this->playlist['callbacks'] = $callbacks;
-        $this->playlist['callback_url'] = config('app.url') . '/api/callback/';
+        $this->playlist['callback_url'] = config('app.url').'/api/callback/';
     }
-
 
     /**
      * Get the channels the event should broadcast on.
@@ -46,6 +46,6 @@ class PlaylistRequest implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel(config('cache.prefix') . '.slidemeister-web.' . session('screens.active'));
+        return new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'));
     }
 }

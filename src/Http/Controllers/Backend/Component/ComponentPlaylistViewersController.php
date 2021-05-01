@@ -3,13 +3,11 @@
 namespace Partymeister\Slides\Http\Controllers\Backend\Component;
 
 use Illuminate\Http\Request;
+use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Motor\CMS\Http\Controllers\Component\ComponentController;
-
+use Partymeister\Slides\Forms\Backend\Component\ComponentPlaylistViewerForm;
 use Partymeister\Slides\Models\Component\ComponentPlaylistViewer;
 use Partymeister\Slides\Services\Component\ComponentPlaylistViewerService;
-use Partymeister\Slides\Forms\Backend\Component\ComponentPlaylistViewerForm;
-
-use Kris\LaravelFormBuilder\FormBuilderTrait;
 
 class ComponentPlaylistViewersController extends ComponentController
 {
@@ -27,11 +25,10 @@ class ComponentPlaylistViewersController extends ComponentController
         return response()->json($this->getFormData('component.playlist-viewers.store', ['mediapool' => false]));
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -39,7 +36,7 @@ class ComponentPlaylistViewersController extends ComponentController
     {
         $this->form = $this->form(ComponentPlaylistViewerForm::class);
 
-        if ( ! $this->isValid()) {
+        if (! $this->isValid()) {
             return $this->respondWithValidationError();
         }
 
@@ -51,25 +48,24 @@ class ComponentPlaylistViewersController extends ComponentController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function edit(ComponentPlaylistViewer $record)
     {
         $this->form = $this->form(ComponentPlaylistViewerForm::class, [
-            'model' => $record
+            'model' => $record,
         ]);
 
         return response()->json($this->getFormData('component.playlist-viewers.update', ['mediapool' => false]));
     }
 
-
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -77,7 +73,7 @@ class ComponentPlaylistViewersController extends ComponentController
     {
         $form = $this->form(ComponentPlaylistViewerForm::class);
 
-        if ( ! $this->isValid()) {
+        if (! $this->isValid()) {
             return $this->respondWithValidationError();
         }
 

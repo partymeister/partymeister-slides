@@ -2,7 +2,6 @@
 
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Motor\Backend\Http\Controllers\Controller;
@@ -14,12 +13,12 @@ use Partymeister\Slides\Services\TransitionService;
 
 /**
  * Class TransitionsController
+ *
  * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class TransitionsController extends Controller
 {
     use FormBuilderTrait;
-
 
     /**
      * Display a listing of the resource.
@@ -38,7 +37,6 @@ class TransitionsController extends Controller
         return view('partymeister-slides::backend.transitions.index', compact('paginator', 'grid'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -49,12 +47,11 @@ class TransitionsController extends Controller
         $form = $this->form(TransitionForm::class, [
             'method'  => 'POST',
             'route'   => 'backend.transitions.store',
-            'enctype' => 'multipart/form-data'
+            'enctype' => 'multipart/form-data',
         ]);
 
         return view('partymeister-slides::backend.transitions.create', compact('form'));
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -68,7 +65,10 @@ class TransitionsController extends Controller
 
         // It will automatically use current request, get the rules, and do the validation
         if (! $form->isValid()) {
-            return redirect()->back()->withErrors($form->getErrors())->withInput();
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
         }
 
         TransitionService::createWithForm($request, $form);
@@ -77,7 +77,6 @@ class TransitionsController extends Controller
 
         return redirect('backend/transitions');
     }
-
 
     /**
      * Display the specified resource.
@@ -89,7 +88,6 @@ class TransitionsController extends Controller
         //
     }
 
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -100,20 +98,19 @@ class TransitionsController extends Controller
     {
         $form = $this->form(TransitionForm::class, [
             'method'  => 'PATCH',
-            'url'     => route('backend.transitions.update', [ $record->id ]),
+            'url'     => route('backend.transitions.update', [$record->id]),
             'enctype' => 'multipart/form-data',
-            'model'   => $record
+            'model'   => $record,
         ]);
 
         return view('partymeister-slides::backend.transitions.edit', compact('form'));
     }
 
-
     /**
      * Update the specified resource in storage.
      *
      * @param TransitionRequest $request
-     * @param Transition        $record
+     * @param Transition $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(TransitionRequest $request, Transition $record)
@@ -122,7 +119,10 @@ class TransitionsController extends Controller
 
         // It will automatically use current request, get the rules, and do the validation
         if (! $form->isValid()) {
-            return redirect()->back()->withErrors($form->getErrors())->withInput();
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
         }
 
         TransitionService::updateWithForm($record, $request, $form);
@@ -131,7 +131,6 @@ class TransitionsController extends Controller
 
         return redirect('backend/transitions');
     }
-
 
     /**
      * Remove the specified resource from storage.

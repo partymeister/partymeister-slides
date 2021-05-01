@@ -1,4 +1,5 @@
 <?php
+
 namespace Partymeister\Slides\Events;
 
 use Illuminate\Broadcasting\Channel;
@@ -9,13 +10,12 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class PlaylistNextRequest
+ *
  * @package Partymeister\Slides\Events
  */
 class SiegmeisterRequest implements ShouldBroadcastNow
 {
-
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
 
     /**
      * Create a new event instance.
@@ -25,7 +25,6 @@ class SiegmeisterRequest implements ShouldBroadcastNow
     public function __construct()
     {
     }
-
 
     /**
      * Get the channels the event should broadcast on.

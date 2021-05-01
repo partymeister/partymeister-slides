@@ -20,22 +20,22 @@ use Motor\Media\Models\FileAssociation;
 /**
  * Partymeister\Slides\Models\SlideClient
  *
- * @property int            $id
- * @property string         $name
- * @property string         $type
- * @property string         $ip_address
- * @property string         $port
- * @property int            $sort_position
- * @property int|null       $playlist_id
- * @property int|null       $playlist_item_id
- * @property Carbon|null    $created_at
- * @property Carbon|null    $updated_at
- * @property int            $created_by
- * @property int            $updated_by
- * @property int|null       $deleted_by
- * @property-read User      $creator
+ * @property int $id
+ * @property string $name
+ * @property string $type
+ * @property string $ip_address
+ * @property string $port
+ * @property int $sort_position
+ * @property int|null $playlist_id
+ * @property int|null $playlist_item_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $created_by
+ * @property int $updated_by
+ * @property int|null $deleted_by
+ * @property-read User $creator
  * @property-read User|null $eraser
- * @property-read User      $updater
+ * @property-read User $updater
  * @method static Builder|SlideClient filteredBy(Filter $filter, $column)
  * @method static Builder|SlideClient filteredByMultiple(Filter $filter)
  * @method static Builder|SlideClient newModelQuery()
@@ -68,7 +68,7 @@ class SlideClient extends Model
      *
      * @var array
      */
-    protected $blameable = [ 'created', 'updated', 'deleted' ];
+    protected $blameable = ['created', 'updated', 'deleted'];
 
     /**
      * Searchable columns for the searchable trait
@@ -77,7 +77,7 @@ class SlideClient extends Model
      */
     protected $searchableColumns = [
         'name',
-        'ip_address'
+        'ip_address',
     ];
 
     /**
@@ -99,7 +99,6 @@ class SlideClient extends Model
     protected $casts = [
         'configuration' => 'array',
     ];
-
 
     /**
      * @return MorphMany

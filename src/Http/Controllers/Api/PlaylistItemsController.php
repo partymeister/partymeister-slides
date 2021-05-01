@@ -3,20 +3,21 @@
 namespace Partymeister\Slides\Http\Controllers\Api;
 
 use Motor\Backend\Http\Controllers\ApiController;
-
-use Partymeister\Slides\Models\PlaylistItem;
 use Partymeister\Slides\Http\Requests\Backend\PlaylistItemRequest;
-use Partymeister\Slides\Services\PlaylistItemService;
-use Partymeister\Slides\Http\Resources\PlaylistItemResource;
 use Partymeister\Slides\Http\Resources\PlaylistItemCollection;
+use Partymeister\Slides\Http\Resources\PlaylistItemResource;
+use Partymeister\Slides\Models\PlaylistItem;
+use Partymeister\Slides\Services\PlaylistItemService;
 
 /**
  * Class PlaylistItemsController
+ *
  * @package Partymeister\Slides\Http\Controllers\Api
  */
 class PlaylistItemsController extends ApiController
 {
     protected string $model = 'Partymeister\Slides\Models\PlaylistItem';
+
     protected string $modelResource = 'playlist_item';
 
     /**
@@ -69,7 +70,9 @@ class PlaylistItemsController extends ApiController
      */
     public function index()
     {
-        $paginator = PlaylistItemService::collection()->getPaginator();
+        $paginator = PlaylistItemService::collection()
+                                        ->getPaginator();
+
         return (new PlaylistItemCollection($paginator))->additional(['message' => 'PlaylistItem collection read']);
     }
 
@@ -124,10 +127,13 @@ class PlaylistItemsController extends ApiController
      */
     public function store(PlaylistItemRequest $request)
     {
-        $result = PlaylistItemService::create($request)->getResult();
-        return (new PlaylistItemResource($result))->additional(['message' => 'PlaylistItem created'])->response()->setStatusCode(201);
-    }
+        $result = PlaylistItemService::create($request)
+                                     ->getResult();
 
+        return (new PlaylistItemResource($result))->additional(['message' => 'PlaylistItem created'])
+                                                  ->response()
+                                                  ->setStatusCode(201);
+    }
 
     /**
      * @OA\Get (
@@ -184,10 +190,11 @@ class PlaylistItemsController extends ApiController
      */
     public function show(PlaylistItem $record)
     {
-        $result = PlaylistItemService::show($record)->getResult();
+        $result = PlaylistItemService::show($record)
+                                     ->getResult();
+
         return (new PlaylistItemResource($result))->additional(['message' => 'PlaylistItem read']);
     }
-
 
     /**
      * @OA\Put (
@@ -243,15 +250,16 @@ class PlaylistItemsController extends ApiController
      * Update the specified resource in storage.
      *
      * @param PlaylistItemRequest $request
-     * @param PlaylistItem        $record
+     * @param PlaylistItem $record
      * @return PlaylistItemResource
      */
     public function update(PlaylistItemRequest $request, PlaylistItem $record)
     {
-        $result = PlaylistItemService::update($record, $request)->getResult();
+        $result = PlaylistItemService::update($record, $request)
+                                     ->getResult();
+
         return (new PlaylistItemResource($result))->additional(['message' => 'PlaylistItem updated']);
     }
-
 
     /**
      * @OA\Delete (
@@ -314,11 +322,13 @@ class PlaylistItemsController extends ApiController
      */
     public function destroy(PlaylistItem $record)
     {
-        $result = PlaylistItemService::delete($record)->getResult();
+        $result = PlaylistItemService::delete($record)
+                                     ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'PlaylistItem deleted']);
         }
+
         return response()->json(['message' => 'Problem deleting PlaylistItem'], 404);
     }
 }

@@ -3,17 +3,16 @@
 namespace Partymeister\Slides\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Motor\Backend\Models\User;
 use Partymeister\Slides\Models\SlideClient;
 
 /**
  * Class SlidemeisterWebController
+ *
  * @package Partymeister\Slides\Http\Controllers
  */
 class SlidemeisterWebController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -25,6 +24,7 @@ class SlidemeisterWebController extends Controller
         // FIXME: this needs to be improved
         // Master api_token
         $apiToken = User::first()->api_token;
+
         return view('partymeister-slides::slidemeister-web/index', ['api_token' => $apiToken]);
     }
 }

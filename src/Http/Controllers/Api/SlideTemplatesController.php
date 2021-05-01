@@ -3,20 +3,21 @@
 namespace Partymeister\Slides\Http\Controllers\Api;
 
 use Motor\Backend\Http\Controllers\ApiController;
-
-use Partymeister\Slides\Models\SlideTemplate;
 use Partymeister\Slides\Http\Requests\Backend\SlideTemplateRequest;
-use Partymeister\Slides\Services\SlideTemplateService;
-use Partymeister\Slides\Http\Resources\SlideTemplateResource;
 use Partymeister\Slides\Http\Resources\SlideTemplateCollection;
+use Partymeister\Slides\Http\Resources\SlideTemplateResource;
+use Partymeister\Slides\Models\SlideTemplate;
+use Partymeister\Slides\Services\SlideTemplateService;
 
 /**
  * Class SlideTemplatesController
+ *
  * @package Partymeister\Slides\Http\Controllers\Api
  */
 class SlideTemplatesController extends ApiController
 {
     protected string $model = 'Partymeister\Slides\Models\SlideTemplate';
+
     protected string $modelResource = 'slide_template';
 
     /**
@@ -69,7 +70,9 @@ class SlideTemplatesController extends ApiController
      */
     public function index()
     {
-        $paginator = SlideTemplateService::collection()->getPaginator();
+        $paginator = SlideTemplateService::collection()
+                                         ->getPaginator();
+
         return (new SlideTemplateCollection($paginator))->additional(['message' => 'SlideTemplate collection read']);
     }
 
@@ -124,10 +127,13 @@ class SlideTemplatesController extends ApiController
      */
     public function store(SlideTemplateRequest $request)
     {
-        $result = SlideTemplateService::create($request)->getResult();
-        return (new SlideTemplateResource($result))->additional(['message' => 'SlideTemplate created'])->response()->setStatusCode(201);
-    }
+        $result = SlideTemplateService::create($request)
+                                      ->getResult();
 
+        return (new SlideTemplateResource($result))->additional(['message' => 'SlideTemplate created'])
+                                                   ->response()
+                                                   ->setStatusCode(201);
+    }
 
     /**
      * @OA\Get (
@@ -184,10 +190,11 @@ class SlideTemplatesController extends ApiController
      */
     public function show(SlideTemplate $record)
     {
-        $result = SlideTemplateService::show($record)->getResult();
+        $result = SlideTemplateService::show($record)
+                                      ->getResult();
+
         return (new SlideTemplateResource($result))->additional(['message' => 'SlideTemplate read']);
     }
-
 
     /**
      * @OA\Put (
@@ -243,15 +250,16 @@ class SlideTemplatesController extends ApiController
      * Update the specified resource in storage.
      *
      * @param SlideTemplateRequest $request
-     * @param SlideTemplate        $record
+     * @param SlideTemplate $record
      * @return SlideTemplateResource
      */
     public function update(SlideTemplateRequest $request, SlideTemplate $record)
     {
-        $result = SlideTemplateService::update($record, $request)->getResult();
+        $result = SlideTemplateService::update($record, $request)
+                                      ->getResult();
+
         return (new SlideTemplateResource($result))->additional(['message' => 'SlideTemplate updated']);
     }
-
 
     /**
      * @OA\Delete (
@@ -314,11 +322,13 @@ class SlideTemplatesController extends ApiController
      */
     public function destroy(SlideTemplate $record)
     {
-        $result = SlideTemplateService::delete($record)->getResult();
+        $result = SlideTemplateService::delete($record)
+                                      ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'SlideTemplate deleted']);
         }
+
         return response()->json(['message' => 'Problem deleting SlideTemplate'], 404);
     }
 }

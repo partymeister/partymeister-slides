@@ -117,7 +117,8 @@ class PlaylistItemResource extends BaseResource
             'callback_hash'           => $this->callback_hash,
             'callback_delay'          => (int) $this->callback_delay,
             'sort_position'           => (int) $this->sort_position,
-            'file_association'        => (!is_null($this->file_association) ? new FileResource($this->file_association->file): null) // FIXME: this is fishy AF
+            'file_association'        => (! is_null($this->file_association) ? new FileResource($this->file_association->file) : null)
+            // FIXME: this is fishy AF
         ];
     }
 }

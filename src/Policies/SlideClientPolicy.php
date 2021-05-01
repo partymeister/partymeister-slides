@@ -27,7 +27,7 @@ class SlideClientPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \Motor\Backend\Models\User  $user
+     * @param \Motor\Backend\Models\User $user
      * @return mixed
      */
     public function viewAny(User $user)
@@ -38,8 +38,8 @@ class SlideClientPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \Motor\Backend\Models\User  $user
-     * @param  \Partymeister\Slides\Models\SlideClient  $slideClient
+     * @param \Motor\Backend\Models\User $user
+     * @param \Partymeister\Slides\Models\SlideClient $slideClient
      * @return mixed
      */
     public function view(User $user, SlideClient $slideClient)
@@ -50,7 +50,7 @@ class SlideClientPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \Motor\Backend\Models\User  $user
+     * @param \Motor\Backend\Models\User $user
      * @return mixed
      */
     public function create(User $user)
@@ -61,8 +61,8 @@ class SlideClientPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \Motor\Backend\Models\User  $user
-     * @param  \Partymeister\Slides\Models\SlideClient  $slideClient
+     * @param \Motor\Backend\Models\User $user
+     * @param \Partymeister\Slides\Models\SlideClient $slideClient
      * @return mixed
      */
     public function update(User $user, SlideClient $slideClient)
@@ -73,8 +73,8 @@ class SlideClientPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \Motor\Backend\Models\User  $user
-     * @param  \Partymeister\Slides\Models\SlideClient  $slideClient
+     * @param \Motor\Backend\Models\User $user
+     * @param \Partymeister\Slides\Models\SlideClient $slideClient
      * @return mixed
      */
     public function delete(User $user, SlideClient $slideClient)
@@ -85,8 +85,8 @@ class SlideClientPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \Motor\Backend\Models\User  $user
-     * @param  \Partymeister\Slides\Models\SlideClient  $slideClient
+     * @param \Motor\Backend\Models\User $user
+     * @param \Partymeister\Slides\Models\SlideClient $slideClient
      * @return mixed
      */
     public function restore(User $user, SlideClient $slideClient)
@@ -97,8 +97,8 @@ class SlideClientPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \Motor\Backend\Models\User  $user
-     * @param  \Partymeister\Slides\Models\SlideClient  $slideClient
+     * @param \Motor\Backend\Models\User $user
+     * @param \Partymeister\Slides\Models\SlideClient $slideClient
      * @return mixed
      */
     public function forceDelete(User $user, SlideClient $slideClient)
