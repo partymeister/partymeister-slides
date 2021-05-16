@@ -4,15 +4,15 @@ return [
     'items' => [
         130 => [
             'slug'        => 'partymeister-slides',
-            'name'        => 'partymeister-slides::backend/global.slides',
-            'icon'        => 'fa fa-image',
+            'name'        => 'partymeister-slides.global.slides',
+            'icon'        => 'images',
             'route'       => null,
             'roles'       => ['SuperAdmin'],
             'permissions' => ['slides.read'],
             'items'       => [
                 100 => [ // <-- !!! replace 277 with your own sort position !!!
                          'slug'        => 'playlists',
-                         'name'        => 'partymeister-slides::backend/playlists.playlists',
+                         'name'        => 'partymeister-slides.playlists.playlists',
                          'icon'        => 'fa fa-plus',
                          'route'       => 'backend.playlists.index',
                          'roles'       => ['SuperAdmin'],
@@ -20,7 +20,7 @@ return [
                 ],
                 200 => [ // <-- !!! replace 488 with your own sort position !!!
                          'slug'        => 'slides',
-                         'name'        => 'partymeister-slides::backend/slides.slides',
+                         'name'        => 'partymeister-slides.slides.slides',
                          'icon'        => 'fa fa-angle-right',
                          'route'       => 'backend.slides.index',
                          'roles'       => ['SuperAdmin'],
@@ -28,7 +28,7 @@ return [
                 ],
                 300 => [ // <-- !!! replace 842 with your own sort position !!!
                          'slug'        => 'slide_templates',
-                         'name'        => 'partymeister-slides::backend/slide_templates.slide_templates',
+                         'name'        => 'partymeister-slides.slide_templates.slide_templates',
                          'icon'        => 'fa fa-angle-right',
                          'route'       => 'backend.slide_templates.index',
                          'roles'       => ['SuperAdmin'],
@@ -36,7 +36,7 @@ return [
                 ],
                 310 => [ // <-- !!! replace 157 with your own sort position !!!
                          'slug'        => 'slide_clients',
-                         'name'        => 'partymeister-slides::backend/slide_clients.slide_clients',
+                         'name'        => 'partymeister-slides.slide_clients.slide_clients',
                          'icon'        => 'fa fa-plus',
                          'route'       => 'backend.slide_clients.index',
                          'roles'       => ['SuperAdmin'],
@@ -44,7 +44,7 @@ return [
                 ],
                 400 => [ // <-- !!! replace 308 with your own sort position !!!
                          'slug'        => 'transitions',
-                         'name'        => 'partymeister-slides::backend/transitions.transitions',
+                         'name'        => 'partymeister-slides.transitions.transitions',
                          'icon'        => 'fa fa-plus',
                          'route'       => 'backend.transitions.index',
                          'roles'       => ['SuperAdmin'],
