@@ -53,7 +53,7 @@ Route::group([
         Route::get('slide_clients/{slide_client}/activate', 'SlideClientsController@activate')
              ->name('slide_clients.activate');
 
-        Route::resource('files', 'FilesController');
+        //Route::resource('files', 'FilesController');
     });
 });
 
