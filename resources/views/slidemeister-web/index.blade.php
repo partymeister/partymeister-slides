@@ -20,6 +20,7 @@
 </div>
 <script>
     const TOKEN = '{{$api_token}}';
+    const BASE_URL = '{{config('app.url')}}'
 </script>
 <script src="{{mix('js/partymeister-slidemeister-web.js')}}"></script>
 </body>

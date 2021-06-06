@@ -83,7 +83,7 @@
                     }
                     if (response.data.data.slide && response.data.data.slide.file_preview) {
                         $('.playlist-' + currentPlaylist + '-preview').removeClass('d-none');
-                        $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.slide.file_preview);
+                        $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.slide.file_final.conversions.preview);
                     }
                 }).catch(function (error) {
                     console.log('UpdatePlaylists: Playlist item not found');
