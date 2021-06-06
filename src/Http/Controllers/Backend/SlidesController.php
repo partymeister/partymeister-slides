@@ -106,9 +106,9 @@ class SlidesController extends Controller
      * @param Slide $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(SlideRequest $request, Slide $record)
+    public function show(Slide $record)
     {
-        $preview = $request->get('preview', 'false');
+        $preview = request()->get('preview', 'false');
 
         $placeholderData = json_encode([
             'test1' => 'test1',

@@ -100,9 +100,9 @@ class SlideTemplatesController extends Controller
      * @param SlideTemplate $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(SlideTemplateRequest $request, SlideTemplate $record)
+    public function show(SlideTemplate $record)
     {
-        $preview = $request->get('preview', 'false');
+        $preview = request()->get('preview', 'false');
 
         $placeholderData = json_encode([]);
 
