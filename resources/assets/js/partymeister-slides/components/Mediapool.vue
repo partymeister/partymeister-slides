@@ -22,7 +22,7 @@
                     <div class="card">
 <!--                        <img v-if="file.file.is_generating" class="card-img-top" :src="previewImage">-->
 <!--                        <img v-if="!file.file.is_generating && isImage(file)" class="card-img-top" :src="file.file.preview">-->
-                        <img v-if="isImage(file)" class="card-img-top" :src="file.file.preview">
+                        <img v-if="isImage(file)" class="card-img-top" :src="file.file_final.conversions.preview">
                         <div class="card-body" data-toggle="tooltip" data-placement="top" :title="file.description">
                             <p class="card-text">
                                 {{ file.name }}<br>
@@ -79,21 +79,14 @@
                 });
             },
           isImage: function (file) {
-            let data = this.getFileType(file);
-            if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg' || data.mime_type === 'video/mp4') {
+              if (!file.file_final) {
+                return false;
+              }
+            if (file.file_final.mime_type === 'image/png' || file.file_final.mime_type === 'image/jpg' || file.file_final.mime_type === 'image/jpeg' || file.file_final.mime_type === 'video/mp4') {
               return true;
             }
             return false;
           },
-          getFileType(file) {
-            let data = { file_name: 'unknown'};
-            if (file.slide !== undefined && file.slide.file_final !== null) {
-              data = file.slide.file_final;
-            } else if (file.file_association !== undefined) {
-              data = file.file_association
-            }
-            return data;
-          }
         },
         mounted: function () {
 

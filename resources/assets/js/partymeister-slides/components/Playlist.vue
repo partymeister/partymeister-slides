@@ -10,10 +10,9 @@
                     </button>
                 </div>
               <div v-if="isHtmlSlide(file)" class="image-wrapper">
-                HTML SLIDE - CANNOT PREVIEW CURRENTLY
-<!--                <div v-html="file.slide.cached_html_preview"></div>-->
+                <img v-if="file.slide" :src="file.slide.file_final.conversions.preview" class="img-fluid">
               </div>
-                <div v-if="isImage(file)" class="image-wrapper">
+                <div v-else-if="isImage(file)" class="image-wrapper">
                     <div>{{ filetype(file) }}</div>
                     <img v-if="file.file" :src="file.file.conversions.preview" class="img-fluid">
                   <img v-if="file.file_association" :src="file.file_association.file.conversions.preview" class="img-fluid">
@@ -142,6 +141,7 @@
                 file.transition_slidemeister = { identifier: 255};
               }
               let data = this.getFileType(file);
+              console.log(data);
                 if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg' || data.mime_type === 'video/mp4') {
                     return true;
                 }
