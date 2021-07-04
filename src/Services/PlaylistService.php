@@ -453,7 +453,8 @@ class PlaylistService extends BaseService
             $i->sort_position = $key;
 
             if (property_exists($item, 'slide_type')) {
-                $i->slide_id = $item->slide->id;
+                //$i->slide_id = $item->slide->id;
+                $i->slide_id = $item->id;
                 $i->slide_type = $item->slide_type;
             }
 
@@ -484,9 +485,10 @@ class PlaylistService extends BaseService
      */
     protected function getType($item)
     {
-        if (is_array($item->file)) {
+        if (isset($item->file) && is_array($item->file) || (isset($item->file_preview) && is_array($item->file_preview))) {
             return "image";
         }
+        $item->file = $item->file_preview;
         if (in_array($item->file->mime_type, [
             'image/png',
             'image/jpg',

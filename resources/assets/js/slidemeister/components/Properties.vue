@@ -170,7 +170,7 @@
             activeElement: undefined,
             activeElementIndex: null,
             mouseIsUp: true,
-            fonts: ['Arial', 'Verdana', '\'Exo 2\'', '\'Ticketing\'', '\'USN_Stencil\'']
+            fonts: ['Arial', 'Verdana', '\'Exo 2\'', '\'Booterfz\'', '\'Blackpearl\'']
         }),
         mounted() {
             this.$eventHub.$on('partymeister-slides:load-font', (font) => {
