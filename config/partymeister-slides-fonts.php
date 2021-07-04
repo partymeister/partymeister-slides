@@ -12,5 +12,15 @@ return [
             'path'   => '/fonts/poppins.css',
             'family' => '\'Poppins\'',
         ],
+        [
+            'name'   => 'Booterfz',
+            'path'   => '/fonts/booterfz.css',
+            'family' => '\'Booterfz\'',
+        ],
+        [
+            'name'   => 'Blackpearl',
+            'path'   => '/fonts/blackpearl.css',
+            'family' => '\'Blackpearl\'',
+        ],
     ],
 ];
