@@ -36,7 +36,7 @@ class PlaylistRequest implements ShouldBroadcastNow
     {
         $this->playlist = (new PlaylistResource($playlist->load('items')))->toArrayRecursive();
         $this->playlist['callbacks'] = $callbacks;
-        $this->playlist['callback_url'] = config('app.url').'/api/callback/';
+        $this->playlist['callback_url'] = config('app.url').'/api-rpc/callback/';
     }
 
     /**
