@@ -10,11 +10,11 @@
                     </button>
                 </div>
               <div v-if="isHtmlSlide(file)" class="image-wrapper">
-                <img v-if="file.slide" :src="file.slide.file_final.conversions.preview" class="img-fluid">
+                <img v-if="file.slide && file.slide.file_final" :src="file.slide.file_final.conversions.preview" class="img-fluid">
               </div>
                 <div v-else-if="isImage(file)" class="image-wrapper">
                     <div>{{ filetype(file) }}</div>
-                    <img v-if="file.file" :src="file.file.conversions.preview" class="img-fluid">
+                    <img v-if="file.file && file.file.conversions" :src="file.file.conversions.preview" class="img-fluid">
                   <img v-if="file.file_association" :src="file.file_association.file.conversions.preview" class="img-fluid">
                 </div>
                 <div v-else> {{ getFileType(file).file_name }}</div>

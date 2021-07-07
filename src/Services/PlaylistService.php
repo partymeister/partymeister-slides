@@ -454,8 +454,8 @@ class PlaylistService extends BaseService
             $i->sort_position = $key;
 
             if (property_exists($item, 'slide_type') && $item->slide_type !== '') {
-                //$i->slide_id = $item->slide->id;
-                $i->slide_id = $item->id;
+                $i->slide_id = $item->slide->id;
+                //$i->slide_id = $item->id;
                 $i->slide_type = $item->slide_type;
             }
 
