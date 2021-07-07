@@ -441,6 +441,7 @@ class PlaylistService extends BaseService
                 $i->type = $item->overwrite_slide_type;
             }
 
+
             $i->duration = $item->duration;
             $i->transition_id = (is_null($transition) ? null : $transition->id);
             $i->transition_slidemeister_id = (is_null($transitionSlidemeister) ? null : $transitionSlidemeister->id);
@@ -452,7 +453,7 @@ class PlaylistService extends BaseService
             $i->metadata = (isset($item->metadata) ? $item->metadata : '{}');
             $i->sort_position = $key;
 
-            if (property_exists($item, 'slide_type')) {
+            if (property_exists($item, 'slide_type') && $item->slide_type !== '') {
                 //$i->slide_id = $item->slide->id;
                 $i->slide_id = $item->id;
                 $i->slide_type = $item->slide_type;
@@ -460,12 +461,17 @@ class PlaylistService extends BaseService
 
             // Fixme: implement this
             $i->is_muted = false;
+
             $i->save();
 
-            if (! property_exists($item, 'slide_type')) {
+            if (! property_exists($item, 'slide_type') || $item->slide_type === '') {
                 // Create file association
                 $fa = new FileAssociation();
-                $fa->file_id = $item->id;
+                if (property_exists($item, 'file_association')) {
+                    $fa->file_id = $item->file_association->id;
+                } else {
+                    $fa->file_id = $item->id;
+                }
                 $fa->model_type = get_class($i);
                 $fa->model_id = $i->id;
                 $fa->identifier = 'playlist_item';
@@ -488,7 +494,8 @@ class PlaylistService extends BaseService
         if (isset($item->file) && is_array($item->file) || (isset($item->file_preview) && is_array($item->file_preview))) {
             return "image";
         }
-        $item->file = $item->file_preview;
+        //dd($item);
+        //$item->file = $item->file_preview;
         if (in_array($item->file->mime_type, [
             'image/png',
             'image/jpg',
