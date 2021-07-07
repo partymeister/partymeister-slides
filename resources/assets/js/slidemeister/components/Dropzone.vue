@@ -78,15 +78,16 @@
             },
             onAdd: function (event) {
                 let image = new Image();
+                console.log(this.droppedFiles[event.newIndex].file);
                 image.onload = () => {
                     this.$eventHub.$emit('partymeister-slides:image-dropped', {
-                        src: this.droppedFiles[event.newIndex].file.file_original_relative,
+                        src: this.droppedFiles[event.newIndex].file.url,
                         width: image.naturalWidth,
                         height: image.naturalHeight,
                         ratio: image.naturalWidth / image.naturalHeight,
                     });
                 };
-                image.src = this.droppedFiles[event.newIndex].file.file_original_relative;
+                image.src = this.droppedFiles[event.newIndex].file.url;
             },
             isImage: function (file) {
                 if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg' || file.file.mime_type == 'image/jpeg' || file.file.mime_type == 'video/mp4') {
