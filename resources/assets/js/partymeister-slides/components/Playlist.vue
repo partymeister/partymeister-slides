@@ -141,7 +141,6 @@
                 file.transition_slidemeister = { identifier: 255};
               }
               let data = this.getFileType(file);
-              console.log(data);
                 if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg' || data.mime_type === 'video/mp4') {
                     return true;
                 }
@@ -152,12 +151,11 @@
             },
           getFileType(file) {
             let data = { file_name: 'unknown', mime_type: 'unknown'};
-            if (file.slide && file.slide.file_final !== null) {
-              data = file.slide.file_final;
+            if (file.cached_html_final && file.file_final !== null) {
+              data = file.file_final;
             } else if (file.file) {
               data = file.file
             } else if (file.file_association) {
-              console.log(file.file_association);
               data = file.file_association.file;
             }
             return data;
