@@ -7,7 +7,10 @@
                 gl_Position = vec4( position, 1.0 );
             }
         </script>
-        <div id="shader-container"></div>
+      <div id="cables-container" :style="{'zoom': zoom/2}">
+        <canvas id="glcanvas" style="margin-top: 0 !important;"/>
+      </div>
+      <div id="shader-container"></div>
         <div class="debug alert alert-danger d-none">
             CachedPlaylists: {{ cachedPlaylists.length }}<br>
             Playlist: {{ playlist.name }}<br>

@@ -5,22 +5,17 @@ return [
         [
             'name'   => 'exo2',
             'path'   => '/fonts/exo2.css',
-            'family' => '\'Exo 2\'',
+            'family' => '\'Exo 2\''
         ],
         [
-            'name'   => 'poppins',
-            'path'   => '/fonts/poppins.css',
-            'family' => '\'Poppins\'',
+            'name'   => 'IBM Plex Sans',
+            'path'   => '/fonts/ibm.css',
+            'family' => '\'IBM Plex Sans\''
         ],
         [
-            'name'   => 'Booterfz',
-            'path'   => '/fonts/booterfz.css',
-            'family' => '\'Booterfz\'',
-        ],
-        [
-            'name'   => 'Blackpearl',
-            'path'   => '/fonts/blackpearl.css',
-            'family' => '\'Blackpearl\'',
+            'name'   => 'Krona One',
+            'path'   => '/fonts/krona.css',
+            'family' => '\'Krona One\''
         ],
     ],
 ];

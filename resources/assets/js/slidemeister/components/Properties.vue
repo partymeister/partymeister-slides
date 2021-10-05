@@ -48,8 +48,9 @@
                 <select @focus="addStepToUndoStack('fontWeight')" @change="updateProperties"
                         class="form-control form-control-sm" id="fontWeight" name="fontWeight"
                         v-model="activeElement.properties.fontWeight">
-                    <option value="normal">regular</option>
-                    <option value="bold">bold</option>
+                    <option value="200">light</option>
+                    <option value="400">regular</option>
+                    <option value="600">bold</option>
                 </select>
             </div>
             <div class="input-group">
@@ -170,7 +171,7 @@
             activeElement: undefined,
             activeElementIndex: null,
             mouseIsUp: true,
-            fonts: ['Arial', 'Verdana', '\'Exo 2\'', '\'Booterfz\'', '\'Blackpearl\'']
+            fonts: ['Arial', 'Verdana', '\'Exo 2\'', '\'IBM Plex Sans\'', '\'Krona One\'']
         }),
         mounted() {
             this.$eventHub.$on('partymeister-slides:load-font', (font) => {
