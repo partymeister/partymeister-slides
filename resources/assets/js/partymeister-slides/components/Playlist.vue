@@ -10,7 +10,7 @@
                     </button>
                 </div>
               <div v-if="isHtmlSlide(file)" class="image-wrapper">
-                <img v-if="file.slide && file.slide.file_final" :src="file.slide.file_final.conversions.preview" class="img-fluid">
+                <img v-if="file.slide && file.slide.file_preview" :src="file.slide.file_preview.conversions.preview" class="img-fluid">
               </div>
                 <div v-else-if="isImage(file)" class="image-wrapper">
                     <div>{{ filetype(file) }}</div>
@@ -151,8 +151,8 @@
             },
           getFileType(file) {
             let data = { file_name: 'unknown', mime_type: 'unknown'};
-            if (file.cached_html_final && file.file_final !== null) {
-              data = file.file_final;
+            if (file.cached_html_final && file.file_preview !== null) {
+              data = file.file_preview;
             } else if (file.file) {
               data = file.file
             } else if (file.file_association) {

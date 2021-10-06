@@ -22,7 +22,7 @@
                     <div class="card">
 <!--                        <img v-if="file.file.is_generating" class="card-img-top" :src="previewImage">-->
 <!--                        <img v-if="!file.file.is_generating && isImage(file)" class="card-img-top" :src="file.file.preview">-->
-                        <img v-if="isImage(file)" class="card-img-top" :src="file.file_final.conversions.preview">
+                        <img v-if="isImage(file)" class="card-img-top" :src="file.file_preview.conversions.preview">
                         <div class="card-body" data-toggle="tooltip" data-placement="top" :title="file.description">
                             <p class="card-text">
                                 {{ file.name }}<br>
