@@ -210,7 +210,7 @@
                 }
                 if (!hard) {
                     setTimeout(() => {
-                        this.playTransition(this.current.transition_slidemeister.identifier, this.current.transition_duration);
+                        this.playTransition();
                     }, 10);
                 } else {
                     this.previousItem = null;
@@ -224,7 +224,7 @@
                         if (this.next.slide_type !== 'slidemeister_winners') {
                             this.deleteBars();
                         }
-                        this.playTransition(this.current.transition_slidemeister.identifier, this.current.transition_duration);
+                        this.playTransition();
                     }, 0);
                 } else {
                     this.currentItem = this.nextItem;
