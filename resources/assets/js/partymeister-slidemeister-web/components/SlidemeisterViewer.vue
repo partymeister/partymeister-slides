@@ -402,21 +402,39 @@
                 let newFragmentShader = '';
                switch (this.currentBackground) {
                     case 'comingup':
+                      CABLES.patch.setVariable('SCENE', 1);
+                      CABLES.patch.setVariable('SCREEN', 'COMING UP');
                         newFragmentShader = this.configuration['fragment_coming_up_now'];
                         break;
+                     case 'now':
+                       CABLES.patch.setVariable('SCENE', 1);
+                       CABLES.patch.setVariable('SCREEN', 'NOW');
+                       newFragmentShader = this.configuration['fragment_end'];
+                       break;
                     case 'end':
+                      CABLES.patch.setVariable('SCENE', 1);
+                      CABLES.patch.setVariable('SCREEN', 'END');
                         newFragmentShader = this.configuration['fragment_end'];
                         break;
                     case 'announce':
+                      CABLES.patch.setVariable('SCENE', 2);
                         newFragmentShader = this.configuration['fragment_announce'];
                         break;
                     case 'announce_important':
+                      CABLES.patch.setVariable('SCENE', 2);
                         newFragmentShader = this.configuration['fragment_announce_important'];
                         break;
                     case 'compo':
+                      CABLES.patch.setVariable('SCENE', 0);
                         newFragmentShader = this.configuration['fragment_compo'];
                         break;
+                    case 'timetable':
+                      CABLES.patch.setVariable('SCENE', 2);
+                      newFragmentShader = this.configuration['fragment_compo'];
+                   break;
                     default:
+                      CABLES.patch.setVariable('SCENE', 1);
+                      CABLES.patch.setVariable('SCREEN', 'HALLO!');
                         newFragmentShader = '';
                 }
 
