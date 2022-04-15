@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Partymeister\Slides\Events\PlaylistNextRequest;
 use Partymeister\Slides\Events\PlaylistPreviousRequest;
+use Partymeister\Slides\Events\SiegmeisterRequest;
 use Partymeister\Slides\Services\XMLService;
 
 /**
