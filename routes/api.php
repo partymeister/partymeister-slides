@@ -122,29 +122,29 @@ Route::group([
         }
     });
 });
-//
-//Route::group([
-//    'middleware' => ['bindings'],
-//    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
-//    'prefix' => 'ajax',
-//    'as' => 'ajax.',
-//], function () {
-//    Route::post('slide_clients/{slide_client}/communication/prizegiving-for-revision', static function (
-//        Request $request,
-//        \Partymeister\Slides\Models\SlideClient $client
-//    ) {
-//
-//        session(['screens.active' => $client->id]);
-//        if (is_null($client)) {
-//            return response()->json(['message' => 'No slide client active'], 400);
-//        }
-//
-//        switch ($client->type) {
-//            case 'slidemeister-web':
-//                event(new SiegmeisterRequest());
-//
-//                return response()->json(['result' => 'Siegmeister event sent']);
-//                break;
-//        }
-//    });
-//});
+
+Route::group([
+    'middleware' => ['bindings'],
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'ajax',
+    'as' => 'ajax.',
+], function () {
+    Route::post('slide_clients/{slide_client}/communication/prizegiving-for-revision', static function (
+        Request $request,
+        \Partymeister\Slides\Models\SlideClient $client
+    ) {
+
+        session(['screens.active' => $client->id]);
+        if (is_null($client)) {
+            return response()->json(['message' => 'No slide client active'], 400);
+        }
+
+        switch ($client->type) {
+            case 'slidemeister-web':
+                event(new SiegmeisterRequest());
+
+                return response()->json(['result' => 'Siegmeister event sent']);
+                break;
+        }
+    });
+});
