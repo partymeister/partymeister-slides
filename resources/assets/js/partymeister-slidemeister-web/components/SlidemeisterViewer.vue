@@ -373,7 +373,8 @@
                 window.clearTimeout(this.slideTimeout);
             },
             animateBackground() {
-              if (!this.currentItem) {
+              console.log("animateBackground", this.currentItem);
+              if (this.currentItem === false || this.currentItem === undefined || this.currentItem === null) {
                 return;
               }
                 if (parseInt(this.items[this.currentItem].midi_note) > 0) {
@@ -400,6 +401,7 @@
                 this.clearSiegmeisterBars();
 
                 let newFragmentShader = '';
+                console.log("Background: ", this.currentBackground);
                switch (this.currentBackground) {
                     case 'comingup':
                       CABLES.patch.setVariable('SCENE', 1);

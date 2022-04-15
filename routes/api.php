@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Partymeister\Slides\Events\PlaylistNextRequest;
+use Partymeister\Slides\Events\PlaylistPreviousRequest;
+use Partymeister\Slides\Services\XMLService;
 
 /**
  * Groups with token necessary
@@ -79,46 +82,46 @@ Route::group([
 //    Route::get('frontend-playlists/{playlist}', 'Partymeister\Slides\Http\Controllers\Api\PlaylistsController@show')->name('playlists.show');
 //});
 
-//Route::group([
-//    'middleware' => ['bindings'],
-//    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
-//    'prefix' => 'ajax',
-//    'as' => 'ajax.',
-//], function () {
-//    Route::post('slide_clients/{slide_client}/communication/skip-for-revision', static function (
-//        Request $request,
-//        \Partymeister\Slides\Models\SlideClient $client
-//    ) {
-//
-//        session(['screens.active' => $client->id]);
-//        if (is_null($client)) {
-//            return response()->json(['message' => 'No slide client active'], 400);
-//        }
-//
-//        switch ($client->type) {
-//            case 'screens':
-//                $result = XMLService::send($request->get('direction'), ['hard' => $request->get('hard')]);
-//                if (! $result) {
-//                    return response()->json(['result' => $result], 400);
-//                } else {
-//                    return response()->json(['result' => $result]);
-//                }
-//            // no break
-//            case 'slidemeister-web':
-//                switch ($request->get('direction')) {
-//                    case 'previous':
-//                        event(new PlaylistPreviousRequest($request->get('hard', false)));
-//                        break;
-//                    case 'next':
-//                        event(new PlaylistNextRequest($request->get('hard', false)));
-//                        break;
-//                }
-//
-//                return response()->json(['result' => 'Skip event sent']);
-//                break;
-//        }
-//    });
-//});
+Route::group([
+    'middleware' => ['bindings'],
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'ajax',
+    'as' => 'ajax.',
+], function () {
+    Route::post('slide_clients/{slide_client}/communication/skip-for-revision', static function (
+        Request $request,
+        \Partymeister\Slides\Models\SlideClient $client
+    ) {
+
+        session(['screens.active' => $client->id]);
+        if (is_null($client)) {
+            return response()->json(['message' => 'No slide client active'], 400);
+        }
+
+        switch ($client->type) {
+            case 'screens':
+                $result = XMLService::send($request->get('direction'), ['hard' => $request->get('hard')]);
+                if (! $result) {
+                    return response()->json(['result' => $result], 400);
+                } else {
+                    return response()->json(['result' => $result]);
+                }
+            // no break
+            case 'slidemeister-web':
+                switch ($request->get('direction')) {
+                    case 'previous':
+                        event(new PlaylistPreviousRequest($request->get('hard', false)));
+                        break;
+                    case 'next':
+                        event(new PlaylistNextRequest($request->get('hard', false)));
+                        break;
+                }
+
+                return response()->json(['result' => 'Skip event sent']);
+                break;
+        }
+    });
+});
 //
 //Route::group([
 //    'middleware' => ['bindings'],
