@@ -46,7 +46,9 @@ export default {
                 } else {
                     setTimeout(() => {
                         this.replaceContent(rankElement, 'rank', '', true);
-                        this.calculatePrizegivingBarCoordinates(row, entryElement);
+                        setTimeout(() => {
+                            this.calculatePrizegivingBarCoordinates(row, entryElement);
+                        }, 500)
                     }, 500);
                 }
             });
@@ -99,6 +101,12 @@ export default {
                     y1: this.normalizeNumber(y1, containerHeight, 10),
                     y2: this.normalizeNumber(y2, containerHeight, 10),
                 };
+
+                // FIXME: HACK FOR REVISION 2022
+                if (prizegivingbarCoordinates.x1 > 0.06) {
+                    prizegivingbarCoordinates.x2 = prizegivingbarCoordinates.x2 - prizegivingbarCoordinates.x1 + 0.0510416667;
+                    prizegivingbarCoordinates.x1 = 0.0510416667;
+                }
 
                 Vue.set(entryElement.properties, 'prizegivingbarCoordinates', prizegivingbarCoordinates);
             });

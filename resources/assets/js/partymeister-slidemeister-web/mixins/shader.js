@@ -24,7 +24,7 @@ export default {
     },
     methods: {
         resize() {
-            if (this.renderer !== undefined) {
+            if (this.renderer !== undefined && this.renderer !== null) {
                 this.renderer.setSize(window.innerWidth, window.innerHeight);
             }
 

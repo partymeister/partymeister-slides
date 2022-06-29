@@ -403,6 +403,10 @@
                 let newFragmentShader = '';
                 console.log("Background: ", this.currentBackground);
                switch (this.currentBackground) {
+                   case 'siegmeister_winners':
+                   case 'siegmeister_bars':
+                     CABLES.patch.setVariable('SCENE', 0);
+                       break;
                     case 'comingup':
                       CABLES.patch.setVariable('SCENE', 1);
                       CABLES.patch.setVariable('SCREEN', 'COMING UP');
@@ -418,6 +422,11 @@
                       CABLES.patch.setVariable('SCREEN', 'END');
                         newFragmentShader = this.configuration['fragment_end'];
                         break;
+                 case 'comments':
+                   CABLES.patch.setVariable('SCENE', 1);
+                   CABLES.patch.setVariable('SCREEN', 'COMMENTS');
+                   newFragmentShader = this.configuration['fragment_end'];
+                   break;
                     case 'announce':
                       CABLES.patch.setVariable('SCENE', 2);
                         newFragmentShader = this.configuration['fragment_announce'];

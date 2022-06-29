@@ -21,7 +21,7 @@ export default class Base {
     }
 
     resize() {
-        if (this.renderer !== undefined && this.sceneClass !== '') {
+        if (this.renderer !== undefined && this.renderer !== null && this.sceneClass !== '') {
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(window.innerWidth, window.innerHeight);

@@ -12,9 +12,9 @@
     }
   ],
   "require": {
-    "partymeister/core": "^1.1",
-    "php-webdriver/webdriver": "^1.8",
-    "beyondcode/laravel-websockets": "^1.4"
+    "partymeister/core": "^1.2",
+    "php-webdriver/webdriver": "^1.12",
+    "beyondcode/laravel-websockets": "^1.13"
   },
   "autoload": {
     "psr-4": {
