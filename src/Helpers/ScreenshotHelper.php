@@ -31,8 +31,8 @@ class ScreenshotHelper
             $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
             $this->driver = RemoteWebDriver::create($host, $capabilities, 5000);
         } catch (Exception $e) {
-            die($e->getMessage());
-            die("Webdriver not running");
+            exit($e->getMessage());
+            exit('Webdriver not running');
             // Do nothing for now
         }
     }
@@ -52,7 +52,7 @@ class ScreenshotHelper
     /**
      * Throw away the browser
      */
-    function __destruct()
+    public function __destruct()
     {
         if ($this->driver instanceof RemoteWebDriver) {
             $this->driver->close();

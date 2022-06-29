@@ -12,8 +12,6 @@ use Partymeister\Slides\Helpers\Browsershot;
 
 /**
  * Class GenerateSlide
- *
- * @package Partymeister\Slides\Jobs
  */
 class GenerateSlide implements ShouldQueue
 {
@@ -32,8 +30,8 @@ class GenerateSlide implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Model $slide
-     * @param       $namePrefix
+     * @param  Model  $slide
+     * @param    $namePrefix
      */
     public function __construct(Model $slide, $namePrefix)
     {

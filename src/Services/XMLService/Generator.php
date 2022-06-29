@@ -11,8 +11,6 @@ use SimpleXMLElement;
 
 /**
  * Class Generator
- *
- * @package Partymeister\Slides\Services\XMLService
  */
 class Generator
 {
@@ -35,7 +33,6 @@ class Generator
     {
         return str_replace('<?xml version="1.0"?>', '<?xml version="1.0" encoding="utf-8"?>', $xml);
     }
-
 
     /**
      * @param $parameters
@@ -99,7 +96,7 @@ class Generator
             }
 
             $item = $data->addChild('item');
-            $item->addAttribute('name', $parameters['playlist_id']."_".$playlist_item->id);
+            $item->addAttribute('name', $parameters['playlist_id'].'_'.$playlist_item->id);
 
             if ($playlist_item->type == 'now' || $playlist_item->type == 'end' || $playlist_item->type == 'comingup') {
                 // FIXME: this does not happen
@@ -196,12 +193,11 @@ class Generator
         }
         if (Arr::get($_GET, 'debug')) {
             print_r(self::add_encoding($xml->asXML()));
-            die();
+            exit();
         }
 
         return self::add_encoding($xml->asXML());
     }
-
 
     /**
      * @param $parameters
@@ -256,7 +252,7 @@ class Generator
         $data = $xml->addChild('data');
 
         $item = $data->addChild('item');
-        $item->addAttribute('name', $parameters['playlist_id']."_".$parameters['slide_id']);
+        $item->addAttribute('name', $parameters['playlist_id'].'_'.$parameters['slide_id']);
 
         if (in_array($attachment->mime_type, config('motor-backend-mimetypes.video'))) {
             $item->addAttribute('type', 'video');
@@ -295,7 +291,6 @@ class Generator
 
         return XMLService::_send($xml);
     }
-
 
     /**
      * @param $parameters
@@ -342,7 +337,6 @@ class Generator
         return self::add_encoding($xml->asXML());
     }
 
-
     /**
      * @param $parameters
      * @return mixed
@@ -365,7 +359,6 @@ class Generator
 
         return self::add_encoding($xml->asXML());
     }
-
 
     /**
      * @param $parameters
@@ -390,7 +383,6 @@ class Generator
         return self::add_encoding($xml->asXML());
     }
 
-
     /**
      * @param $parameters
      * @return mixed
@@ -409,7 +401,6 @@ class Generator
 
         return self::add_encoding($xml->asXML());
     }
-
 
     /**
      * @param $xml

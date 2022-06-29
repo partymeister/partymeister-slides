@@ -1,8 +1,8 @@
 <?php
 
 use Culpa\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 use Culpa\Facades\Schema;
+use Illuminate\Database\Migrations\Migration;
 
 class CreatePlaylistsTable extends Migration
 {
@@ -59,7 +59,7 @@ class CreatePlaylistsTable extends Migration
      */
     public function down()
     {
-		Schema::dropIfExists('playlist_items');
+        Schema::dropIfExists('playlist_items');
         Schema::dropIfExists('playlists');
     }
 }

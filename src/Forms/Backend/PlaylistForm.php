@@ -6,8 +6,6 @@ use Kris\LaravelFormBuilder\Form;
 
 /**
  * Class PlaylistForm
- *
- * @package Partymeister\Slides\Forms\Backend
  */
 class PlaylistForm extends Form
 {

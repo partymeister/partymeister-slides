@@ -7,8 +7,6 @@ use Symfony\Component\Process\Process;
 
 /**
  * Class PartymeisterChromiumProcess
- *
- * @package Partymeister\Competitions\Console\Commands
  */
 class PartymeisterWebdriverCommand extends Command
 {

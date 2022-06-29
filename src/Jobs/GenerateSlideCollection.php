@@ -11,8 +11,6 @@ use Illuminate\Support\Collection;
 
 /**
  * Class GenerateSlideCollection
- *
- * @package Partymeister\Slides\Jobs
  */
 class GenerateSlideCollection implements ShouldQueue
 {
@@ -31,8 +29,8 @@ class GenerateSlideCollection implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Collection $slideIds
-     * @param            $namePrefix
+     * @param  Collection  $slideIds
+     * @param    $namePrefix
      */
     public function __construct(Collection $slideIds, $namePrefix)
     {

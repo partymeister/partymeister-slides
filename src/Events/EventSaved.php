@@ -10,8 +10,6 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class EventSaved
- *
- * @package Partymeister\Slides\Events
  */
 class EventSaved
 {

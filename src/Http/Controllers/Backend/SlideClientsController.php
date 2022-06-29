@@ -16,15 +16,13 @@ use Partymeister\Slides\Services\SlideClientService;
 
 /**
  * Class SlideClientsController
- *
- * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class SlideClientsController extends Controller
 {
     use FormBuilderTrait;
 
     /**
-     * @param SlideClient $record
+     * @param  SlideClient  $record
      * @return RedirectResponse|Redirector
      */
     public function activate(Request $request, SlideClient $record)
@@ -38,6 +36,7 @@ class SlideClientsController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws \ReflectionException
      */
     public function index()
@@ -72,7 +71,7 @@ class SlideClientsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param SlideClientRequest $request
+     * @param  SlideClientRequest  $request
      * @return RedirectResponse|Redirector
      */
     public function store(SlideClientRequest $request)
@@ -107,7 +106,7 @@ class SlideClientsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param SlideClient $record
+     * @param  SlideClient  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(SlideClient $record)
@@ -127,8 +126,8 @@ class SlideClientsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param SlideClientRequest $request
-     * @param SlideClient $record
+     * @param  SlideClientRequest  $request
+     * @param  SlideClient  $record
      * @return RedirectResponse|Redirector
      */
     public function update(SlideClientRequest $request, SlideClient $record)
@@ -153,7 +152,7 @@ class SlideClientsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param SlideClient $record
+     * @param  SlideClient  $record
      * @return RedirectResponse|Redirector
      */
     public function destroy(SlideClient $record)

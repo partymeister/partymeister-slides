@@ -15,8 +15,6 @@ use Partymeister\Slides\Services\PlaylistService;
 
 /**
  * Class PlaylistsController
- *
- * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class PlaylistsController extends Controller
 {
@@ -26,6 +24,7 @@ class PlaylistsController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws \ReflectionException
      */
     public function index()
@@ -61,7 +60,7 @@ class PlaylistsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param PlaylistRequest $request
+     * @param  PlaylistRequest  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(PlaylistRequest $request)
@@ -96,7 +95,7 @@ class PlaylistsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Playlist $record
+     * @param  Playlist  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Request $request, Playlist $record)
@@ -122,8 +121,8 @@ class PlaylistsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param PlaylistRequest $request
-     * @param Playlist $record
+     * @param  PlaylistRequest  $request
+     * @param  Playlist  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(PlaylistRequest $request, Playlist $record)
@@ -148,7 +147,7 @@ class PlaylistsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Playlist $record
+     * @param  Playlist  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Playlist $record)

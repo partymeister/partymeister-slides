@@ -91,9 +91,8 @@ Route::group([
 ], function () {
     Route::post('slide_clients/{slide_client}/communication/skip-for-revision', static function (
         Request $request,
-        \Partymeister\Slides\Models\SlideClient $client
+        Partymeister\Slides\Models\SlideClient $client
     ) {
-
         session(['screens.active' => $client->id]);
         if (is_null($client)) {
             return response()->json(['message' => 'No slide client active'], 400);
@@ -132,9 +131,8 @@ Route::group([
 ], function () {
     Route::post('slide_clients/{slide_client}/communication/prizegiving-for-revision', static function (
         Request $request,
-        \Partymeister\Slides\Models\SlideClient $client
+        Partymeister\Slides\Models\SlideClient $client
     ) {
-
         session(['screens.active' => $client->id]);
         if (is_null($client)) {
             return response()->json(['message' => 'No slide client active'], 400);

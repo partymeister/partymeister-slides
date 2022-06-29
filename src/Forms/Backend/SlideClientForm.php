@@ -6,8 +6,6 @@ use Kris\LaravelFormBuilder\Form;
 
 /**
  * Class SlideClientForm
- *
- * @package Partymeister\Slides\Forms\Backend
  */
 class SlideClientForm extends Form
 {
@@ -17,9 +15,9 @@ class SlideClientForm extends Form
     public function buildForm()
     {
         $this->add('name', 'text', [
-                'label' => trans('partymeister-slides::backend/slide_clients.name'),
-                'rules' => 'required',
-            ])
+            'label' => trans('partymeister-slides::backend/slide_clients.name'),
+            'rules' => 'required',
+        ])
              ->add('type', 'select', [
                  'label'   => trans('partymeister-slides::backend/slide_clients.type'),
                  'choices' => (trans('partymeister-slides::backend/slide_clients.types')),

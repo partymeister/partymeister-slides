@@ -13,8 +13,6 @@ use Partymeister\Slides\Services\TransitionService;
 
 /**
  * Class TransitionsController
- *
- * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class TransitionsController extends Controller
 {
@@ -24,6 +22,7 @@ class TransitionsController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws \ReflectionException
      */
     public function index()
@@ -56,7 +55,7 @@ class TransitionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param TransitionRequest $request
+     * @param  TransitionRequest  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(TransitionRequest $request)
@@ -91,7 +90,7 @@ class TransitionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Transition $record
+     * @param  Transition  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Transition $record)
@@ -109,8 +108,8 @@ class TransitionsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param TransitionRequest $request
-     * @param Transition $record
+     * @param  TransitionRequest  $request
+     * @param  Transition  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(TransitionRequest $request, Transition $record)
@@ -135,7 +134,7 @@ class TransitionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Transition $record
+     * @param  Transition  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Transition $record)

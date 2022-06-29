@@ -19,7 +19,7 @@ return [
         'announce_important' => 'Warning',
         'compo'              => 'Competition',
         'coming_up_now'      => 'Coming up / Now',
-        'end'                => 'End / Participants'
+        'end'                => 'End / Participants',
     ],
 
     'latest'     => 'Latest slides',

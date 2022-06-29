@@ -18,8 +18,6 @@ use Partymeister\Slides\Models\Transition;
 
 /**
  * Class PlaylistService
- *
- * @package Partymeister\Slides\Services
  */
 class PlaylistService extends BaseService
 {
@@ -30,6 +28,7 @@ class PlaylistService extends BaseService
 
     /**
      * @param $data
+     *
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
@@ -58,7 +57,7 @@ class PlaylistService extends BaseService
                                 ->where('_lft', 1)
                                 ->first();
             if (is_null($rootNode)) {
-                die("Root node for slide category tree does not exist");
+                exit('Root node for slide category tree does not exist');
             }
             $c = new Category();
             $c->scope = 'slides';
@@ -170,6 +169,7 @@ class PlaylistService extends BaseService
     /**
      * @param $competition
      * @param $data
+     *
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
@@ -199,7 +199,7 @@ class PlaylistService extends BaseService
                                 ->where('_lft', 1)
                                 ->first();
             if (is_null($rootNode)) {
-                die("Root node for slide category tree does not exist");
+                exit('Root node for slide category tree does not exist');
             }
             $c = new Category();
             $c->scope = 'slides';
@@ -441,7 +441,6 @@ class PlaylistService extends BaseService
                 $i->type = $item->overwrite_slide_type;
             }
 
-
             $i->duration = $item->duration;
             $i->transition_id = (is_null($transition) ? null : $transition->id);
             $i->transition_slidemeister_id = (is_null($transitionSlidemeister) ? null : $transitionSlidemeister->id);
@@ -483,7 +482,6 @@ class PlaylistService extends BaseService
         }
     }
 
-
     /**
      * @param $data
      */
@@ -495,7 +493,7 @@ class PlaylistService extends BaseService
     protected function getType($item)
     {
         if (isset($item->file) && is_array($item->file) || (isset($item->file_preview) && is_array($item->file_preview))) {
-            return "image";
+            return 'image';
         }
         if (isset($item->file_preview)) {
             $item->file = $item->file_preview;

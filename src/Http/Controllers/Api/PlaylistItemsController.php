@@ -11,8 +11,6 @@ use Partymeister\Slides\Services\PlaylistItemService;
 
 /**
  * Class PlaylistItemsController
- *
- * @package Partymeister\Slides\Http\Controllers\Api
  */
 class PlaylistItemsController extends ApiController
 {
@@ -122,7 +120,7 @@ class PlaylistItemsController extends ApiController
      *
      * Store a newly created resource in storage.
      *
-     * @param PlaylistItemRequest $request
+     * @param  PlaylistItemRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(PlaylistItemRequest $request)
@@ -185,7 +183,7 @@ class PlaylistItemsController extends ApiController
      *
      * Display the specified resource.
      *
-     * @param PlaylistItem $record
+     * @param  PlaylistItem  $record
      * @return PlaylistItemResource
      */
     public function show(PlaylistItem $record)
@@ -249,8 +247,8 @@ class PlaylistItemsController extends ApiController
      *
      * Update the specified resource in storage.
      *
-     * @param PlaylistItemRequest $request
-     * @param PlaylistItem $record
+     * @param  PlaylistItemRequest  $request
+     * @param  PlaylistItem  $record
      * @return PlaylistItemResource
      */
     public function update(PlaylistItemRequest $request, PlaylistItem $record)
@@ -317,7 +315,7 @@ class PlaylistItemsController extends ApiController
      *
      * Remove the specified resource from storage.
      *
-     * @param PlaylistItem $record
+     * @param  PlaylistItem  $record
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(PlaylistItem $record)

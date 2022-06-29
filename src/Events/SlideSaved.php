@@ -11,8 +11,6 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class SlideSaved
- *
- * @package Partymeister\Slides\Events
  */
 class SlideSaved
 {
@@ -33,8 +31,8 @@ class SlideSaved
      *
      * SlideSaved constructor.
      *
-     * @param Model $slide
-     * @param       $namePrefix
+     * @param  Model  $slide
+     * @param    $namePrefix
      */
     public function __construct(Model $slide, $namePrefix)
     {

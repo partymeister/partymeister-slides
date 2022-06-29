@@ -8,8 +8,6 @@ use Spatie\Browsershot\Exceptions\ElementNotFound;
 
 /**
  * Class Browsershot
- *
- * @package Partymeister\Slides\Helpers
  */
 class Browsershot extends \Spatie\Browsershot\Browsershot
 {
@@ -29,7 +27,8 @@ class Browsershot extends \Spatie\Browsershot\Browsershot
     }
 
     /**
-     * @param string $targetPath
+     * @param  string  $targetPath
+     *
      * @throws CouldNotTakeBrowsershot
      * @throws ElementNotFound
      */

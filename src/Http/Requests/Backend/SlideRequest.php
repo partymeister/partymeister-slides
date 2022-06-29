@@ -6,8 +6,6 @@ use Motor\Backend\Http\Requests\Request;
 
 /**
  * Class SlideRequest
- *
- * @package Partymeister\Slides\Http\Requests\Backend
  */
 class SlideRequest extends Request
 {
@@ -69,7 +67,6 @@ class SlideRequest extends Request
     public function rules()
     {
         if ($this->method() === 'POST') {
-
             return [
                 'name'                => 'required',
                 'slide_template_id'   => 'nullable|integer',

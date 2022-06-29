@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddSlideIdToPlaylistItems extends Migration
 {
@@ -20,7 +20,6 @@ class AddSlideIdToPlaylistItems extends Migration
         });
     }
 
-
     /**
      * Reverse the migrations.
      *
@@ -29,7 +28,7 @@ class AddSlideIdToPlaylistItems extends Migration
     public function down()
     {
         Schema::table('playlist_items', function (Blueprint $table) {
-        	$table->dropForeign(['slide_id']);
+            $table->dropForeign(['slide_id']);
             $table->dropColumn('slide_id');
         });
     }

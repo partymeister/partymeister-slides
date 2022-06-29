@@ -40,6 +40,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read Collection|Media[] $media
  * @property-read Collection|Slide[] $slides
  * @property-read User $updater
+ *
  * @method static Builder|SlideTemplate filteredBy(Filter $filter, $column)
  * @method static Builder|SlideTemplate filteredByMultiple(Filter $filter)
  * @method static Builder|SlideTemplate newModelQuery()
@@ -67,7 +68,8 @@ class SlideTemplate extends Model implements HasMedia
     use InteractsWithMedia;
 
     /**
-     * @param Media|null $media
+     * @param  Media|null  $media
+     *
      * @throws InvalidManipulation
      */
     /**
@@ -100,7 +102,8 @@ class SlideTemplate extends Model implements HasMedia
     ];
 
     /**
-     * @param Media|null $media
+     * @param  Media|null  $media
+     *
      * @throws InvalidManipulation
      */
     public function registerMediaConversions(Media $media = null): void

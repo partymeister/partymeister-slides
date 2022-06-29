@@ -24,5 +24,5 @@ return [
         'prizegiving'         => 'Prizegiving',
         'comments'            => 'Competition comments',
         'end_of_pg'           => 'End of prizegiving',
-    ]
+    ],
 ];

@@ -11,8 +11,6 @@ use Partymeister\Slides\Services\SlideTemplateService;
 
 /**
  * Class SlideTemplatesController
- *
- * @package Partymeister\Slides\Http\Controllers\Api
  */
 class SlideTemplatesController extends ApiController
 {
@@ -122,7 +120,7 @@ class SlideTemplatesController extends ApiController
      *
      * Store a newly created resource in storage.
      *
-     * @param SlideTemplateRequest $request
+     * @param  SlideTemplateRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(SlideTemplateRequest $request)
@@ -185,7 +183,7 @@ class SlideTemplatesController extends ApiController
      *
      * Display the specified resource.
      *
-     * @param SlideTemplate $record
+     * @param  SlideTemplate  $record
      * @return SlideTemplateResource
      */
     public function show(SlideTemplate $record)
@@ -249,8 +247,8 @@ class SlideTemplatesController extends ApiController
      *
      * Update the specified resource in storage.
      *
-     * @param SlideTemplateRequest $request
-     * @param SlideTemplate $record
+     * @param  SlideTemplateRequest  $request
+     * @param  SlideTemplate  $record
      * @return SlideTemplateResource
      */
     public function update(SlideTemplateRequest $request, SlideTemplate $record)
@@ -317,7 +315,7 @@ class SlideTemplatesController extends ApiController
      *
      * Remove the specified resource from storage.
      *
-     * @param SlideTemplate $record
+     * @param  SlideTemplate  $record
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(SlideTemplate $record)

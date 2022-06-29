@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'no_callback' => 'No callback'
+    'no_callback' => 'No callback',
 ];

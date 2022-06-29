@@ -6,8 +6,6 @@ use Partymeister\Slides\Events\SlideSaved;
 
 /**
  * Class GenerateSlide
- *
- * @package Partymeister\Slides\Listeners
  */
 class GenerateSlide
 {
@@ -24,8 +22,7 @@ class GenerateSlide
     /**
      * Handle the event.
      *
-     * @param SlideSaved $event
-     *
+     * @param  SlideSaved  $event
      * @return void
      */
     public function handle(SlideSaved $event)

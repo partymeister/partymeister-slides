@@ -10,8 +10,6 @@ use Partymeister\Slides\Models\Slide;
 
 /**
  * Class SlideService
- *
- * @package Partymeister\Slides\Services
  */
 class SlideService extends BaseService
 {

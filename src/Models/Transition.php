@@ -30,6 +30,7 @@ use Motor\Core\Traits\Searchable;
  * @property-read User $creator
  * @property-read User|null $eraser
  * @property-read User $updater
+ *
  * @method static Builder|Transition filteredBy(Filter $filter, $column)
  * @method static Builder|Transition filteredByMultiple(Filter $filter)
  * @method static Builder|Transition newModelQuery()

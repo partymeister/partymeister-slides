@@ -20,13 +20,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class CommunicationController
- *
- * @package Partymeister\Slides\Http\Controllers\Api\SlideClients
  */
 class CommunicationController extends Controller
 {
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function playlist(Request $request)
@@ -59,7 +57,7 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function playnow(Request $request)
@@ -96,7 +94,7 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function seek(Request $request)
@@ -128,13 +126,12 @@ class CommunicationController extends Controller
         }
     }
 
-
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function skip(Request $request)
@@ -169,13 +166,12 @@ class CommunicationController extends Controller
         }
     }
 
-
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function siegmeister(Request $request)
@@ -199,11 +195,11 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function get_system_info(Request $request)
@@ -216,15 +212,16 @@ class CommunicationController extends Controller
         }
     }
 
-
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
+     *
      * @throws InvalidArgumentException
      */
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
+     *
      * @throws InvalidArgumentException
      */
     public function get_playlists(Request $request)

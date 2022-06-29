@@ -12,8 +12,6 @@ use Partymeister\Slides\Models\Playlist;
 
 /**
  * Class PlaylistRequest
- *
- * @package Partymeister\Slides\Events
  */
 class PlaylistRequest implements ShouldBroadcastNow
 {
@@ -29,8 +27,8 @@ class PlaylistRequest implements ShouldBroadcastNow
      *
      * PlaylistRequest constructor.
      *
-     * @param Playlist $playlist
-     * @param          $callbacks
+     * @param  Playlist  $playlist
+     * @param    $callbacks
      */
     public function __construct(Playlist $playlist, $callbacks)
     {
