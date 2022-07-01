@@ -3,7 +3,7 @@
 namespace Partymeister\Slides\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Motor\Backend\Models\User;
+use Motor\Admin\Models\User;
 use Partymeister\Slides\Models\Slide;
 
 class SlidePolicy

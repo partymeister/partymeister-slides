@@ -3,7 +3,7 @@
 namespace Partymeister\Slides\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Motor\Backend\Models\User;
+use Motor\Admin\Models\User;
 use Partymeister\Slides\Models\SlideClient;
 
 /**
