@@ -8,15 +8,13 @@ use Partymeister\Slides\Models\PlaylistItem;
 
 /**
  * Class ItemsController
- *
- * @package Partymeister\Slides\Http\Controllers\Api\Playlists
  */
 class ItemsController extends Controller
 {
     /**
      * Display the specified resource.
      *
-     * @param PlaylistItem $record
+     * @param  PlaylistItem  $record
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(PlaylistItem $record)

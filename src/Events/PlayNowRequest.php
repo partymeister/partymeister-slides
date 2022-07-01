@@ -15,8 +15,6 @@ use Partymeister\Slides\Models\Slide;
 
 /**
  * Class PlayNowRequest
- *
- * @package Partymeister\Slides\Events
  */
 class PlayNowRequest implements ShouldBroadcastNow
 {
@@ -67,6 +65,7 @@ class PlayNowRequest implements ShouldBroadcastNow
     public function broadcastOn()
     {
         Log::info('PlayNowEventSent');
+
         return new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'));
     }
 }

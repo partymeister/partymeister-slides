@@ -9,8 +9,6 @@ use Partymeister\Slides\Models\SlideTemplate;
 
 /**
  * Class SlideTemplateService
- *
- * @package Partymeister\Slides\Services
  */
 class SlideTemplateService extends BaseService
 {

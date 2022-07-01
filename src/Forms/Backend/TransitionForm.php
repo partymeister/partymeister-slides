@@ -6,8 +6,6 @@ use Kris\LaravelFormBuilder\Form;
 
 /**
  * Class TransitionForm
- *
- * @package Partymeister\Slides\Forms\Backend
  */
 class TransitionForm extends Form
 {
@@ -22,9 +20,9 @@ class TransitionForm extends Form
                  'choices' => (trans('partymeister-slides::backend/slide_clients.types')),
              ])
              ->add('identifier', 'text', [
-                     'label' => trans('partymeister-slides::backend/transitions.identifier'),
-                     'rules' => 'required',
-                 ])
+                 'label' => trans('partymeister-slides::backend/transitions.identifier'),
+                 'rules' => 'required',
+             ])
              ->add('default_duration', 'text', [
                  'label' => trans('partymeister-slides::backend/transitions.default_duration'),
                  'rules' => 'required',

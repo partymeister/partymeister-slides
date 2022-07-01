@@ -9,8 +9,6 @@ use Motor\Backend\Grid\Renderers\TranslateRenderer;
 
 /**
  * Class SlideGrid
- *
- * @package Partymeister\Slides\Grids
  */
 class SlideGrid extends Grid
 {

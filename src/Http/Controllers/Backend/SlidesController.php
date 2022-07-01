@@ -14,8 +14,6 @@ use Partymeister\Slides\Services\SlideService;
 
 /**
  * Class SlidesController
- *
- * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class SlidesController extends Controller
 {
@@ -25,6 +23,7 @@ class SlidesController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws \ReflectionException
      */
     public function index()
@@ -41,7 +40,7 @@ class SlidesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param SlideRequest $request
+     * @param  SlideRequest  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(SlideRequest $request)
@@ -64,7 +63,7 @@ class SlidesController extends Controller
     }
 
     /**
-     * @param Slide $record
+     * @param  Slide  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function duplicate(Slide $record)
@@ -78,7 +77,7 @@ class SlidesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param Model $record
+     * @param  Model  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create($record
@@ -102,8 +101,8 @@ class SlidesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param SlideRequest $request
-     * @param Slide $record
+     * @param  SlideRequest  $request
+     * @param  Slide  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(SlideRequest $request, Slide $record)
@@ -121,7 +120,7 @@ class SlidesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Slide $record
+     * @param  Slide  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Slide $record)
@@ -141,8 +140,8 @@ class SlidesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param SlideRequest $request
-     * @param Slide $record
+     * @param  SlideRequest  $request
+     * @param  Slide  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(SlideRequest $request, Slide $record)
@@ -167,7 +166,7 @@ class SlidesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Slide $record
+     * @param  Slide  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Slide $record)

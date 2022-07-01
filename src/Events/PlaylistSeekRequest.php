@@ -11,8 +11,6 @@ use Partymeister\Slides\Models\Playlist;
 
 /**
  * Class PlaylistSeekRequest
- *
- * @package Partymeister\Slides\Events
  */
 class PlaylistSeekRequest implements ShouldBroadcastNow
 {
@@ -33,8 +31,8 @@ class PlaylistSeekRequest implements ShouldBroadcastNow
      *
      * PlaylistSeekRequest constructor.
      *
-     * @param Playlist $playlist
-     * @param          $index
+     * @param  Playlist  $playlist
+     * @param    $index
      */
     public function __construct(Playlist $playlist, $index)
     {

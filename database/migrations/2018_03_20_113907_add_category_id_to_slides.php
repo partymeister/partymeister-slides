@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddCategoryIdToSlides extends Migration
 {
@@ -20,7 +20,6 @@ class AddCategoryIdToSlides extends Migration
         });
     }
 
-
     /**
      * Reverse the migrations.
      *
@@ -29,7 +28,7 @@ class AddCategoryIdToSlides extends Migration
     public function down()
     {
         Schema::table('slides', function (Blueprint $table) {
-        	$table->dropForeign(['category_id']);
+            $table->dropForeign(['category_id']);
             $table->dropColumn('category_id');
         });
     }

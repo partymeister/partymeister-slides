@@ -8,8 +8,6 @@ use Motor\Backend\Grid\Renderers\TranslateRenderer;
 
 /**
  * Class PlaylistGrid
- *
- * @package Partymeister\Slides\Grids
  */
 class PlaylistGrid extends Grid
 {

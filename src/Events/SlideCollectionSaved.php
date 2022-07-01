@@ -11,8 +11,6 @@ use Illuminate\Support\Collection;
 
 /**
  * Class SlideCollectionSaved
- *
- * @package Partymeister\Slides\Events
  */
 class SlideCollectionSaved
 {
@@ -33,8 +31,8 @@ class SlideCollectionSaved
      *
      * SlideCollectionSaved constructor.
      *
-     * @param Collection $slideIds
-     * @param            $namePrefix
+     * @param  Collection  $slideIds
+     * @param    $namePrefix
      */
     public function __construct(Collection $slideIds, $namePrefix)
     {

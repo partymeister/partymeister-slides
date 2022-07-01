@@ -6,8 +6,6 @@ use Motor\Backend\Http\Requests\Request;
 
 /**
  * Class SlideTemplateRequest
- *
- * @package Partymeister\Slides\Http\Requests\Backend
  */
 class SlideTemplateRequest extends Request
 {

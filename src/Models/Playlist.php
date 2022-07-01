@@ -34,6 +34,7 @@ use Motor\Core\Traits\Searchable;
  * @property-read mixed $item_count
  * @property-read Collection|PlaylistItem[] $items
  * @property-read User $updater
+ *
  * @method static Builder|Playlist filteredBy(Filter $filter, $column)
  * @method static Builder|Playlist filteredByMultiple(Filter $filter)
  * @method static Builder|Playlist newModelQuery()
@@ -95,7 +96,6 @@ class Playlist extends Model
         return $this->items()
                     ->count();
     }
-
 
     /**
      * @return HasMany

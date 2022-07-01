@@ -6,8 +6,6 @@ use Motor\Backend\Http\Requests\Request;
 
 /**
  * Class PlaylistItemRequest
- *
- * @package Partymeister\Slides\Http\Requests\Backend
  */
 class PlaylistItemRequest extends Request
 {

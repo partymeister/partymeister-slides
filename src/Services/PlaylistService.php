@@ -18,8 +18,6 @@ use Partymeister\Slides\Models\Transition;
 
 /**
  * Class PlaylistService
- *
- * @package Partymeister\Slides\Services
  */
 class PlaylistService extends BaseService
 {
@@ -30,6 +28,7 @@ class PlaylistService extends BaseService
 
     /**
      * @param $data
+     *
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
@@ -58,7 +57,7 @@ class PlaylistService extends BaseService
                                 ->where('_lft', 1)
                                 ->first();
             if (is_null($rootNode)) {
-                die("Root node for slide category tree does not exist");
+                exit('Root node for slide category tree does not exist');
             }
             $c = new Category();
             $c->scope = 'slides';
@@ -170,6 +169,7 @@ class PlaylistService extends BaseService
     /**
      * @param $competition
      * @param $data
+     *
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
@@ -199,7 +199,7 @@ class PlaylistService extends BaseService
                                 ->where('_lft', 1)
                                 ->first();
             if (is_null($rootNode)) {
-                die("Root node for slide category tree does not exist");
+                exit('Root node for slide category tree does not exist');
             }
             $c = new Category();
             $c->scope = 'slides';
@@ -473,7 +473,6 @@ class PlaylistService extends BaseService
         }
     }
 
-
     /**
      * @param $data
      */
@@ -485,7 +484,7 @@ class PlaylistService extends BaseService
     protected function getType($item)
     {
         if (is_array($item->file)) {
-            return "image";
+            return 'image';
         }
         if (in_array($item->file->mime_type, [
             'image/png',

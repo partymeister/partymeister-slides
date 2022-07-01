@@ -10,8 +10,6 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class PlaylistNextRequest
- *
- * @package Partymeister\Slides\Events
  */
 class SiegmeisterRequest implements ShouldBroadcastNow
 {

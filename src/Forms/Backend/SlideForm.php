@@ -7,8 +7,6 @@ use Motor\Backend\Models\Category;
 
 /**
  * Class SlideForm
- *
- * @package Partymeister\Slides\Forms\Backend
  */
 class SlideForm extends Form
 {
@@ -36,8 +34,8 @@ class SlideForm extends Form
 
         $this->add('name', 'text', ['label' => trans('motor-backend::backend/global.name'), 'rules' => 'required'])
              ->add('category_id', 'select', ['label'   => trans('motor-backend::backend/categories.category'),
-                                             'choices' => $categoryChoices,
-                 ])
+                 'choices' => $categoryChoices,
+             ])
              ->add('slide_type', 'select', [
                  'label'   => trans('partymeister-slides::backend/slides.slide_type'),
                  'choices' => (trans('partymeister-slides::backend/slides.slide_types')),

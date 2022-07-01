@@ -9,8 +9,6 @@ use Motor\Backend\Grid\Renderers\FileRenderer;
 
 /**
  * Class FileGrid
- *
- * @package Partymeister\Slides\Grids
  */
 class FileGrid extends Grid
 {

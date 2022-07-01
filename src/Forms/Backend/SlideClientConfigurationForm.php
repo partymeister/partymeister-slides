@@ -6,8 +6,6 @@ use Kris\LaravelFormBuilder\Form;
 
 /**
  * Class SlideClientForm
- *
- * @package Partymeister\Slides\Forms\Backend
  */
 class SlideClientConfigurationForm extends Form
 {

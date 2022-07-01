@@ -9,8 +9,6 @@ use Partymeister\Slides\Grids\FileGrid;
 
 /**
  * Class FilesController
- *
- * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class FilesController extends \Motor\Media\Http\Controllers\Backend\FilesController
 {
@@ -20,6 +18,7 @@ class FilesController extends \Motor\Media\Http\Controllers\Backend\FilesControl
      * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws \ReflectionException
      */
     public function index()

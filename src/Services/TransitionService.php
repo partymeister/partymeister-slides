@@ -8,8 +8,6 @@ use Partymeister\Slides\Models\Transition;
 
 /**
  * Class TransitionService
- *
- * @package Partymeister\Slides\Services
  */
 class TransitionService extends BaseService
 {

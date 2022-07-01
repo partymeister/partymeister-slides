@@ -36,6 +36,7 @@ use Motor\Media\Models\FileAssociation;
  * @property-read User $creator
  * @property-read User|null $eraser
  * @property-read User $updater
+ *
  * @method static Builder|SlideClient filteredBy(Filter $filter, $column)
  * @method static Builder|SlideClient filteredByMultiple(Filter $filter)
  * @method static Builder|SlideClient newModelQuery()

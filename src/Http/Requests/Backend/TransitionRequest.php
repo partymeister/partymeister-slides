@@ -6,8 +6,6 @@ use Motor\Backend\Http\Requests\Request;
 
 /**
  * Class TransitionRequest
- *
- * @package Partymeister\Slides\Http\Requests\Backend
  */
 class TransitionRequest extends Request
 {

@@ -95,7 +95,7 @@ class PlaylistItemResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
@@ -110,14 +110,14 @@ class PlaylistItemResource extends BaseResource
             'transition'              => new TransitionResource($this->transition),
             'transition_slidemeister' => new TransitionResource($this->transition_slidemeister),
             'transition_duration'     => (int) $this->transition_duration,
-            'is_advanced_manually'    => (boolean) $this->is_advanced_manually,
-            'is_muted'                => (boolean) $this->is_muted,
+            'is_advanced_manually'    => (bool) $this->is_advanced_manually,
+            'is_muted'                => (bool) $this->is_muted,
             'midi_note'               => (int) $this->midi_note,
             'metadata'                => $this->metadata,
             'callback_hash'           => $this->callback_hash,
             'callback_delay'          => (int) $this->callback_delay,
             'sort_position'           => (int) $this->sort_position,
-            'file_association'        => (! is_null($this->file_association) ? new FileResource($this->file_association->file) : null)
+            'file_association'        => (! is_null($this->file_association) ? new FileResource($this->file_association->file) : null),
             // FIXME: this is fishy AF
         ];
     }

@@ -47,6 +47,7 @@ use Motor\Media\Models\FileAssociation;
  * @property-read Slide|null $slide
  * @property-read Transition|null $transition
  * @property-read User $updater
+ *
  * @method static Builder|PlaylistItem filteredBy(Filter $filter, $column)
  * @method static Builder|PlaylistItem filteredByMultiple(Filter $filter)
  * @method static Builder|PlaylistItem newModelQuery()
@@ -129,7 +130,6 @@ class PlaylistItem extends Model
         return $this->belongsTo(Transition::class);
     }
 
-
     /**
      * @return BelongsTo
      */
@@ -151,7 +151,6 @@ class PlaylistItem extends Model
     {
         return $this->morphOne(FileAssociation::class, 'model');
     }
-
 
     /**
      * @return BelongsTo

@@ -10,8 +10,6 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Class PlaylistPreviousRequest
- *
- * @package Partymeister\Slides\Events
  */
 class PlaylistPreviousRequest implements ShouldBroadcastNow
 {
@@ -27,7 +25,7 @@ class PlaylistPreviousRequest implements ShouldBroadcastNow
      *
      * PlaylistPreviousRequest constructor.
      *
-     * @param bool $hard
+     * @param  bool  $hard
      */
     public function __construct($hard = false)
     {

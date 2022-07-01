@@ -12,5 +12,5 @@ return [
 
     'name'             => 'Name',
     'identifier'       => 'Identifier',
-    'default_duration' => 'Default duration (ms)'
+    'default_duration' => 'Default duration (ms)',
 ];

@@ -11,8 +11,6 @@ use Partymeister\Slides\Services\TransitionService;
 
 /**
  * Class TransitionsController
- *
- * @package Partymeister\Slides\Http\Controllers\Api
  */
 class TransitionsController extends ApiController
 {
@@ -122,7 +120,7 @@ class TransitionsController extends ApiController
      *
      * Store a newly created resource in storage.
      *
-     * @param TransitionRequest $request
+     * @param  TransitionRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(TransitionRequest $request)
@@ -185,7 +183,7 @@ class TransitionsController extends ApiController
      *
      * Display the specified resource.
      *
-     * @param Transition $record
+     * @param  Transition  $record
      * @return TransitionResource
      */
     public function show(Transition $record)
@@ -249,8 +247,8 @@ class TransitionsController extends ApiController
      *
      * Update the specified resource in storage.
      *
-     * @param TransitionRequest $request
-     * @param Transition $record
+     * @param  TransitionRequest  $request
+     * @param  Transition  $record
      * @return TransitionResource
      */
     public function update(TransitionRequest $request, Transition $record)
@@ -317,7 +315,7 @@ class TransitionsController extends ApiController
      *
      * Remove the specified resource from storage.
      *
-     * @param Transition $record
+     * @param  Transition  $record
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Transition $record)

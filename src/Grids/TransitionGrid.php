@@ -7,8 +7,6 @@ use Motor\Backend\Grid\Renderers\TranslateRenderer;
 
 /**
  * Class TransitionGrid
- *
- * @package Partymeister\Slides\Grids
  */
 class TransitionGrid extends Grid
 {

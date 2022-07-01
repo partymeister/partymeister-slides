@@ -6,8 +6,6 @@ use Kris\LaravelFormBuilder\Form;
 
 /**
  * Class SlideTemplateForm
- *
- * @package Partymeister\Slides\Forms\Backend
  */
 class SlideTemplateForm extends Form
 {

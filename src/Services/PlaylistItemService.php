@@ -7,8 +7,6 @@ use Partymeister\Slides\Models\PlaylistItem;
 
 /**
  * Class PlaylistItemService
- *
- * @package Partymeister\Slides\Services
  */
 class PlaylistItemService extends BaseService
 {

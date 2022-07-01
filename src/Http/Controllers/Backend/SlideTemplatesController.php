@@ -12,8 +12,6 @@ use Partymeister\Slides\Services\SlideTemplateService;
 
 /**
  * Class SlideTemplatesController
- *
- * @package Partymeister\Slides\Http\Controllers\Backend
  */
 class SlideTemplatesController extends Controller
 {
@@ -23,6 +21,7 @@ class SlideTemplatesController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws \ReflectionException
      */
     public function index()
@@ -39,7 +38,7 @@ class SlideTemplatesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param SlideTemplateRequest $request
+     * @param  SlideTemplateRequest  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(SlideTemplateRequest $request)
@@ -62,7 +61,7 @@ class SlideTemplatesController extends Controller
     }
 
     /**
-     * @param SlideTemplate $record
+     * @param  SlideTemplate  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function duplicate(SlideTemplate $record)
@@ -76,7 +75,7 @@ class SlideTemplatesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param SlideTemplate $record
+     * @param  SlideTemplate  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create(SlideTemplate $record)
@@ -96,8 +95,8 @@ class SlideTemplatesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param SlideTemplateRequest $request
-     * @param SlideTemplate $record
+     * @param  SlideTemplateRequest  $request
+     * @param  SlideTemplate  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(SlideTemplateRequest $request, SlideTemplate $record)
@@ -112,7 +111,7 @@ class SlideTemplatesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param SlideTemplate $record
+     * @param  SlideTemplate  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(SlideTemplate $record)
@@ -132,8 +131,8 @@ class SlideTemplatesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param SlideTemplateRequest $request
-     * @param SlideTemplate $record
+     * @param  SlideTemplateRequest  $request
+     * @param  SlideTemplate  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(SlideTemplateRequest $request, SlideTemplate $record)
@@ -158,7 +157,7 @@ class SlideTemplatesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param SlideTemplate $record
+     * @param  SlideTemplate  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(SlideTemplate $record)

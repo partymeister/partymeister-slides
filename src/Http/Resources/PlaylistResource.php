@@ -34,7 +34,7 @@ class PlaylistResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
@@ -43,7 +43,7 @@ class PlaylistResource extends BaseResource
             'id'             => (int) $this->id,
             'name'           => $this->name,
             'type'           => $this->type,
-            'is_competition' => (boolean) $this->is_competition,
+            'is_competition' => (bool) $this->is_competition,
             'items'          => PlaylistItemResource::collection($this->items),
             'updated_at'     => $this->updated_at,
         ];

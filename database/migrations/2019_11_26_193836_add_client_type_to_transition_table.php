@@ -16,9 +16,8 @@ class AddClientTypeToTransitionTable extends Migration
         Schema::table('transitions', function (Blueprint $table) {
             $table->string('client_type')->after('name');
             $table->string('identifier')->change();
-
         });
-        foreach(\Partymeister\Slides\Models\Transition::get() as $transition) {
+        foreach (\Partymeister\Slides\Models\Transition::get() as $transition) {
             $transition->client_type = 'screens';
             $transition->save();
         }

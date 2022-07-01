@@ -16,10 +16,10 @@ return [
     'type'                 => 'Type',
     'types'                => [
         'video'       => 'Video',
-        'prizegiving' => 'Prizegiving'
+        'prizegiving' => 'Prizegiving',
     ],
     'slide_types'          => [
-        'image' => 'Image'
+        'image' => 'Image',
     ],
     'duration'             => 'Duration',
     'seconds'              => 'sec',

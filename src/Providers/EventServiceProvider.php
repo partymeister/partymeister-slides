@@ -6,8 +6,6 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 
 /**
  * Class EventServiceProvider
- *
- * @package Partymeister\Slides\Providers
  */
 class EventServiceProvider extends ServiceProvider
 {

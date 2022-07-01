@@ -15,8 +15,6 @@ use Partymeister\Slides\Models\Transition;
 
 /**
  * Class PartymeisterServiceProvider
- *
- * @package Partymeister\Slides\Providers
  */
 class PartymeisterServiceProvider extends ServiceProvider
 {
