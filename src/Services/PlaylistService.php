@@ -3,8 +3,8 @@
 namespace Partymeister\Slides\Services;
 
 use Illuminate\Support\Arr;
-use Motor\Backend\Models\Category;
-use Motor\Backend\Services\BaseService;
+use Motor\Admin\Models\Category;
+use Motor\Admin\Services\BaseService;
 use Motor\Core\Filter\Renderers\SelectRenderer;
 use Motor\Media\Models\File;
 use Motor\Media\Models\FileAssociation;

@@ -2,8 +2,8 @@
 
 namespace Partymeister\Slides\Grids;
 
-use Motor\Backend\Grid\Grid;
-use Motor\Backend\Grid\Renderers\TranslateRenderer;
+use Motor\Admin\Grid\Grid;
+use Motor\Admin\Grid\Renderers\TranslateRenderer;
 
 /**
  * Class SlideClientGrid

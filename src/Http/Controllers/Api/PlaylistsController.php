@@ -2,7 +2,7 @@
 
 namespace Partymeister\Slides\Http\Controllers\Api;
 
-use Motor\Backend\Http\Controllers\ApiController;
+use Motor\Admin\Http\Controllers\ApiController;
 use Partymeister\Slides\Http\Requests\Backend\PlaylistRequest;
 use Partymeister\Slides\Http\Resources\PlaylistCollection;
 use Partymeister\Slides\Http\Resources\PlaylistResource;

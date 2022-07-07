@@ -2,7 +2,7 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
-use Motor\Backend\Http\Resources\BaseCollection;
+use Motor\Admin\Http\Resources\BaseCollection;
 
 class PlaylistItemCollection extends BaseCollection
 {

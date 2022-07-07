@@ -3,7 +3,7 @@
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
 use Kris\LaravelFormBuilder\FormBuilderTrait;
-use Motor\Backend\Http\Controllers\Controller;
+use Motor\Admin\Http\Controllers\Controller;
 use Partymeister\Slides\Forms\Backend\SlideTemplateForm;
 use Partymeister\Slides\Grids\SlideTemplateGrid;
 use Partymeister\Slides\Http\Requests\Backend\SlideTemplateRequest;

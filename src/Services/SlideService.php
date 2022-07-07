@@ -2,8 +2,8 @@
 
 namespace Partymeister\Slides\Services;
 
-use Motor\Backend\Models\Category;
-use Motor\Backend\Services\BaseService;
+use Motor\Admin\Models\Category;
+use Motor\Admin\Services\BaseService;
 use Motor\Core\Filter\Renderers\SelectRenderer;
 use Partymeister\Slides\Helpers\ScreenshotHelper;
 use Partymeister\Slides\Models\Slide;

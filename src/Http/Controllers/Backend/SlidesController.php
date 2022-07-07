@@ -4,7 +4,7 @@ namespace Partymeister\Slides\Http\Controllers\Backend;
 
 use Illuminate\Database\Eloquent\Model;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
-use Motor\Backend\Http\Controllers\Controller;
+use Motor\Admin\Http\Controllers\Controller;
 use Partymeister\Slides\Forms\Backend\SlideForm;
 use Partymeister\Slides\Grids\SlideGrid;
 use Partymeister\Slides\Http\Requests\Backend\SlideRequest;

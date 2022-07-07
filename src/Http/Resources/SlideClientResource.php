@@ -2,8 +2,8 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
-use Motor\Backend\Http\Resources\BaseResource;
-use Motor\Backend\Http\Resources\MediaResource;
+use Motor\Admin\Http\Resources\BaseResource;
+use Motor\Admin\Http\Resources\MediaResource;
 
 /**
  * @OA\Schema(

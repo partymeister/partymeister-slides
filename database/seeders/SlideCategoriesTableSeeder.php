@@ -16,7 +16,7 @@ class SlideCategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        \Motor\Backend\Models\Category::create([
+        \Motor\Admin\Models\Category::create([
             'name'       => 'Slides',
             'scope'      => 'slides',
             'created_by' => 1,

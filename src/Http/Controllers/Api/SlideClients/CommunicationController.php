@@ -6,7 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Motor\Backend\Http\Controllers\Controller;
+use Motor\Admin\Http\Controllers\Controller;
 use Partymeister\Slides\Events\PlaylistNextRequest;
 use Partymeister\Slides\Events\PlaylistPreviousRequest;
 use Partymeister\Slides\Events\PlaylistRequest;

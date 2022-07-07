@@ -2,10 +2,10 @@
 
 namespace Partymeister\Slides\Grids;
 
-use Motor\Backend\Grid\Grid;
-use Motor\Backend\Grid\Renderers\BladeRenderer;
-use Motor\Backend\Grid\Renderers\CollectionRenderer;
-use Motor\Backend\Grid\Renderers\FileRenderer;
+use Motor\Admin\Grid\Grid;
+use Motor\Admin\Grid\Renderers\BladeRenderer;
+use Motor\Admin\Grid\Renderers\CollectionRenderer;
+use Motor\Admin\Grid\Renderers\FileRenderer;
 
 /**
  * Class FileGrid
