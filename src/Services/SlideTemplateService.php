@@ -46,8 +46,8 @@ class SlideTemplateService extends BaseService
             $browser = new ScreenshotHelper();
         }
         if (isset($browser)) {
-            $browser->screenshot(config('app.url').route('backend.slide_templates.show', [$this->record->id], false).'?preview=true', storage_path().'/preview_'.$this->record->id.'.png');
-            $browser->screenshot(config('app.url').route('backend.slide_templates.show', [$this->record->id], false), storage_path().'/final_'.$this->record->id.'.png');
+            $browser->screenshot(config('app.url_internal').route('backend.slide_templates.show', [$this->record->id], false).'?preview=true', storage_path().'/preview_'.$this->record->id.'.png');
+            $browser->screenshot(config('app.url_internal').route('backend.slide_templates.show', [$this->record->id], false), storage_path().'/final_'.$this->record->id.'.png');
         }
 
         $this->record->clearMediaCollection('preview');

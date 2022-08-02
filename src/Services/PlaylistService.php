@@ -147,8 +147,8 @@ class PlaylistService extends BaseService
 
             // 7. generate slides
             if (isset($browser)) {
-                $browser->screenshot(config('app.url').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png');
-                $browser->screenshot(config('app.url').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png');
+                $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png');
+                $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png');
             }
 
             $s->clearMediaCollection('preview');
@@ -318,8 +318,8 @@ class PlaylistService extends BaseService
 
                     // 7. generate slides
                     if (isset($browser)) {
-                        $browser->screenshot(config('app.url').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png');
-                        $browser->screenshot(config('app.url').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png');
+                        $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png');
+                        $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png');
                     }
 
                     $s->clearMediaCollection('preview');

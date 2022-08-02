@@ -61,7 +61,7 @@ class SlideService extends BaseService
         }
 
         if (isset($browser)) {
-            $browser->screenshot(config('app.url').route('backend.slides.show', [$this->record->id], false).'?preview=true', storage_path().'/preview_'.$this->record->id.'.png');
+            $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$this->record->id], false).'?preview=true', storage_path().'/preview_'.$this->record->id.'.png');
         }
 
         $this->record->clearMediaCollection('preview');
