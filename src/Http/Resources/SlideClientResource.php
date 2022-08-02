@@ -121,9 +121,9 @@ class SlideClientResource extends BaseResource
             'jingles'       => $jingles,
             'websocket'     => [
                 'key'  => config('broadcasting.connections.pusher.key'),
-                'host' => config('broadcasting.connections.pusher.options.host'),
-                'port' => config('broadcasting.connections.pusher.options.port'),
-                'path' => config('broadcasting.connections.pusher.options.path'),
+                'host' => config('partymeister-slides-slidemeister.host'),
+                'port' => config('partymeister-slides-slidemeister.port'),
+                'path' => config('partymeister-slides-slidemeister.path'),
             ],
         ];
     }
