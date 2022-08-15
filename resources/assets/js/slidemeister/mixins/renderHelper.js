@@ -44,7 +44,10 @@ export default {
 
             if (content !== element.properties.placeholder) {
                 element.properties.content = content;
-                element.properties.placeholder = content;
+                // Check if there is still stuff to replace (mostly for platform and options)
+                if (element.properties.content.search('<<') > -1) {
+                    element.properties.placeholder = content;
+                }
                 if (update) {
                     this.$forceNextTick(() => {
                         this.updateElementProperties(element);

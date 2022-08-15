@@ -49,7 +49,7 @@
       "color": "#FFFFFF",
       "locked": true,
       "zIndex": 1999,
-      "content": "<p><b>05</b></p>",
+      "content": "<p>05</p>",
       "opacity": 1,
       "editable": true,
       "fontSize": "110",
@@ -59,7 +59,7 @@
       "resizable": true,
       "textAlign": "right",
       "fontFamily": "'Exo 2'",
-      "fontWeight": "normal",
+      "fontWeight": "bold",
       "prettyname": "position",
       "visibility": "render",
       "coordinates": {
