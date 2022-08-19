@@ -152,6 +152,8 @@ export default {
                 target.style.width = element.properties.coordinates.width + 'px';
                 target.style.height = element.properties.coordinates.height + 'px';
                 if (element.properties.image) {
+                    // replace url with absolute path to get rid of problems with changing urls
+                    element.properties.image = this.replaceUrlWithPath(element.properties.image);
                     target.style.backgroundImage = 'url(' + element.properties.image + ')';
                 }
                 if (element.properties.dataUrl) {
@@ -178,6 +180,9 @@ export default {
             });
         }
         ,
+        replaceUrlWithPath(url) {
+            return url.substring(url.search('/media'));
+        },
         updateAllElementProperties() {
             Object.entries(this.elements).forEach(([key, element]) => {
                 this.updateElementProperties(element);
