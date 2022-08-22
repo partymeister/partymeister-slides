@@ -374,6 +374,9 @@ class PlaylistService extends BaseService
                     if (! is_null($transition)) {
                         $i->transition_id = $transition->id;
                     }
+                if (! is_null($transitionSlidemeister)) {
+                    $i->transition_slidemeister_id = $transitionSlidemeister->id;
+                }
                     $i->transition_duration = $transitionDuration;
                     $i->duration = $duration;
                     $i->sort_position = $count;
