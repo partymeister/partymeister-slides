@@ -34,12 +34,10 @@ export default {
             let content = element.properties.placeholder;
             if (Array.isArray(name)) {
                 for (const [i, n] of name.entries()) {
-                    console.log('REPLACE', n, value[i], content);
                     content = content.replace('<<' + n + '>>', value[i]);
                 }
             } else {
                 content = content.replace('<<' + name + '>>', value);
-                console.log('ELSE', name, value, content);
             }
 
             if (content !== element.properties.placeholder) {
