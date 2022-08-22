@@ -198,12 +198,12 @@ export default {
                     let found = false;
                     for (const [index, p] of this.cachedPlaylists.entries()) {
                         if (p.id === e.playlist_id) {
-                            // console.log('Playlist exists, seeking to item ' + e.index);
+                            console.log('Playlist exists, seeking to item ' + e.index);
                             if (this.playlist.id === e.playlist_id) {
-                                // console.log('Playlist is running, seeking to item ' + e.index);
+                                console.log('Playlist is running, seeking to item ' + e.index);
                                 this.seekToIndex(parseInt(e.index));
                             } else {
-                                // console.log('Playlist is not running yet. Setting it and seeking to item ' + e.index);
+                                console.log('Playlist is not running yet. Setting it and seeking to item ' + e.index);
                                 this.playlist = p;
                                 this.items = p.items;
                                 this.playNow = false;

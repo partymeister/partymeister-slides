@@ -142,7 +142,7 @@
         computed: {
             // a computed getter
             current: function () {
-                // console.log('CURRENT updated');
+                console.log('CURRENT updated');
                 if (this.playNow && this.playNowItems[this.currentPlayNowItem] !== undefined) {
                     // console.log('playnow current', this.playNowItems[this.currentPlayNowItem]);
                     return this.playNowItems[this.currentPlayNowItem];
@@ -150,7 +150,7 @@
                 return this.items[this.currentItem];
             },
             next: function () {
-                // console.log('NEXT updated');
+                console.log('NEXT updated');
                 if (this.clearPlayNowAfter) {
                     return this.items[this.nextItem];
                 }
@@ -189,7 +189,7 @@
 
             },
             seekToIndex(index, hard) {
-                // console.log('Seek to index ' + index);
+                console.log('Seek to index ' + index);
                 this.clearTimeouts();
 
                 if (this.items[index] !== undefined) {
@@ -208,13 +208,18 @@
                     this.currentItem = 0;
                     this.nextItem = 0;
                 }
-                if (!hard) {
+
+                console.log("items", this.currentItem, this.nextItem, this.previousItem);
+
+                if (this.previousItem !== null) {
+                  if (!hard) {
                     setTimeout(() => {
-                        this.playTransition();
+                      this.playTransition();
                     }, 10);
-                } else {
+                  } else {
                     this.previousItem = null;
                     this.afterSeek();
+                  }
                 }
 
             },
@@ -235,7 +240,7 @@
                 }
             },
             seekToNextItem(hard) {
-                // console.log('Seek to next item');
+                console.log('Seek to next item');
                 this.clearTimeouts();
 
                 let currentItem = this.currentItem;
@@ -257,7 +262,7 @@
                 this.prepareTransition(currentItem, hard);
             },
             seekToPreviousItem(hard) {
-                // console.log('Seek to previous item');
+                console.log('Seek to previous item');
                 this.clearTimeouts();
 
                 let currentItem = this.currentItem;
@@ -359,9 +364,9 @@
                         this.callbackTimeout = setTimeout(() => {
                             // console.log('Excuting callback ' + this.items[this.currentItem].callback_hash);
                             axios.get(this.playlist.callback_url + this.items[this.currentItem].callback_hash).then(result => {
-                                // console.log('Callback successfully executed');
+                                console.log('Callback successfully executed');
                             }).catch(e => {
-                                // console.log('Error executing callback');
+                                console.log('Error executing callback');
                             });
                         }, this.items[this.currentItem].callback_delay * 1000)
                     }
@@ -405,47 +410,47 @@
                switch (this.currentBackground) {
                    case 'siegmeister_winners':
                    case 'siegmeister_bars':
-                     CABLES.patch.setVariable('SCENE', 0);
+                     // CABLES.patch.setVariable('SCENE', 0);
                        break;
                     case 'comingup':
-                      CABLES.patch.setVariable('SCENE', 1);
-                      CABLES.patch.setVariable('SCREEN', 'COMING UP');
+                      // CABLES.patch.setVariable('SCENE', 1);
+                      // CABLES.patch.setVariable('SCREEN', 'COMING UP');
                         newFragmentShader = this.configuration['fragment_coming_up_now'];
                         break;
                      case 'now':
-                       CABLES.patch.setVariable('SCENE', 1);
-                       CABLES.patch.setVariable('SCREEN', 'NOW');
+                       // CABLES.patch.setVariable('SCENE', 1);
+                       // CABLES.patch.setVariable('SCREEN', 'NOW');
                        newFragmentShader = this.configuration['fragment_end'];
                        break;
                     case 'end':
-                      CABLES.patch.setVariable('SCENE', 1);
-                      CABLES.patch.setVariable('SCREEN', 'END');
+                      // CABLES.patch.setVariable('SCENE', 1);
+                      // CABLES.patch.setVariable('SCREEN', 'END');
                         newFragmentShader = this.configuration['fragment_end'];
                         break;
                  case 'comments':
-                   CABLES.patch.setVariable('SCENE', 1);
-                   CABLES.patch.setVariable('SCREEN', 'COMMENTS');
+                   // CABLES.patch.setVariable('SCENE', 1);
+                   // CABLES.patch.setVariable('SCREEN', 'COMMENTS');
                    newFragmentShader = this.configuration['fragment_end'];
                    break;
                     case 'announce':
-                      CABLES.patch.setVariable('SCENE', 2);
+                      // CABLES.patch.setVariable('SCENE', 2);
                         newFragmentShader = this.configuration['fragment_announce'];
                         break;
                     case 'announce_important':
-                      CABLES.patch.setVariable('SCENE', 2);
+                      // CABLES.patch.setVariable('SCENE', 2);
                         newFragmentShader = this.configuration['fragment_announce_important'];
                         break;
                     case 'compo':
-                      CABLES.patch.setVariable('SCENE', 0);
+                      // CABLES.patch.setVariable('SCENE', 0);
                         newFragmentShader = this.configuration['fragment_compo'];
                         break;
                     case 'timetable':
-                      CABLES.patch.setVariable('SCENE', 2);
+                      // CABLES.patch.setVariable('SCENE', 2);
                       newFragmentShader = this.configuration['fragment_compo'];
                    break;
                     default:
-                      CABLES.patch.setVariable('SCENE', 1);
-                      CABLES.patch.setVariable('SCREEN', 'HALLO!');
+                      // CABLES.patch.setVariable('SCENE', 1);
+                      // CABLES.patch.setVariable('SCREEN', 'HALLO!');
                         newFragmentShader = '';
                 }
 
