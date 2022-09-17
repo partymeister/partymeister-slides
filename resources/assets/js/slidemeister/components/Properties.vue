@@ -48,9 +48,15 @@
                 <select @focus="addStepToUndoStack('fontWeight')" @change="updateProperties"
                         class="form-control form-control-sm" id="fontWeight" name="fontWeight"
                         v-model="activeElement.properties.fontWeight">
-                    <option value="200">light</option>
-                    <option value="400">regular</option>
-                    <option value="600">bold</option>
+                    <option value="100">100 (thin)</option>
+                    <option value="200">200 (extralight)</option>
+                    <option value="300">300 (light)</option>
+                    <option value="400">400 (regular)</option>
+                    <option value="500">500 (medium)</option>
+                    <option value="600">600 (semibold)</option>
+                    <option value="700">700 (bold)</option>
+                    <option value="800">800 (extrabold)</option>
+                    <option value="900">900 (black)</option>
                 </select>
             </div>
             <div class="input-group">
