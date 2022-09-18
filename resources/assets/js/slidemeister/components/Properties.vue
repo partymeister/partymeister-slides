@@ -162,6 +162,7 @@
 
     import colorpicker from '../components/ColorPicker';
     import webFontLoader from "../mixins/webFontLoader";
+    import axios from "axios";
 
     export default {
         name: 'partymeister-slides-properties',
@@ -177,13 +178,22 @@
             activeElement: undefined,
             activeElementIndex: null,
             mouseIsUp: true,
-            fonts: ['Arial', 'Verdana', '\'Exo 2\'', '\'IBM Plex Sans\'', '\'Krona One\'', '\'Kanit\'']
+            fonts: ['Arial', 'Verdana']
         }),
         mounted() {
+            // Load font from API
+          axios.get('/api/slidemeister/fonts').then(result => {
+            for (const font of result.data.data) {
+              this.fonts.push(font.family)
+            }
+        }).catch(e => {
+            console.log('Error getting font configuration');
+          });
+
             this.$eventHub.$on('partymeister-slides:load-font', (font) => {
                 if (!this.fonts.includes(font)) {
                     console.log("Request loading font " + font);
-                    this.fonts.push(font);n
+                    this.fonts.push(font);
                     this.loadFont(font);
                 }
             });

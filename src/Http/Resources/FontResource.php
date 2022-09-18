@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
+use Illuminate\Support\Arr;
 use Motor\Backend\Http\Resources\BaseResource;
 
 /**
@@ -35,9 +36,9 @@ class FontResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'name'   => $this->name,
-            'path'   => $this->path,
-            'family' => $this->family,
+            'name'   => Arr::get($this, 'name'),
+            'path'   => Arr::get($this, 'path'),
+            'family' => Arr::get($this, 'family'),
         ];
     }
 }
