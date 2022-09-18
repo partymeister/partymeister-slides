@@ -177,13 +177,13 @@
             activeElement: undefined,
             activeElementIndex: null,
             mouseIsUp: true,
-            fonts: ['Arial', 'Verdana', '\'Exo 2\'', '\'IBM Plex Sans\'', '\'Krona One\'']
+            fonts: ['Arial', 'Verdana', '\'Exo 2\'', '\'IBM Plex Sans\'', '\'Krona One\'', '\'Kanit\'']
         }),
         mounted() {
             this.$eventHub.$on('partymeister-slides:load-font', (font) => {
                 if (!this.fonts.includes(font)) {
                     console.log("Request loading font " + font);
-                    this.fonts.push(font);
+                    this.fonts.push(font);n
                     this.loadFont(font);
                 }
             });

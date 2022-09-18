@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Cache;
 use Partymeister\Slides\Events\PlaylistNextRequest;
 use Partymeister\Slides\Events\PlaylistPreviousRequest;
 use Partymeister\Slides\Events\SiegmeisterRequest;
+use Partymeister\Slides\Http\Controllers\Api\FontsController;
 use Partymeister\Slides\Services\XMLService;
 
 /**
@@ -33,6 +34,7 @@ Route::group([
     'prefix'     => 'api',
     'as'         => 'api.',
 ], function () {
+    Route::get('slidemeister/fonts', [FontsController::class, 'index']);
 });
 
 // FIXME: put this in a controller so we can use route caching
@@ -85,9 +87,9 @@ Route::group([
 
 Route::group([
     'middleware' => ['bindings'],
-    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix' => 'ajax',
-    'as' => 'ajax.',
+    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix'     => 'ajax',
+    'as'         => 'ajax.',
 ], function () {
     Route::post('slide_clients/{slide_client}/communication/skip-for-revision', static function (
         Request $request,
@@ -125,9 +127,9 @@ Route::group([
 
 Route::group([
     'middleware' => ['bindings'],
-    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix' => 'ajax',
-    'as' => 'ajax.',
+    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix'     => 'ajax',
+    'as'         => 'ajax.',
 ], function () {
     Route::post('slide_clients/{slide_client}/communication/prizegiving-for-revision', static function (
         Request $request,
