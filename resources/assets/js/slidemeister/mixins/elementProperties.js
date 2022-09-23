@@ -36,6 +36,7 @@ export default {
                     locked: false,
                     fontFamily: 'Arial',
                     fontSize: 30,
+                    fontKerning: 'auto',
                     calculatedFontSize: 30,
                     fontWeight: 'normal',
                     fontStyle: 'normal',
@@ -134,6 +135,7 @@ export default {
 
                 content.style.fontFamily = element.properties.fontFamily;
                 content.style.fontSize = element.properties.fontSize + 'px';
+                content.style.fontKerning = element.properties.fontKerning;
                 content.style.fontWeight = element.properties.fontWeight;
                 content.dataset.fontSize = element.properties.fontSize;
                 content.style.fontStyle = element.properties.fontStyle;

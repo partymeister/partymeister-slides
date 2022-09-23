@@ -44,6 +44,12 @@
                        v-model="activeElement.properties.fontSize">
             </div>
             <div class="input-group">
+              <label class="col-form-label col-form-label-sm" for="fontKerning">fontKerning</label>
+              <input @focus="addStepToUndoStack('fontKerning')" @blur="updateProperties"
+                     class="form-control form-control-sm" id="fontKerning" type="text" name="fontKerning"
+                     v-model="activeElement.properties.fontKerning">
+            </div>
+            <div class="input-group">
                 <label class="col-form-label col-form-label-sm" for="fontWeight">fontWeight</label>
                 <select @focus="addStepToUndoStack('fontWeight')" @change="updateProperties"
                         class="form-control form-control-sm" id="fontWeight" name="fontWeight"
