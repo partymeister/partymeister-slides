@@ -7,8 +7,8 @@
                 gl_Position = vec4( position, 1.0 );
             }
         </script>
-      <div id="cables-container" :style="{'zoom': zoom/2}">
-        <canvas id="glcanvas" style="margin-top: 0 !important;"/>
+      <div id="cables-container">
+        <canvas id="glcanvas" width="100vw" height="100vh" tabindex="1"></canvas>
       </div>
       <div id="shader-container"></div>
         <div class="debug alert alert-danger d-none">
@@ -407,52 +407,7 @@
 
                 let newFragmentShader = '';
                 console.log("Background: ", this.currentBackground);
-               switch (this.currentBackground) {
-                   case 'siegmeister_winners':
-                   case 'siegmeister_bars':
-                     // CABLES.patch.setVariable('SCENE', 0);
-                       break;
-                    case 'comingup':
-                      // CABLES.patch.setVariable('SCENE', 1);
-                      // CABLES.patch.setVariable('SCREEN', 'COMING UP');
-                        newFragmentShader = this.configuration['fragment_coming_up_now'];
-                        break;
-                     case 'now':
-                       // CABLES.patch.setVariable('SCENE', 1);
-                       // CABLES.patch.setVariable('SCREEN', 'NOW');
-                       newFragmentShader = this.configuration['fragment_end'];
-                       break;
-                    case 'end':
-                      // CABLES.patch.setVariable('SCENE', 1);
-                      // CABLES.patch.setVariable('SCREEN', 'END');
-                        newFragmentShader = this.configuration['fragment_end'];
-                        break;
-                 case 'comments':
-                   // CABLES.patch.setVariable('SCENE', 1);
-                   // CABLES.patch.setVariable('SCREEN', 'COMMENTS');
-                   newFragmentShader = this.configuration['fragment_end'];
-                   break;
-                    case 'announce':
-                      // CABLES.patch.setVariable('SCENE', 2);
-                        newFragmentShader = this.configuration['fragment_announce'];
-                        break;
-                    case 'announce_important':
-                      // CABLES.patch.setVariable('SCENE', 2);
-                        newFragmentShader = this.configuration['fragment_announce_important'];
-                        break;
-                    case 'compo':
-                      // CABLES.patch.setVariable('SCENE', 0);
-                        newFragmentShader = this.configuration['fragment_compo'];
-                        break;
-                    case 'timetable':
-                      // CABLES.patch.setVariable('SCENE', 2);
-                      newFragmentShader = this.configuration['fragment_compo'];
-                   break;
-                    default:
-                      // CABLES.patch.setVariable('SCENE', 1);
-                      // CABLES.patch.setVariable('SCREEN', 'HALLO!');
-                        newFragmentShader = '';
-                }
+                CABLES.patch.setVariable('SLIDETYPE', this.currentBackground);
 
                 if (newFragmentShader !== this.fragmentShader && newFragmentShader !== '') {
                     this.fragmentShader = newFragmentShader;
@@ -605,7 +560,9 @@
     }
 
     canvas {
-        position: absolute;
+      display: block;
+      position: absolute;
+      outline:0;
         background-color: #000000;
         overflow: hidden
     }
