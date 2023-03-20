@@ -2,10 +2,14 @@
 
 namespace Partymeister\Slides\Models\Component;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Motor\CMS\Models\ComponentBaseModel;
 
 class ComponentPlaylistViewer extends ComponentBaseModel
 {
+
+    use HasUuids;
+
     /**
      * The attributes that are mass assignable.
      *

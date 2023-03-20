@@ -1,8 +1,7 @@
 <?php
 
-use Culpa\Database\Schema\Blueprint;
-use Culpa\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateSlideClientsTable extends Migration
 {
@@ -23,9 +22,9 @@ class CreateSlideClientsTable extends Migration
             $table->integer('playlist_item_id')->unsigned()->index()->nullable();
             $table->timestamps();
 
-            $table->createdBy();
-            $table->updatedBy();
-            $table->deletedBy(true);
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('deleted_by')->nullable();
 
             $table->foreign('playlist_id')->references('id')->on('playlists')->onDelete('set null');
             $table->foreign('playlist_item_id')->references('id')->on('playlist_items')->onDelete('set null');
