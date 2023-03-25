@@ -13,7 +13,7 @@ class CreateComponentPlaylistViewersTable extends Migration
     public function up()
     {
         Schema::create('component_playlist_viewers', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('playlist_id')->unsigned()->index();
             $table->timestamps();
         });

@@ -13,7 +13,7 @@ class CreateSlideTemplatesTable extends Migration
     public function up()
     {
         Schema::create('slide_templates', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
             $table->json('definitions');
 

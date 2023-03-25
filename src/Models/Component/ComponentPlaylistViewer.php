@@ -2,13 +2,13 @@
 
 namespace Partymeister\Slides\Models\Component;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Kra8\Snowflake\HasSnowflakePrimary;
 use Motor\CMS\Models\ComponentBaseModel;
 
 class ComponentPlaylistViewer extends ComponentBaseModel
 {
 
-    use HasUuids;
+    use HasSnowflakePrimary;
 
     /**
      * The attributes that are mass assignable.

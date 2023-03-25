@@ -13,7 +13,7 @@ class CreateSlideClientsTable extends Migration
     public function up()
     {
         Schema::create('slide_clients', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
             $table->string('ip_address');
             $table->string('port');

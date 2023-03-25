@@ -4,7 +4,7 @@ namespace Partymeister\Slides\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Kra8\Snowflake\HasSnowflakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Motor\Backend\Models\User;
@@ -51,7 +51,7 @@ class Transition extends Model
     use Searchable;
     use Filterable;
     use BlameableTrait;
-    use HasUuids;
+    use HasSnowflakePrimary;
 
     /**
      * Searchable columns for the searchable trait

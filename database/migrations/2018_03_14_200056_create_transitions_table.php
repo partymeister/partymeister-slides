@@ -13,7 +13,7 @@ class CreateTransitionsTable extends Migration
     public function up()
     {
         Schema::create('transitions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
             $table->integer('identifier');
             $table->integer('default_duration');

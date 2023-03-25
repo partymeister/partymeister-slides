@@ -5,7 +5,7 @@ namespace Partymeister\Slides\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Kra8\Snowflake\HasSnowflakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -64,7 +64,7 @@ class SlideTemplate extends Model implements HasMedia
     use Filterable;
     use BlameableTrait;
     use InteractsWithMedia;
-    use HasUuids;
+    use HasSnowflakePrimary;
 
 
     /**

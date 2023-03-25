@@ -13,7 +13,7 @@ class CreatePlaylistsTable extends Migration
     public function up()
     {
         Schema::create('playlists', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
             $table->string('type');
             $table->boolean('is_competition');
@@ -26,7 +26,7 @@ class CreatePlaylistsTable extends Migration
         });
 
         Schema::create('playlist_items', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('playlist_id')->unsigned()->index();
             $table->string('type');
             $table->string('slide_type');
