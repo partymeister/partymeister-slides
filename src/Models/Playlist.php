@@ -5,7 +5,7 @@ namespace Partymeister\Slides\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Kra8\Snowflake\HasSnowflakePrimary;
+use Kra8\Snowflake\HasShortFlakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -55,7 +55,7 @@ class Playlist extends Model
     use Searchable;
     use Filterable;
     use BlameableTrait;
-    use HasSnowflakePrimary;
+    use HasShortFlakePrimary;
 
     /**
      * Searchable columns for the searchable trait

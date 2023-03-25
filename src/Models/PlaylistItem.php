@@ -4,7 +4,7 @@ namespace Partymeister\Slides\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Kra8\Snowflake\HasSnowflakePrimary;
+use Kra8\Snowflake\HasShortFlakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -79,7 +79,7 @@ class PlaylistItem extends Model
     use Searchable;
     use Filterable;
     use BlameableTrait;
-    use HasSnowflakePrimary;
+    use HasShortFlakePrimary;
 
     /**
      * Searchable columns for the searchable trait

@@ -18,20 +18,20 @@ class CreatePlaylistsTable extends Migration
             $table->string('type');
             $table->boolean('is_competition');
 
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
 
             $table->timestamps();
         });
 
         Schema::create('playlist_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('playlist_id')->unsigned()->index();
+            $table->bigInteger('playlist_id')->unsigned()->index();
             $table->string('type');
             $table->string('slide_type');
             $table->integer('duration');
-            $table->integer('transition_id')->unsigned()->nullable()->index();
+            $table->bigInteger('transition_id')->unsigned()->nullable()->index();
             $table->integer('transition_duration');
             $table->boolean('is_advanced_manually');
             $table->boolean('is_muted');
@@ -40,9 +40,9 @@ class CreatePlaylistsTable extends Migration
             $table->string('callback_hash');
             $table->integer('callback_delay');
 
-            $table->createdBy();
-            $table->updatedBy();
-            $table->deletedBy(true);
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
 
             $table->timestamps();
 

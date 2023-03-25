@@ -14,7 +14,7 @@ class AddSlideIdToPlaylistItems extends Migration
     public function up()
     {
         Schema::table('playlist_items', function (Blueprint $table) {
-            $table->integer('slide_id')->after('slide_type')->unsigned()->nullable();
+            $table->bigInteger('slide_id')->after('slide_type')->unsigned()->nullable();
 
             $table->foreign('slide_id')->references('id')->on('slides')->onDelete('set null');
         });

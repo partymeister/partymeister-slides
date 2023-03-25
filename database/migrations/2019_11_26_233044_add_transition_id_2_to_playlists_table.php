@@ -14,7 +14,7 @@ class AddTransitionId2ToPlaylistsTable extends Migration
     public function up()
     {
         Schema::table('playlist_items', function (Blueprint $table) {
-            $table->integer('transition_slidemeister_id')->after('transition_id')->unsigned()->nullable()->index();
+            $table->bigInteger('transition_slidemeister_id')->after('transition_id')->unsigned()->nullable()->index();
             $table->foreign('transition_slidemeister_id')->references('id')->on('transitions')->onDelete('set null');
         });
     }

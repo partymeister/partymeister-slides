@@ -17,9 +17,9 @@ class ChangeSlidesTable extends Migration
             $table->renameColumn('content', 'definitions');
             $table->string('slide_type')->after('name');
 
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
         });
     }
 

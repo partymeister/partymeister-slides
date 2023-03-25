@@ -18,9 +18,9 @@ class CreateTransitionsTable extends Migration
             $table->integer('identifier');
             $table->integer('default_duration');
 
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
 
             $table->timestamps();
         });

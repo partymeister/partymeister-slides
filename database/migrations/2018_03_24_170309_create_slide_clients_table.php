@@ -18,13 +18,13 @@ class CreateSlideClientsTable extends Migration
             $table->string('ip_address');
             $table->string('port');
             $table->integer('sort_position');
-            $table->integer('playlist_id')->unsigned()->index()->nullable();
-            $table->integer('playlist_item_id')->unsigned()->index()->nullable();
+            $table->bigInteger('playlist_id')->unsigned()->index()->nullable();
+            $table->bigInteger('playlist_item_id')->unsigned()->index()->nullable();
             $table->timestamps();
 
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
 
             $table->foreign('playlist_id')->references('id')->on('playlists')->onDelete('set null');
             $table->foreign('playlist_item_id')->references('id')->on('playlist_items')->onDelete('set null');

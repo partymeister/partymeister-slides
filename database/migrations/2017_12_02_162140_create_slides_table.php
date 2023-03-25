@@ -14,7 +14,7 @@ class CreateSlidesTable extends Migration
     {
         Schema::create('slides', function (Blueprint $table) {
             $table->id();
-            $table->integer('slide_templates_id')->unsigned()->index()->nullable();
+            $table->bigInteger('slide_templates_id')->unsigned()->index()->nullable();
             $table->string('name');
             $table->json('content');
             $table->timestamps();
