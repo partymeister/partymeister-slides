@@ -2,13 +2,13 @@
 
 namespace Partymeister\Slides\Models\Component;
 
-use Kra8\Snowflake\HasShortFlakePrimary;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Motor\CMS\Models\ComponentBaseModel;
 
 class ComponentPlaylistViewer extends ComponentBaseModel
 {
 
-    use HasShortFlakePrimary;
+    use HasShortflakePrimary;
 
     /**
      * The attributes that are mass assignable.
