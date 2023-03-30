@@ -17,11 +17,14 @@ export default {
         renderPrizegivingSlideOrWinners(replacements, includeRank) {
             // Replace headline
             this.replaceContentGlobal('headline', replacements.headline, true);
-            let baseEntryElement, baseRankElement = false;
+            let baseEntryElement, baseRemoteTypeElement, baseRankElement = false;
 
             Object.entries(this.elements).forEach(([key, element]) => {
                 if (element.properties.prettyname === 'entry') {
                     baseEntryElement = element;
+                }
+                if (element.properties.prettyname === 'remote_type') {
+                    baseRemoteTypeElement = element;
                 }
                 if (element.properties.prettyname === 'rank') {
                     baseRankElement = element;
@@ -31,16 +34,20 @@ export default {
             // Duplicate elements and replace placeholders
             replacements.rows.forEach((row, index) => {
                 let entryElement;
+                let remoteTypeElement;
                 let rankElement;
                 if (index === 0) {
                     entryElement = baseEntryElement;
                     rankElement = baseRankElement;
+                    remoteTypeElement = baseRemoteTypeElement;
                 } else {
                     entryElement = this.cloneElement(baseEntryElement, index, 50 * index);
+                    remoteTypeElement = this.cloneElement(baseRemoteTypeElement, index, 50 * index);
                     rankElement = this.cloneElement(baseRankElement, index, 50 * index);
                 }
 
                 this.replaceContent(entryElement, ['title', 'author'], [row.title, row.author], true);
+                this.replaceContent(remoteTypeElement, 'remote_type', row.remote_type, true);
                 if (includeRank) {
                     this.replaceContent(rankElement, 'rank', '#' + row.rank, true);
                 } else {
