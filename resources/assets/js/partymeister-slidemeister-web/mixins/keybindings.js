@@ -7,6 +7,7 @@ export default {
     },
     methods: {
         addListener(e) {
+            console.log(e.key);
             switch (e.key) {
                 case 'F1':
                     this.playJingle('jingle_1');
@@ -24,12 +25,37 @@ export default {
                     this.playJingle('jingle_4');
                     e.preventDefault();
                     break;
+                case 'F5':
+                    this.playMidi('jingle_5');
+                    e.preventDefault();
+                    break;
+                case 'F6':
+                    this.playMidi('jingle_6');
+                    e.preventDefault();
+                    break;
+                case 'F7':
+                    this.playMidi('jingle_7');
+                    e.preventDefault();
+                    break;
+                case 'F8':
+                    this.playMidi('jingle_8');
+                    e.preventDefault();
+                    break;
+                case 'F9':
+                    this.playMidi('jingle_9');
+                    e.preventDefault();
+                    break;
+                case 'F10':
+                    this.playMidi('jingle_10');
+                    e.preventDefault();
+                    break;
             }
 
-            if (e.key === 'F10') {
+            if (e.key === 'Escape') {
                 let player = document.querySelector('#jingle-player > audio');
                 player.pause();
                 player.currentTime = 0;
+                e.preventDefault();
             }
 
             if (this.standalone && e.key === 'c') {

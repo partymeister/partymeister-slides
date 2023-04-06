@@ -100,7 +100,8 @@ class SlideClientResource extends BaseResource
     {
         $jingles = [];
         foreach ($this->file_associations as $file) {
-            $jingles[] = new MediaResource($file->file->getFirstMedia('file'));
+            $f = new MediaResource($file->file->getFirstMedia('file'));
+            $jingles[$file->identifier] = $f->getUrl();
         }
 
         $configuration = $this->configuration;
