@@ -530,13 +530,13 @@ export default {
       console.log("Background: ", this.currentBackground);
       switch (this.currentBackground) {
         case 'siegmeister_winners':
-          CABLES.patch.setVariable('currentSlide', {scene: 3, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
           break;
         case 'siegmeister_bars':
-          CABLES.patch.setVariable('currentSlide', {scene: 3, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
           break;
         case 'comingup':
-          let comingupSlide = {scene: 1, transition: true, time: Date.now()};
+          let comingupSlide = {scene: 2, transition: true, time: Date.now()};
           console.log(comingupSlide, competition.innerText);
           CABLES.patch.setVariable('currentSlide', comingupSlide);
 
@@ -553,7 +553,7 @@ export default {
 
           break;
         case 'now':
-          let nowSlide = {scene: 1, transition: true, time: Date.now()};
+          let nowSlide = {scene: 2, transition: true, time: Date.now()};
           console.log(nowSlide, competition.innerText);
           CABLES.patch.setVariable('currentSlide', nowSlide);
 
@@ -570,7 +570,7 @@ export default {
 
           break;
         case 'end':
-          let endSlide = {scene: 1, transition: true, time: Date.now()};
+          let endSlide = {scene: 2, transition: true, time: Date.now()};
           console.log(endSlide, competition.innerText);
           CABLES.patch.setVariable('currentSlide', endSlide);
 
@@ -587,22 +587,22 @@ export default {
 
           break;
         case 'comments':
-          CABLES.patch.setVariable('currentSlide', {scene: 2, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
         case 'announce':
-          CABLES.patch.setVariable('currentSlide', {scene: 3, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
           break;
         case 'announce_important':
-          CABLES.patch.setVariable('currentSlide', {scene: 3, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
           break;
         case 'compo':
-          let compoSlide = {scene: 0, transition: true, time: Date.now()};
+          let compoSlide = {scene: 3, transition: true, time: Date.now()};
           console.log(compoSlide);
           CABLES.patch.setVariable('currentSlide', compoSlide);
           break;
         case 'timetable':
           console.log("TIMETABLE");
-          CABLES.patch.setVariable('currentSlide', {scene: 2, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
 
       }
