@@ -25,16 +25,19 @@
 </script>
 <script src="{{mix('js/partymeister-slidemeister-web.js')}}"></script>
 <script>
-    setTimeout(() => {
-        CABLES.patch = new CABLES.Patch(
-            {
-                patch: CABLES.exportedPatch,
-                prefixAssetPath: '/cables/',
-                glCanvasId: 'glcanvas',
-                glCanvasResizeToParent: true,
-                onError: err => alert(err),
-            });
-    }, 100);
+    document.addEventListener('CABLES.jsLoaded', function (event) {
+        CABLES.patch = new CABLES.Patch({
+            patch: CABLES.exportedPatch,
+            "prefixAssetPath": "/wurst",
+            "assetPath": "/cables/assets/",
+            "jsPath": "/cables/js/",
+            "glCanvasId": "glcanvas",
+            "glCanvasResizeToWindow": true,
+            "onPatchLoaded": patchInitialized,
+            "onFinishedLoading": patchFinishedLoading,
+            "canvas":{"alpha":true,"premultipliedAlpha":true} // make canvas transparent
+        });
+    });
 </script>
 </body>
 </html>

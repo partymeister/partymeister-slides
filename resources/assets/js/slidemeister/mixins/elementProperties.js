@@ -39,6 +39,7 @@ export default {
                     fontKerning: 'auto',
                     calculatedFontSize: 30,
                     fontWeight: 'normal',
+                    fontStretch: 'normal',
                     fontStyle: 'normal',
                     textAlign: 'left',
                     horizontalAlign: 'flex-start',
@@ -137,6 +138,7 @@ export default {
                 content.style.fontSize = element.properties.fontSize + 'px';
                 content.style.fontKerning = element.properties.fontKerning;
                 content.style.fontWeight = element.properties.fontWeight;
+                content.style.fontStretch = element.properties.fontStretch + '%';
                 content.dataset.fontSize = element.properties.fontSize;
                 content.style.fontStyle = element.properties.fontStyle;
                 content.style.textAlign = element.properties.textAlign;
@@ -149,6 +151,7 @@ export default {
                 target.style.lineHeight = element.properties.lineHeight;
                 target.style.textTransform = element.properties.textTransform;
                 target.dataset.partymeisterSlidesVisibility = element.properties.visibility;
+                target.dataset.partymeisterSlidesPrettyname = element.properties.prettyname;
 
                 content.innerHTML = element.properties.content;
                 target.style.width = element.properties.coordinates.width + 'px';

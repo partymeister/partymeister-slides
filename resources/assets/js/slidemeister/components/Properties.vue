@@ -65,6 +65,23 @@
                     <option value="900">900 (black)</option>
                 </select>
             </div>
+          <div class="input-group">
+            <label class="col-form-label col-form-label-sm" for="fontStretch">fontStretch</label>
+            <select @focus="addStepToUndoStack('fontStretch')" @change="updateProperties"
+                    class="form-control form-control-sm" id="fontStretch" name="fontStretch"
+                    v-model="activeElement.properties.fontStretch">
+              <option value="75">75</option>
+              <option value="80">80</option>
+              <option value="85">85</option>
+              <option value="90">90</option>
+              <option value="100">100</option>
+              <option value="105">105</option>
+              <option value="110">110</option>
+              <option value="115">115</option>
+              <option value="120">120</option>
+              <option value="125">125</option>
+            </select>
+          </div>
             <div class="input-group">
                 <label class="col-form-label col-form-label-sm" for="fontStyle">fontStyle</label>
                 <select @focus="addStepToUndoStack('fontStyle')" @change="updateProperties"
