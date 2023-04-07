@@ -33,7 +33,7 @@
            :style="{'opacity': currentOpacity, 'zoom': zoom}"></div>
       <video v-if="current.type === 'video'" id="video-current" class="slide current"
              :style="{'opacity': currentOpacity}">
-        <source :src="current.file_association.file.url" type="video/x-m4v">
+        <source :src="current.file_association.file.url" type="video/mp4">
       </video>
     </template>
 
@@ -45,7 +45,7 @@
            v-html="previous.slide.cached_html_final" class="slidemeister-instance slide previous"
            :style="{'zoom': zoom}"></div>
       <video v-if="previous.type === 'video'" id="video-previous" class="slide previous">
-        <source :src="previous.file_association.file.url" type="video/x-m4v">
+        <source :src="previous.file_association.file.url" type="video/mp4">
       </video>
     </template>
 
@@ -57,7 +57,7 @@
            v-html="next.slide.cached_html_final" class="slidemeister-instance slide next"
            :style="{'opacity': nextOpacity, 'zoom': zoom}"></div>
       <video v-if="next.type === 'video'" id="video-next" class="slide next" :style="{'opacity': nextOpacity}">
-        <source :src="next.file_association.file.url" type="video/x-m4v">
+        <source :src="next.file_association.file.url" type="video/mp4">
       </video>
     </template>
     <div id="fake-element">

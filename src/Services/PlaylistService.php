@@ -359,8 +359,9 @@ class PlaylistService extends BaseService
                     }
 
                     if ($file->media()
-                             ->first() != null && $file->media()
-                                                       ->first()->mime_type == 'video/x-m4v') {
+                             ->first() != null && ($file->media()
+                                                       ->first()->mime_type == 'video/x-m4v' || $file->media()
+                                                                                                    ->first()->mime_type == 'video/mp4') {
                         $type = 'video';
                     } else {
                         $type = 'image';
@@ -374,9 +375,9 @@ class PlaylistService extends BaseService
                     if (! is_null($transition)) {
                         $i->transition_id = $transition->id;
                     }
-                if (! is_null($transitionSlidemeister)) {
-                    $i->transition_slidemeister_id = $transitionSlidemeister->id;
-                }
+                    if (! is_null($transitionSlidemeister)) {
+                        $i->transition_slidemeister_id = $transitionSlidemeister->id;
+                    }
                     $i->transition_duration = $transitionDuration;
                     $i->duration = $duration;
                     $i->sort_position = $count;
@@ -509,7 +510,7 @@ class PlaylistService extends BaseService
             return 'image';
         }
 
-        if (in_array($item->file->mime_type, ['video/x-m4v'])) {
+        if (in_array($item->file->mime_type, ['video/x-m4v', 'video/mp4'])) {
             return 'video';
         }
 

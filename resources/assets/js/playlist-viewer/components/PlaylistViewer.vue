@@ -5,7 +5,7 @@
             <div v-for="(item, index) in playlist.items" class="slide" :id="'slide-'+index">
                 <img v-if="item.type == 'image'" :src="item.file.file_original">
                 <video muted loop autoplay :id="'video-'+index" v-if="item.type == 'video'">
-                    <source :src="item.file.file_original" type="video/x-m4v">
+                    <source :src="item.file.file_original" type="video/mp4">
                 </video>
             </div>
         </agile>

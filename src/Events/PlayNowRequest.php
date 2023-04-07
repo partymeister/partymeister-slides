@@ -42,7 +42,7 @@ class PlayNowRequest implements ShouldBroadcastNow
                 $data['type'] = 'image';
                 $data['playnow_type'] = 'file';
                 $data['slide_type'] = 'default';
-                if ($file->getFirstMedia('file')->mime_type == 'video/x-m4v') {
+                if ($file->getFirstMedia('file')->mime_type == 'video/x-m4v' || $file->getFirstMedia('file')->mime_type == 'video/mp4') {
                     $data['type'] = 'video';
                 }
                 $this->item = $data;

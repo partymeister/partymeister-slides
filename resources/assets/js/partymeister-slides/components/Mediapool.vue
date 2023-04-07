@@ -82,7 +82,7 @@
               if (!file.file_final) {
                 return false;
               }
-            if (file.file_final.mime_type === 'image/png' || file.file_final.mime_type === 'image/jpg' || file.file_final.mime_type === 'image/jpeg' || file.file_final.mime_type === 'video/x-m4v') {
+            if (file.file_final.mime_type === 'image/png' || file.file_final.mime_type === 'image/jpg' || file.file_final.mime_type === 'image/jpeg' || file.file_final.mime_type === 'video/x-m4v' || file.file_final.mime_type === 'video/mp4') {
               return true;
             }
             return false;
