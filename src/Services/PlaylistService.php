@@ -360,7 +360,7 @@ class PlaylistService extends BaseService
 
                     if ($file->media()
                              ->first() != null && $file->media()
-                                                       ->first()->mime_type == 'video/mp4') {
+                                                       ->first()->mime_type == 'video/x-m4v') {
                         $type = 'video';
                     } else {
                         $type = 'image';
@@ -509,7 +509,7 @@ class PlaylistService extends BaseService
             return 'image';
         }
 
-        if (in_array($item->file->mime_type, ['video/mp4'])) {
+        if (in_array($item->file->mime_type, ['video/x-m4v'])) {
             return 'video';
         }
 

@@ -125,7 +125,7 @@
               }
                 if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg') {
                     return 'Image';
-                } else if (data.mime_type === 'video/mp4') {
+                } else if (data.mime_type === 'video/x-m4v') {
                     return 'Video';
                 }
               return 'unknown';
@@ -141,7 +141,7 @@
                 file.transition_slidemeister = { identifier: 255};
               }
               let data = this.getFileType(file);
-                if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg' || data.mime_type === 'video/mp4') {
+                if (data.mime_type === 'image/png' || data.mime_type === 'image/jpg' || data.mime_type === 'image/jpeg' || data.mime_type === 'video/x-m4v') {
                     return true;
                 }
                 return false;
