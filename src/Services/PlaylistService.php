@@ -468,12 +468,21 @@ class PlaylistService extends BaseService
                 }
             }
 
+            if (isset($item->definitions) && property_exists($item, 'slide_type') && $item->slide_type !== '') {
+                if (isset($item->slide)) {
+                    $i->slide_id = $item->slide->id;
+                } else {
+                    $i->slide_id = $item->id;
+                }
+            }
+
             // Fixme: implement this
             $i->is_muted = false;
 
             $i->save();
 
-            if (isset($item->file) || isset($item->file_association)) {
+
+            if (!$i->slide && (isset($item->file) || isset($item->file_association))) {
                 // Create file association
                 $fa = new FileAssociation();
                 if (property_exists($item, 'file_association')) {
