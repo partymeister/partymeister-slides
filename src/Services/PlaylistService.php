@@ -444,7 +444,9 @@ class PlaylistService extends BaseService
             if (isset($item->overwrite_slide_type) && $item->overwrite_slide_type != '') {
                 $i->slide_type = $item->overwrite_slide_type;
             } else {
-                $i->slide_type = $item->slide_type;
+                if (property_exists($item, 'slide_type')) {
+                    $i->slide_type = $item->slide_type;
+                }
             }
 
             $i->duration = $item->duration;
