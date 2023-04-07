@@ -186,8 +186,39 @@ export default {
       this.updateStatus();
 
     },
-    seekToIndex(index, hard) {
-      console.log('Seek to index ' + index);
+    seekToIndex(index) {
+      console.log('SEEK TO INDEX ' + index);
+
+      this.clearTimeouts();
+
+      let currentItem;
+
+      if (this.items[index] !== undefined) {
+        currentItem = index;
+      } else {
+        console.log('Cannot seek to ' + index);
+        return;
+      }
+
+      console.log("SET CURRENT ITEM TO", currentItem, index);
+
+      if (this.items[currentItem + 1] !== undefined) {
+        this.nextItem = currentItem + 1;
+      } else {
+        this.nextItem = 0;
+      }
+      if (this.items[currentItem - 1] !== undefined) {
+        this.previousItem = currentItem - 1;
+      } else {
+        this.previousItem = this.items.length - 1;
+      }
+      this.next;
+      this.prepareTransition(currentItem, true);
+
+
+
+
+      return;
       this.clearTimeouts();
 
       if (this.items[index] !== undefined) {
@@ -206,8 +237,6 @@ export default {
         this.currentItem = 0;
         this.nextItem = 0;
       }
-
-      console.log("items", this.currentItem, this.nextItem, this.previousItem);
 
       if (this.previousItem !== null) {
         this.beforeSeek();
@@ -378,120 +407,11 @@ export default {
       window.clearTimeout(this.slideTimeout);
     },
 
-
-    animateBackground() {
-      console.log("animateBackground", this.currentItem);
-      if (this.currentItem === false || this.currentItem === undefined || this.currentItem === null) {
-        return;
-      }
-      if (parseInt(this.items[this.currentItem].midi_note) > 0) {
-        if (WebMidi.outputs.length > 0) {
-          WebMidi.outputs[0].playNote(parseInt(this.items[this.currentItem].midi_note), 1, {
-            velocity: 1,
-            duration: 1000
-          });
-          console.log("Played midi note " + this.items[this.currentItem].midi_note + ' to device ' + WebMidi.outputs[0].name + ' (' + WebMidi.outputs[0].id + ')');
-        }
-      }
-
-      if (this.currentBackground === this.items[this.currentItem].slide_type) {
-        // console.log('Correct background is already playing, skipping');
-        this.currentBackground = this.items[this.currentItem].slide_type;
-        this.clearSiegmeisterBars();
-        return;
-      }
-      if (this.currentBackground !== this.items[this.currentItem].slide_type) {
-        // console.log('New background needed, stopping all playing backgrounds');
-        this.$eventHub.$emit('slidemeister:shader', null);
-      }
-      this.currentBackground = this.items[this.currentItem].slide_type;
-      this.clearSiegmeisterBars();
-
-      // Add html to a hidden element so we can search it. THIS SUCKS but it's the web and js and html and... yeah I don't care...
-      let competition = '';
-      if (this.items[this.currentItem].slide.cached_html_final) {
-        document.getElementById('fake-element').append(this.items[this.currentItem].slide.cached_html_final);
-        competition = document.querySelector('[data-partymeister-slides-prettyname="competition"]');
-      }
-
-
-      let newFragmentShader = '';
-      console.log("Background: ", this.currentBackground);
-      switch (this.currentBackground) {
-        case 'siegmeister_winners':
-          CABLES.patch.setVariable('sceneNo', 0);
-          break;
-        case 'siegmeister_bars':
-          CABLES.patch.setVariable('sceneNo', 0);
-          break;
-        case 'comingup':
-          CABLES.patch.setVariable("slideTypeString", "COMING UP");
-          if (competition.innerText.length > 8) {
-            CABLES.patch.setVariable("eventOrCompoName", '');
-            CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
-          } else {
-            CABLES.patch.setVariable("eventOrCompoNameLong", '');
-            CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
-          }
-
-          CABLES.patch.setVariable('sceneNo', 1);
-          break;
-        case 'now':
-          CABLES.patch.setVariable('sceneNo', 1);
-          CABLES.patch.setVariable("slideTypeString", "NOW");
-          if (competition.innerText.length > 8) {
-            CABLES.patch.setVariable("eventOrCompoName", '');
-            CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
-          } else {
-            CABLES.patch.setVariable("eventOrCompoNameLong", '');
-            CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
-          }
-          break;
-        case 'end':
-          CABLES.patch.setVariable('sceneNo', 1);
-          CABLES.patch.setVariable("slideTypeString", "END");
-          if (competition.innerText.length > 8) {
-            CABLES.patch.setVariable("eventOrCompoName", '');
-            CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
-          } else {
-            CABLES.patch.setVariable("eventOrCompoNameLong", '');
-            CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
-          }
-          break;
-        case 'comments':
-          CABLES.patch.setVariable('sceneNo', 0);
-          break;
-        case 'announce':
-          CABLES.patch.setVariable('sceneNo', 0);
-          break;
-        case 'announce_important':
-          CABLES.patch.setVariable('sceneNo', 0);
-          break;
-        case 'compo':
-          CABLES.patch.setVariable('sceneNo', 0);
-          break;
-        case 'timetable':
-          CABLES.patch.setVariable('sceneNo', 0);
-          break;
-
-      }
-      CABLES.patch.setVariable('SLIDETYPE', this.currentBackground);
-
-      if (newFragmentShader !== this.fragmentShader && newFragmentShader !== '') {
-        this.fragmentShader = newFragmentShader;
-        this.unloadScene();
-        this.loadScene();
-        this.animate();
-      } else if (newFragmentShader === '') {
-        this.fragmentShader = newFragmentShader;
-        this.unloadScene();
-      }
-    },
     beforeSeek() {
       if (this.nextItem === false || this.nextItem === undefined || this.nextItem === null) {
         return;
       }
-      if (parseInt(this.items[this.nextItem].midi_note) > 0) {
+      if (this.currentItem && parseInt(this.items[this.nextItem].midi_note) > 0) {
         if (WebMidi.outputs.length > 0) {
           WebMidi.outputs[0].playNote(parseInt(this.items[this.currentItem].midi_note), 1, {
             velocity: 1,
@@ -504,20 +424,25 @@ export default {
 
       // Add html to a hidden element so we can search it. THIS SUCKS but it's the web and js and html and... yeah I don't care...
       let competition = null;
-      if (this.items[this.nextItem].slide.cached_html_final && this.items[this.nextItem].slide_type !== 'compo') {
+      if (this.items[this.nextItem] && this.items[this.nextItem].slide && this.items[this.nextItem].slide.cached_html_final && this.items[this.nextItem].slide_type !== 'compo') {
 
         const tempWrapper = document.createElement('div');
         tempWrapper.innerHTML = this.items[this.nextItem].slide.cached_html_final;
 
-        document.getElementById('fake-element').replaceChildren(tempWrapper);
+        let fakeElement = document.getElementById('fake-element');
 
-        competition = document.getElementById('fake-element').querySelector('[data-partymeister-slides-prettyname="competition"]');
-        if (competition) {
-          console.log("GETTING NEW COMPETITION NAME", this.items[this.nextItem].slide.id, competition.innerText);
+
+        if (fakeElement) {
+          document.getElementById('fake-element').replaceChildren(tempWrapper);
+
+          competition = document.getElementById('fake-element').querySelector('[data-partymeister-slides-prettyname="competition"]');
+          if (competition) {
+            console.log("GETTING NEW COMPETITION NAME", this.items[this.nextItem].slide.id, competition.innerText);
+          }
         }
       }
 
-      if (this.currentBackground === this.items[this.nextItem].slide_type && !competition) {
+      if (this.items[this.nextItem] && this.currentBackground === this.items[this.nextItem].slide_type && !competition) {
         // console.log('Correct background is already playing, skipping');
         this.currentBackground = this.items[this.nextItem].slide_type;
         this.clearSiegmeisterBars();
@@ -864,7 +789,6 @@ div[data-partymeister-slides-visibility='preview'] {
   font-size: 40px;
   margin: 0 auto;
   font-weight: 100;
-  letter-spacing: 1px;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;

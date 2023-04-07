@@ -9,7 +9,6 @@ export default {
     },
     created() {
         this.$eventHub.$on('jingles-loaded', (jingles) => {
-            console.log("Jingles loaded", jingles);
             this.jingles = jingles;
         });
     },
@@ -18,7 +17,6 @@ export default {
             if (this.jingles[index] !== undefined) {
                 this.jingle = this.jingles[index];
                 let player = document.querySelector('#jingle-player > audio');
-                console.log(player);
                 setTimeout(() => {
                     player.play();
                     if (WebMidi.outputs.length > 0 && parseInt(this.configuration['midi_note_' + index]) > 0) {

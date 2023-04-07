@@ -34,7 +34,6 @@
             font-size: 40px;
             margin: 0 auto;
             font-weight: 100;
-            letter-spacing: 1px;
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center center;
