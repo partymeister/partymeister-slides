@@ -406,16 +406,23 @@ export default {
 
     beforeSeek() {
       if (this.nextItem === false || this.nextItem === undefined || this.nextItem === null) {
+        console.log("SKIPPING BEFORE SEEK");
         return;
       }
-      if (this.currentItem && parseInt(this.items[this.nextItem].midi_note) > 0) {
+      if (this.nextItem && parseInt(this.items[this.nextItem].midi_note) > 0) {
+        console.log("CurrentItem and Midi Note Exist");
         if (WebMidi.outputs.length > 0) {
-          WebMidi.outputs[0].playNote(parseInt(this.items[this.currentItem].midi_note), 1, {
+          console.log("We have a midi device");
+          WebMidi.outputs[0].playNote(parseInt(this.items[this.nextItem].midi_note), 1, {
             velocity: 1,
             duration: 1000
           });
           console.log("Played midi note " + this.items[this.nextItem].midi_note + ' to device ' + WebMidi.outputs[0].name + ' (' + WebMidi.outputs[0].id + ')');
+        } else {
+          console.log('We do not have a midi device');
         }
+      } else {
+        console.log("SKIPPED MIDI");
       }
 
 

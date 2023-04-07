@@ -15,14 +15,14 @@ return [
     'name'        => 'Name',
     'slide_type'  => 'Slide type',
     'slide_types' => [
-        'announce'           => 'Default',
-        'announce_important' => 'Warning',
-        'compo'              => 'Competition',
-        'coming_up_now'      => 'Coming up / Now',
-        'end'                => 'End / Participants',
+        'comingup'  => 'Coming up',
+        'now'       => 'Now',
+        'end'       => 'End',
+        'announce'  => 'Announce',
+        'compo'     => 'Compo entry',
+        'timetable' => 'Timetable',
     ],
 
     'latest'     => 'Latest slides',
     'generating' => 'Generating slide previews and hiding the ugliness',
-
 ];
