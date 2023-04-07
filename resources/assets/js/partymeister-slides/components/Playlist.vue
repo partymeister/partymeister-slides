@@ -87,7 +87,7 @@
                 transitions: [],
                 slidemeisterTransitions: [],
                 callbacks: [],
-                slideTypes: [{name: 'Web', value: 'web'}]
+                slideTypes: [{name: 'Web', value: 'web'}, {name: 'compo', value: 'compo'}]
             };
         },
         components: {
