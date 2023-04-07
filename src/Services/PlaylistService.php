@@ -360,8 +360,8 @@ class PlaylistService extends BaseService
 
                     if ($file->media()
                              ->first() != null && ($file->media()
-                                                       ->first()->mime_type == 'video/x-m4v' || $file->media()
-                                                                                                    ->first()->mime_type == 'video/mp4')) {
+                                                        ->first()->mime_type == 'video/x-m4v' || $file->media()
+                                                                                                      ->first()->mime_type == 'video/mp4')) {
                         $type = 'video';
                     } else {
                         $type = 'image';
@@ -443,6 +443,8 @@ class PlaylistService extends BaseService
 
             if (isset($item->overwrite_slide_type) && $item->overwrite_slide_type != '') {
                 $i->slide_type = $item->overwrite_slide_type;
+            } else {
+                $i->slide_type = $item->slide_type;
             }
 
             $i->duration = $item->duration;
@@ -456,13 +458,12 @@ class PlaylistService extends BaseService
             $i->metadata = (isset($item->metadata) ? $item->metadata : '{}');
             $i->sort_position = $key;
 
-            if (property_exists($item, 'slide_type') && $item->slide_type !== '') {
+            if (isset($item->slide) && property_exists($item, 'slide_type') && $item->slide_type !== '') {
                 if (isset($item->slide)) {
                     $i->slide_id = $item->slide->id;
                 } else {
                     $i->slide_id = $item->id;
                 }
-                $i->slide_type = $item->slide_type;
             }
 
             // Fixme: implement this
@@ -470,7 +471,7 @@ class PlaylistService extends BaseService
 
             $i->save();
 
-            if (! property_exists($item, 'slide_type') || $item->slide_type === '') {
+            if (isset($item->file) || isset($item->file_association)) {
                 // Create file association
                 $fa = new FileAssociation();
                 if (property_exists($item, 'file_association')) {
