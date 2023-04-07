@@ -201,6 +201,12 @@ export default {
                             console.log('Playlist exists, seeking to item ' + e.index);
                             if (this.playlist.id === e.playlist_id) {
                                 console.log('Playlist is running, seeking to item ' + e.index);
+                                if (e.index === false) {
+                                    e.index = parseInt(localStorage.getItem('currentItem'));
+                                    if (!e.index) {
+                                        e.index = 0;
+                                    }
+                                }
                                 this.seekToIndex(parseInt(e.index));
                             } else {
                                 console.log('Playlist is not running yet. Setting it and seeking to item ' + e.index);
@@ -209,6 +215,12 @@ export default {
                                 this.playNow = false;
                                 localStorage.setItem('playlist', JSON.stringify(this.playlist));
                                 setTimeout(() => {
+                                    if (e.index === false) {
+                                        e.index = parseInt(localStorage.getItem('currentItem'));
+                                        if (!e.index) {
+                                            e.index = 0;
+                                        }
+                                    }
                                     this.seekToIndex(parseInt(e.index));
                                 }, 200);
                             }

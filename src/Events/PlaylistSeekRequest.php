@@ -34,7 +34,7 @@ class PlaylistSeekRequest implements ShouldBroadcastNow
      * @param  Playlist  $playlist
      * @param    $index
      */
-    public function __construct(Playlist $playlist, $index)
+    public function __construct(Playlist $playlist, $index = false)
     {
         $this->playlist_id = $playlist->id;
         $this->index = $index;

@@ -202,16 +202,13 @@ export default {
 
       console.log("SET CURRENT ITEM TO", currentItem, index);
 
-      if (this.items[currentItem + 1] !== undefined) {
-        this.nextItem = currentItem + 1;
-      } else {
+      if (currentItem === 0) {
         this.nextItem = 0;
-      }
-      if (this.items[currentItem - 1] !== undefined) {
-        this.previousItem = currentItem - 1;
       } else {
-        this.previousItem = this.items.length - 1;
+        this.nextItem = currentItem;
+        currentItem = currentItem - 1;
       }
+
       this.next;
       this.prepareTransition(currentItem, true);
 

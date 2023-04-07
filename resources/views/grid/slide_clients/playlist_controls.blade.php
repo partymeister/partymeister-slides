@@ -15,7 +15,7 @@
         </li>
         <li>
             <a href="#" class="slide-clients-play"
-               data-playlist="{{$record->id}}" data-action="none" data-callbacks="1">{{trans('partymeister-slides::backend/slide_clients.play_with_callbacks')}}</a>
+               data-playlist="{{$record->id}}" data-action="seek_continue" data-callbacks="1">{{trans('partymeister-slides::backend/slide_clients.play_with_callbacks')}}</a>
         </li>
         <li>
             <a href="#" class="slide-clients-play"
@@ -23,7 +23,7 @@
         </li>
         <li>
             <a href="#" class="slide-clients-play"
-               data-playlist="{{$record->id}}" data-action="none" data-callbacks="0">{{trans('partymeister-slides::backend/slide_clients.play_without_callbacks')}}</a>
+               data-playlist="{{$record->id}}" data-action="seek_continue" data-callbacks="0">{{trans('partymeister-slides::backend/slide_clients.play_without_callbacks')}}</a>
         </li>
     </ul>
 @endif

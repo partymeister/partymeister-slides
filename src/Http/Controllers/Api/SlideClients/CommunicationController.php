@@ -130,6 +130,39 @@ class CommunicationController extends Controller
      * @param  Request  $request
      * @return JsonResponse
      */
+    public function seek_continue(Request $request)
+    {
+        $client = SlideClient::find(session('screens.active'));
+
+        if (is_null($client)) {
+            return response()->json(['message' => 'No slide client active'], 400);
+        }
+
+        switch ($client->type) {
+            case 'screens':
+                $result = XMLService::send('seek', $request->all());
+                if (! $result) {
+                    return response()->json(['result' => $result], 400);
+                } else {
+                    return response()->json(['result' => $result]);
+                }
+                break;
+            case 'slidemeister-web':
+                $playlist = Playlist::find($request->get('playlist_id'));
+                if (is_null($playlist)) {
+                    return response()->json(['message' => 'Playlist not found'], 400);
+                }
+                event(new PlaylistSeekRequest($playlist));
+
+                return response()->json(['result' => 'Seek event sent']);
+                break;
+        }
+    }
+
+    /**
+     * @param  Request  $request
+     * @return JsonResponse
+     */
     /**
      * @param  Request  $request
      * @return JsonResponse

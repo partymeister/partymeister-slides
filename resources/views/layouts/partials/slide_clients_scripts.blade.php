@@ -105,6 +105,15 @@
             });
         };
 
+        let seekContinue = function (data) {
+            console.log("SCHMORP");
+            return axios.post('{{route('ajax.slide_clients.communication.seek_continue')}}', data).then(function (response) {
+                updatePlaylists();
+            }).catch(function (error) {
+                console.log(error);
+            });
+        };
+
         $('.slide-clients-play').on('click', function (e) {
             e.preventDefault();
 
@@ -130,6 +139,18 @@
                     };
 
                     seek(seekData).then(() => {
+                        updatePlaylists();
+                    });
+                    return;
+                }
+
+                if (action === 'seek_continue') {
+                    let seekData = {
+                        playlist_id: data.playlist_id,
+                        hard: false,
+                    };
+
+                    seekContinue(seekData).then(() => {
                         updatePlaylists();
                     });
                     return;

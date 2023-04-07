@@ -66,6 +66,8 @@ Route::group([
          ->name('slide_clients.communication.playnow');
     Route::post('slide_clients/communication/seek', 'SlideClients\CommunicationController@seek')
          ->name('slide_clients.communication.seek');
+    Route::post('slide_clients/communication/seek_continue', 'SlideClients\CommunicationController@seek_continue')
+         ->name('slide_clients.communication.seek_continue');
     Route::post('slide_clients/communication/siegmeister', 'SlideClients\CommunicationController@siegmeister')
          ->name('slide_clients.communication.siegmeister');
     Route::post('slide_clients/communication/skip', 'SlideClients\CommunicationController@skip')
