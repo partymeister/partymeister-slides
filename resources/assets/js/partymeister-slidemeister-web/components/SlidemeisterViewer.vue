@@ -175,7 +175,24 @@ export default {
       });
     },
     afterSeek() {
+      console.log('AFTERSEEK');
       localStorage.setItem('currentItem', this.currentItem);
+
+      if (this.currentItem && parseInt(this.items[this.currentItem].midi_note) > 0) {
+        console.log("CurrentItem and Midi Note Exist");
+        if (WebMidi.outputs.length > 0) {
+          console.log("We have a midi device");
+          WebMidi.outputs[0].playNote(parseInt(this.items[this.currentItem].midi_note), 1, {
+            velocity: 1,
+            duration: 1000
+          });
+          console.log("Played midi note " + this.items[this.currentItem].midi_note + ' to device ' + WebMidi.outputs[0].name + ' (' + WebMidi.outputs[0].id + ')');
+        } else {
+          console.log('We do not have a midi device');
+        }
+      } else {
+        console.log("SKIPPED MIDI");
+      }
 
       if (!this.playnow) {
         this.checkVideo();
@@ -409,21 +426,21 @@ export default {
         console.log("SKIPPING BEFORE SEEK");
         return;
       }
-      if (this.nextItem && parseInt(this.items[this.nextItem].midi_note) > 0) {
-        console.log("CurrentItem and Midi Note Exist");
-        if (WebMidi.outputs.length > 0) {
-          console.log("We have a midi device");
-          WebMidi.outputs[0].playNote(parseInt(this.items[this.nextItem].midi_note), 1, {
-            velocity: 1,
-            duration: 1000
-          });
-          console.log("Played midi note " + this.items[this.nextItem].midi_note + ' to device ' + WebMidi.outputs[0].name + ' (' + WebMidi.outputs[0].id + ')');
-        } else {
-          console.log('We do not have a midi device');
-        }
-      } else {
-        console.log("SKIPPED MIDI");
-      }
+      // if (this.nextItem && parseInt(this.items[this.nextItem].midi_note) > 0) {
+      //   console.log("CurrentItem and Midi Note Exist");
+      //   if (WebMidi.outputs.length > 0) {
+      //     console.log("We have a midi device");
+      //     WebMidi.outputs[0].playNote(parseInt(this.items[this.nextItem].midi_note), 1, {
+      //       velocity: 1,
+      //       duration: 1000
+      //     });
+      //     console.log("Played midi note " + this.items[this.nextItem].midi_note + ' to device ' + WebMidi.outputs[0].name + ' (' + WebMidi.outputs[0].id + ')');
+      //   } else {
+      //     console.log('We do not have a midi device');
+      //   }
+      // } else {
+      //   console.log("SKIPPED MIDI");
+      // }
 
 
       // Add html to a hidden element so we can search it. THIS SUCKS but it's the web and js and html and... yeah I don't care...
@@ -455,6 +472,10 @@ export default {
 
       this.currentBackground = this.items[this.nextItem].slide_type;
       this.clearSiegmeisterBars();
+
+      if (this.currentBackground === '') {
+        this.currentBackground = 'announce';
+      }
 
       console.log("Background: ", this.currentBackground);
       switch (this.currentBackground) {
