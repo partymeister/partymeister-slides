@@ -514,7 +514,7 @@ class PlaylistService extends BaseService
         if (isset($item->file_preview)) {
             $item->file = $item->file_preview;
         }
-        if (in_array($item->file->mime_type, [
+        if (!isset($item->file->mime_type) || in_array($item->file->mime_type, [
             'image/png',
             'image/jpg',
             'image/jpeg',
