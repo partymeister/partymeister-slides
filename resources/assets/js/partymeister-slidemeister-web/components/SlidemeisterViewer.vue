@@ -457,9 +457,9 @@ export default {
           document.getElementById('fake-element').replaceChildren(tempWrapper);
 
           competition = document.getElementById('fake-element').querySelector('[data-partymeister-slides-prettyname="competition"]');
-          if (competition) {
-            console.log("GETTING NEW COMPETITION NAME", this.items[this.nextItem].slide.id, competition.innerText);
-          }
+          // if (competition) {
+          //   console.log("GETTING NEW COMPETITION NAME", this.items[this.nextItem].slide.id, competition.innerText);
+          // }
         }
       }
 
@@ -477,82 +477,84 @@ export default {
         this.currentBackground = 'announce';
       }
 
-      console.log("Background: ", this.currentBackground);
+      // console.log("Background: ", this.currentBackground);
+      // CABLES.patch.setVariable('SLIDETYPE', this.currentBackground);
       switch (this.currentBackground) {
         case 'siegmeister_winners':
-          // CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
           break;
         case 'siegmeister_bars':
-          // CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
           break;
         case 'comingup':
           let comingupSlide = {scene: 2, transition: true, time: Date.now()};
-          console.log(comingupSlide, competition.innerText);
-          // CABLES.patch.setVariable('currentSlide', comingupSlide);
+          console.log("COMING UP", comingupSlide);
+          // console.log(comingupSlide, competition.innerText);
+          CABLES.patch.setVariable('currentSlide', comingupSlide);
 
           setTimeout(() => {
-            // CABLES.patch.setVariable("slideTypeString", "COMING UP");
+            CABLES.patch.setVariable("slideTypeString", "COMING UP");
             if (competition.innerText.length > 8) {
-              // CABLES.patch.setVariable("eventOrCompoName", '');
-              // CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
+              CABLES.patch.setVariable("eventOrCompoName", '');
+              CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
             } else {
-              // CABLES.patch.setVariable("eventOrCompoNameLong", '');
-              // CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
+              CABLES.patch.setVariable("eventOrCompoNameLong", '');
+              CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
             }
           }, 500);
 
           break;
         case 'now':
           let nowSlide = {scene: 2, transition: true, time: Date.now()};
-          console.log(nowSlide, competition.innerText);
-          // CABLES.patch.setVariable('currentSlide', nowSlide);
+          console.log("NOW", nowSlide);
+          CABLES.patch.setVariable('currentSlide', nowSlide);
 
           setTimeout(() => {
-            // CABLES.patch.setVariable("slideTypeString", "NOW");
+            CABLES.patch.setVariable("slideTypeString", "NOW");
             if (competition.innerText.length > 8) {
-              // CABLES.patch.setVariable("eventOrCompoName", '');
-              // CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
+              CABLES.patch.setVariable("eventOrCompoName", '');
+              CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
             } else {
-              // CABLES.patch.setVariable("eventOrCompoNameLong", '');
-              // CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
+              CABLES.patch.setVariable("eventOrCompoNameLong", '');
+              CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
             }
           }, 500);
 
           break;
         case 'end':
           let endSlide = {scene: 2, transition: true, time: Date.now()};
-          console.log(endSlide, competition.innerText);
-          // CABLES.patch.setVariable('currentSlide', endSlide);
+          console.log("END", endSlide);
+          CABLES.patch.setVariable('currentSlide', endSlide);
 
           setTimeout(() => {
-            // CABLES.patch.setVariable("slideTypeString", "END");
+            CABLES.patch.setVariable("slideTypeString", "END");
             if (competition.innerText.length > 8) {
-              // CABLES.patch.setVariable("eventOrCompoName", '');
-              // CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
+              CABLES.patch.setVariable("eventOrCompoName", '');
+              CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
             } else {
-              // CABLES.patch.setVariable("eventOrCompoNameLong", '');
-              // CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
+              CABLES.patch.setVariable("eventOrCompoNameLong", '');
+              CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
             }
           }, 500);
 
           break;
         case 'comments':
-          // CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
         case 'announce':
-          // CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
           break;
         case 'announce_important':
-          // CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
           break;
         case 'compo':
-          let compoSlide = {scene: 3, transition: true, time: Date.now()};
-          console.log(compoSlide);
-          // CABLES.patch.setVariable('currentSlide', compoSlide);
+          let compoSlide = {scene: 3, transition: true, entryType: "remote", time: Date.now()};
+          console.log("COMPO", compoSlide);
+          CABLES.patch.setVariable('currentSlide', compoSlide);
           break;
         case 'timetable':
           console.log("TIMETABLE");
-          // CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
 
       }

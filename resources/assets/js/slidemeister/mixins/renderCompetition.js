@@ -19,6 +19,9 @@ export default {
         renderCompetitionEntry(replacements) {
             Object.entries(this.elements).forEach(([key, element]) => {
                 Object.entries(replacements).forEach(([property, value]) => {
+                    if (property === 'remote_type') {
+                        value = value.toLowerCase();
+                    }
                     this.replaceContent(element, property, value);
                 });
                 element.properties.content = element.properties.content.replace(/<<.+>>/, '');
