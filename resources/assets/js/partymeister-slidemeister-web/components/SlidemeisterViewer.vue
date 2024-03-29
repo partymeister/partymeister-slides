@@ -476,9 +476,9 @@ export default {
       this.currentBackground = this.items[this.nextItem].slide_type;
       this.clearSiegmeisterBars();
 
-      if (this.currentBackground === '') {
-        this.currentBackground = 'announce';
-      }
+      // if (this.currentBackground === '') {
+      //   this.currentBackground = 'announce';
+      // }
 
       console.log("Background: ", this.currentBackground);
       // CABLES.patch.setVariable('SLIDETYPE', this.currentBackground);
