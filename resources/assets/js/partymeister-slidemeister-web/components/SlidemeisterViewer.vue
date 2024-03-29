@@ -8,7 +8,8 @@
             }
 
     </script>
-    <div id="cables-container">
+
+    <div id="cables-container" style="width: 100%; height: 100%;">
       <canvas id="glcanvas" width="100vw" height="100vh" tabindex="1"></canvas>
     </div>
     <div id="shader-container"></div>
@@ -124,9 +125,9 @@ export default {
       slideTimeout: null,
       currentBackground: null,
       transitionGroups: [
-        ['fadeIn', 'fadeOut'],
-        ['pulse', 'fadeOut'],
-        ['zoomIn', 'zoomOut'],
+        ['animate__fadeIn', 'animate__fadeOut'],
+        // ['pulse', 'fadeOut'],
+        // ['zoomIn', 'zoomOut'],
       ],
     };
   },
@@ -273,7 +274,7 @@ export default {
             this.deleteBars();
           }
           this.playTransition();
-        }, 0);
+        }, 250);
       } else {
         this.currentItem = this.nextItem;
 
@@ -345,15 +346,17 @@ export default {
       this.clearSiegmeisterBars();
 
       let transitionGroup = this.transitionGroups[Math.floor(Math.random() * this.transitionGroups.length)];
-      if (transition !== 255 && transition !== '') {
-        transitionGroup = this.transitionGroups[parseInt(transition)];
-      }
-      if (transitionGroup === undefined || transitionGroup.length !== 2) {
-        transitionGroup = this.transitionGroups[Math.floor(Math.random() * this.transitionGroups.length)];
-      }
+      // if (transition !== 255 && transition !== '') {
+      //   transitionGroup = this.transitionGroups[parseInt(transition)];
+      // }
+      // if (transitionGroup === undefined || transitionGroup.length !== 2) {
+      //   transitionGroup = this.transitionGroups[Math.floor(Math.random() * this.transitionGroups.length)];
+      // }
 
       this.currentOpacity = 1;
       this.nextOpacity = 1;
+
+      console.log("START FADE IN");
       this.animateCSS('.next', transitionGroup[0], () => {
         // console.log('Transition done - swapping items');
         document.querySelector('.next').style.zIndex = 1001;
@@ -378,6 +381,7 @@ export default {
         }, 0);
       });
 
+      console.log("START FADE OUT");
       this.animateCSS('.current', transitionGroup[1], () => {
       });
     },
@@ -452,7 +456,6 @@ export default {
 
         let fakeElement = document.getElementById('fake-element');
 
-
         if (fakeElement) {
           document.getElementById('fake-element').replaceChildren(tempWrapper);
 
@@ -463,7 +466,7 @@ export default {
         }
       }
 
-      if (this.items[this.nextItem] && this.currentBackground === this.items[this.nextItem].slide_type && !competition) {
+      if (this.items[this.nextItem] && this.currentBackground === this.items[this.nextItem].slide_type && !competition && this.items[this.nextItem].slide_type !== 'compo') {
         // console.log('Correct background is already playing, skipping');
         this.currentBackground = this.items[this.nextItem].slide_type;
         this.clearSiegmeisterBars();
@@ -477,14 +480,14 @@ export default {
         this.currentBackground = 'announce';
       }
 
-      // console.log("Background: ", this.currentBackground);
+      console.log("Background: ", this.currentBackground);
       // CABLES.patch.setVariable('SLIDETYPE', this.currentBackground);
       switch (this.currentBackground) {
         case 'siegmeister_winners':
-          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
         case 'siegmeister_bars':
-          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
         case 'comingup':
           let comingupSlide = {scene: 2, transition: true, time: Date.now()};
@@ -542,13 +545,19 @@ export default {
           CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
         case 'announce':
-          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
         case 'announce_important':
-          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
         case 'compo':
-          let compoSlide = {scene: 3, transition: true, entryType: "remote", time: Date.now()};
+
+          console.log("METT-A_DATA", this.items[this.nextItem].metadata);
+          let remoteType = 'party';
+          if (this.items[this.nextItem].metadata?.remote_type != '') {
+           remoteType = this.items[this.nextItem].metadata.remote_type.toLowerCase();
+          }
+          let compoSlide = {scene: 3, transition: true, entryType: remoteType, time: Date.now()};
           console.log("COMPO", compoSlide);
           CABLES.patch.setVariable('currentSlide', compoSlide);
           break;
@@ -556,7 +565,8 @@ export default {
           console.log("TIMETABLE");
           CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
           break;
-
+        default:
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
       }
 
     },
@@ -597,10 +607,10 @@ export default {
         // console.error('Node ' + element + ' not found - skipping');
         return;
       }
-      node.classList.add('animated', animationName);
+      node.classList.add('animate__animated', animationName, 'animate__delay_05s');
 
       function handleAnimationEnd() {
-        node.classList.remove('animated', animationName);
+        node.classList.remove('animate__animated', animationName);
         node.removeEventListener('animationend', handleAnimationEnd);
 
         if (typeof callback === 'function') callback()

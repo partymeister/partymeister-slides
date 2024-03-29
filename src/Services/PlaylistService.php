@@ -297,6 +297,10 @@ class PlaylistService extends BaseService
                     $i->playlist_id = $playlist->id;
                     $i->type = 'image';
                     $i->slide_type = $s->slide_type;
+                    if (isset($entry) && !is_null($entry)) {
+                        $i->metadata = '{"remote_type": "'.$entry->remote_type.'"}';
+                    }
+
                     $i->slide_id = $s->id;
                     $i->is_advanced_manually = $isAdvancedManually;
                     $i->midi_note = $midiNote;

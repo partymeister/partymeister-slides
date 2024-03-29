@@ -87,7 +87,7 @@
                 transitions: [],
                 slidemeisterTransitions: [],
                 callbacks: [],
-                slideTypes: [{name: 'announce', value: 'announce'}, {name: 'compo', value: 'compo'},
+                slideTypes: [{name: 'announce', value: 'announce'},{name: 'announce no bg', value: 'announce_nobg'}, {name: 'compo', value: 'compo'},
                   {name: 'comingup', value: 'comingup'}, {name: 'now', value: 'now'}, {name: 'end', value: 'end'}]
             };
         },
