@@ -153,15 +153,17 @@ class PlaylistService extends BaseService
 
             $s->clearMediaCollection('preview');
             $s->clearMediaCollection('final');
-            if (!file_exists(storage_path().'/preview_'.$slideName.'.png')) {
+            if (! file_exists(storage_path().'/preview_'.$slideName.'.png')) {
                 $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
                   ->toMediaCollection('preview', 'media');
                 $s->addMedia(storage_path().'/final_'.$slideName.'.png')
                   ->toMediaCollection('final', 'media');
             } else {
                 $s->addMedia(storage_path().'/placeholder.png')
+                  ->preservingOriginal()
                   ->toMediaCollection('preview', 'media');
                 $s->addMedia(storage_path().'/placeholder.png')
+                  ->preservingOriginal()
                   ->toMediaCollection('final', 'media');
             }
 
@@ -304,7 +306,7 @@ class PlaylistService extends BaseService
                     $i->playlist_id = $playlist->id;
                     $i->type = 'image';
                     $i->slide_type = $s->slide_type;
-                    if (isset($entry) && !is_null($entry)) {
+                    if (isset($entry) && ! is_null($entry)) {
                         $i->metadata = '{"remote_type": "'.$entry->remote_type.'"}';
                     }
 
@@ -493,8 +495,7 @@ class PlaylistService extends BaseService
 
             $i->save();
 
-
-            if (!$i->slide && (isset($item->file) || isset($item->file_association))) {
+            if (! $i->slide && (isset($item->file) || isset($item->file_association))) {
                 // Create file association
                 $fa = new FileAssociation();
                 if (property_exists($item, 'file_association')) {
@@ -526,11 +527,11 @@ class PlaylistService extends BaseService
         if (isset($item->file_preview)) {
             $item->file = $item->file_preview;
         }
-        if (!isset($item->file->mime_type) || in_array($item->file->mime_type, [
-            'image/png',
-            'image/jpg',
-            'image/jpeg',
-        ])) {
+        if (! isset($item->file->mime_type) || in_array($item->file->mime_type, [
+                'image/png',
+                'image/jpg',
+                'image/jpeg',
+            ])) {
             return 'image';
         }
 
