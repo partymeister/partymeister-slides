@@ -113,7 +113,7 @@ class PlaylistItemResource extends BaseResource
             'is_advanced_manually'    => (bool) $this->is_advanced_manually,
             'is_muted'                => (bool) $this->is_muted,
             'midi_note'               => (int) $this->midi_note,
-            'metadata'                => json_decode($this->metadata, true),
+            'metadata'                => $this->metadata,
             'callback_hash'           => $this->callback_hash,
             'callback_delay'          => (int) $this->callback_delay,
             'sort_position'           => (int) $this->sort_position,
