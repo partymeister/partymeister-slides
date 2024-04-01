@@ -153,7 +153,7 @@ class PlaylistService extends BaseService
 
             $s->clearMediaCollection('preview');
             $s->clearMediaCollection('final');
-            if (! file_exists(storage_path().'/preview_'.$slideName.'.png')) {
+            if (file_exists(storage_path().'/preview_'.$slideName.'.png')) {
                 $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
                   ->toMediaCollection('preview', 'media');
                 $s->addMedia(storage_path().'/final_'.$slideName.'.png')
