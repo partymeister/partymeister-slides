@@ -6,6 +6,7 @@ use Exception;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Support\Facades\Log;
 
 class ScreenshotHelper
 {
@@ -43,9 +44,13 @@ class ScreenshotHelper
      */
     public function screenshot($url, $file)
     {
-        if ($this->driver) {
-            $this->driver->get($url);
-            $this->driver->takeScreenshot($file);
+        try {
+            if ($this->driver) {
+                $this->driver->get($url);
+                $this->driver->takeScreenshot($file);
+            }
+        } catch (Exception $e) {
+            Log::error("Screenshothelper: ". $e->getMessage());
         }
     }
 

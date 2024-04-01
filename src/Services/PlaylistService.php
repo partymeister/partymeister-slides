@@ -153,10 +153,17 @@ class PlaylistService extends BaseService
 
             $s->clearMediaCollection('preview');
             $s->clearMediaCollection('final');
-            $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
-              ->toMediaCollection('preview', 'media');
-            $s->addMedia(storage_path().'/final_'.$slideName.'.png')
-              ->toMediaCollection('final', 'media');
+            if (!file_exists(storage_path().'/preview_'.$slideName.'.png')) {
+                $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
+                  ->toMediaCollection('preview', 'media');
+                $s->addMedia(storage_path().'/final_'.$slideName.'.png')
+                  ->toMediaCollection('final', 'media');
+            } else {
+                $s->addMedia(storage_path().'/placeholder.png')
+                  ->toMediaCollection('preview', 'media');
+                $s->addMedia(storage_path().'/placeholder.png')
+                  ->toMediaCollection('final', 'media');
+            }
 
             $slideIds[] = $s->id;
         }
