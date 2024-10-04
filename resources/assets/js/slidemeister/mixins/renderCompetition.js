@@ -20,7 +20,7 @@ export default {
             Object.entries(this.elements).forEach(([key, element]) => {
                 Object.entries(replacements).forEach(([property, value]) => {
                     if (property === 'remote_type') {
-                        value = value.toLowerCase();
+                        value = value?.toLowerCase();
                     }
                     this.replaceContent(element, property, value);
                 });

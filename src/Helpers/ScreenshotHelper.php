@@ -22,10 +22,10 @@ class ScreenshotHelper
             $host = 'http://localhost:9515';
             $options = new ChromeOptions();
             $options->addArguments([
-                '--headless',
+                '--headless=old',
                 '--window-size=1920,1080',
                 '--disable-gpu',
-                '--no-sandbox',
+                '--no-sandbox'
             ]);
 
             $capabilities = DesiredCapabilities::chrome();
