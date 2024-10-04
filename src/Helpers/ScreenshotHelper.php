@@ -23,7 +23,7 @@ class ScreenshotHelper
             $options = new ChromeOptions();
             $options->addArguments([
                 '--headless',
-                '--window-size=1920x1080',
+                '--window-size=1920,1080',
                 '--disable-gpu',
                 '--no-sandbox',
             ]);

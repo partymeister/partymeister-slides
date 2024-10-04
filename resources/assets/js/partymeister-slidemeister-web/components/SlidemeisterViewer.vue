@@ -555,7 +555,7 @@ export default {
           console.log("METT-A_DATA", this.items[this.nextItem].metadata);
           let remoteType = 'party';
           if (this.items[this.nextItem].metadata?.remote_type != '') {
-           remoteType = this.items[this.nextItem].metadata.remote_type.toLowerCase();
+           remoteType = this.items[this.nextItem].metadata?.remote_type.toLowerCase();
           }
           let compoSlide = {scene: 3, transition: true, entryType: remoteType, time: Date.now()};
           console.log("COMPO", compoSlide);
