@@ -481,7 +481,7 @@ export default {
       // }
 
       console.log("Background: ", this.currentBackground);
-      // CABLES.patch.setVariable('SLIDETYPE', this.currentBackground);
+      CABLES.patch.setVariable('SLIDETYPE', this.currentBackground); // only for deadline / darya
       switch (this.currentBackground) {
         case 'siegmeister_winners':
           CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
