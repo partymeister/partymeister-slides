@@ -46,22 +46,25 @@ class SlideTemplateService extends BaseService
             $browser = new ScreenshotHelper();
         }
         if (isset($browser)) {
-            $browser->screenshot(config('app.url_internal').route('backend.slide_templates.show', [$this->record->id], false).'?preview=true', storage_path().'/preview_'.$this->record->id.'.png');
-            $browser->screenshot(config('app.url_internal').route('backend.slide_templates.show', [$this->record->id], false), storage_path().'/final_'.$this->record->id.'.png');
+            $browser->screenshot(config('app.url_internal').route('backend.slide_templates.show', [$this->record->id], false).'?preview=true', storage_path().'/preview_'.$this->record->id.'.png', $this->record->id, SlideTemplate::class, 'preview');
+            $browser->screenshot(config('app.url_internal').route('backend.slide_templates.show', [$this->record->id], false), storage_path().'/final_'.$this->record->id.'.png', $this->record->id, SlideTemplate::class, 'final');
+
+            //$browser->screenshot(config('app.url_internal').route('backend.slide_templates.show', [$this->record->id], false).'?preview=true', storage_path().'/preview_'.$this->record->id.'.png');
+            //$browser->screenshot(config('app.url_internal').route('backend.slide_templates.show', [$this->record->id], false), storage_path().'/final_'.$this->record->id.'.png');
         }
 
-        $this->record->clearMediaCollection('preview');
-        $this->record->clearMediaCollection('final');
-
-        if (file_exists(storage_path().'/preview_'.$this->record->id.'.png')) {
-            $this->record->addMedia(storage_path().'/preview_'.$this->record->id.'.png')
-                         ->toMediaCollection('preview', 'media');
-        }
-
-        if (file_exists(storage_path().'/final_'.$this->record->id.'.png')) {
-            $this->record->addMedia(storage_path().'/final_'.$this->record->id.'.png')
-                         ->toMediaCollection('final', 'media');
-        }
+        //$this->record->clearMediaCollection('preview');
+        //$this->record->clearMediaCollection('final');
+        //
+        //if (file_exists(storage_path().'/preview_'.$this->record->id.'.png')) {
+        //    $this->record->addMedia(storage_path().'/preview_'.$this->record->id.'.png')
+        //                 ->toMediaCollection('preview', 'media');
+        //}
+        //
+        //if (file_exists(storage_path().'/final_'.$this->record->id.'.png')) {
+        //    $this->record->addMedia(storage_path().'/final_'.$this->record->id.'.png')
+        //                 ->toMediaCollection('final', 'media');
+        //}
     }
 
     public function afterUpdate()

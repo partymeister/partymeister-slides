@@ -61,16 +61,17 @@ class SlideService extends BaseService
         }
 
         if (isset($browser)) {
-            $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$this->record->id], false).'?preview=true', storage_path().'/preview_'.$this->record->id.'.png');
+            $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$this->record->id], false).'?preview=true', storage_path().'/preview_'.$this->record->id.'.png', $this->record->id, Slide::class, 'preview');
+            $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$this->record->id], false), storage_path().'/final_'.$this->record->id.'.png', $this->record->id, Slide::class, 'final');
         }
 
-        $this->record->clearMediaCollection('preview');
-        $this->record->clearMediaCollection('final');
-
-        if (is_file(storage_path().'/preview_'.$this->record->id.'.png')) {
-            $this->record->addMedia(storage_path().'/preview_'.$this->record->id.'.png')
-                         ->toMediaCollection('preview', 'media');
-        }
+        //$this->record->clearMediaCollection('preview');
+        //$this->record->clearMediaCollection('final');
+        //
+        //if (is_file(storage_path().'/preview_'.$this->record->id.'.png')) {
+        //    $this->record->addMedia(storage_path().'/preview_'.$this->record->id.'.png')
+        //                 ->toMediaCollection('preview', 'media');
+        //}
     }
 
     public function afterUpdate()

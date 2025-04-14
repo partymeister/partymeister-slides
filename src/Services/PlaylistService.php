@@ -14,6 +14,7 @@ use Partymeister\Slides\Helpers\ScreenshotHelper;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\PlaylistItem;
 use Partymeister\Slides\Models\Slide;
+use Partymeister\Slides\Models\SlideTemplate;
 use Partymeister\Slides\Models\Transition;
 
 /**
@@ -147,25 +148,25 @@ class PlaylistService extends BaseService
 
             // 7. generate slides
             if (isset($browser)) {
-                $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png');
-                $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png');
+                $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png', $s->id, Slide::class, 'preview');
+                $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png', $s->id, Slide::class, 'final');
             }
 
-            $s->clearMediaCollection('preview');
-            $s->clearMediaCollection('final');
-            if (file_exists(storage_path().'/preview_'.$slideName.'.png')) {
-                $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
-                  ->toMediaCollection('preview', 'media');
-                $s->addMedia(storage_path().'/final_'.$slideName.'.png')
-                  ->toMediaCollection('final', 'media');
-            } else {
-                $s->addMedia(storage_path().'/placeholder.png')
-                  ->preservingOriginal()
-                  ->toMediaCollection('preview', 'media');
-                $s->addMedia(storage_path().'/placeholder.png')
-                  ->preservingOriginal()
-                  ->toMediaCollection('final', 'media');
-            }
+            //$s->clearMediaCollection('preview');
+            //$s->clearMediaCollection('final');
+            //if (file_exists(storage_path().'/preview_'.$slideName.'.png')) {
+            //    $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
+            //      ->toMediaCollection('preview', 'media');
+            //    $s->addMedia(storage_path().'/final_'.$slideName.'.png')
+            //      ->toMediaCollection('final', 'media');
+            //} else {
+            //    $s->addMedia(storage_path().'/placeholder.png')
+            //      ->preservingOriginal()
+            //      ->toMediaCollection('preview', 'media');
+            //    $s->addMedia(storage_path().'/placeholder.png')
+            //      ->preservingOriginal()
+            //      ->toMediaCollection('final', 'media');
+            //}
 
             $slideIds[] = $s->id;
         }
@@ -331,21 +332,21 @@ class PlaylistService extends BaseService
 
                     // 7. generate slides
                     if (isset($browser)) {
-                        $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png');
-                        $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png');
+                        $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png', $s->id, Slide::class, 'preview');
+                        $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png', $s->id, Slide::class, 'final');
                     }
 
-                    $s->clearMediaCollection('preview');
-                    $s->clearMediaCollection('final');
-
-                    if (is_file(storage_path().'/preview_'.$slideName.'.png')) {
-                        $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
-                          ->toMediaCollection('preview', 'media');
-                    }
-                    if (is_file(storage_path().'/final_'.$slideName.'.png')) {
-                        $s->addMedia(storage_path().'/final_'.$slideName.'.png')
-                          ->toMediaCollection('final', 'media');
-                    }
+                    //$s->clearMediaCollection('preview');
+                    //$s->clearMediaCollection('final');
+                    //
+                    //if (is_file(storage_path().'/preview_'.$slideName.'.png')) {
+                    //    $s->addMedia(storage_path().'/preview_'.$slideName.'.png')
+                    //      ->toMediaCollection('preview', 'media');
+                    //}
+                    //if (is_file(storage_path().'/final_'.$slideName.'.png')) {
+                    //    $s->addMedia(storage_path().'/final_'.$slideName.'.png')
+                    //      ->toMediaCollection('final', 'media');
+                    //}
                     break;
                 case 'video_1':
                 case 'video_2':

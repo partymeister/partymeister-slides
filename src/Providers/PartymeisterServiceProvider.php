@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Providers;
 
+use Partymeister\Slides\Console\Commands\PartymeisterSlidesListenForScreenshotCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Partymeister\Slides\Console\Commands\PartymeisterWebdriverCommand;
@@ -44,6 +45,7 @@ class PartymeisterServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 PartymeisterWebdriverCommand::class,
+                PartymeisterSlidesListenForScreenshotCommand::class
             ]);
         }
     }

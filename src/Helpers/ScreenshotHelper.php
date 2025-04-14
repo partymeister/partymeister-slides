@@ -2,67 +2,73 @@
 
 namespace Partymeister\Slides\Helpers;
 
-use Exception;
-use Facebook\WebDriver\Chrome\ChromeOptions;
-use Facebook\WebDriver\Remote\DesiredCapabilities;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
-use Illuminate\Support\Facades\Log;
-use Spatie\Browsershot\Browsershot;
+use Illuminate\Support\Facades\Redis;
 
 class ScreenshotHelper
 {
     protected $driver = null;
 
     /**
-     * ScreenshotHelper constructor.
-     * Initialize a browser
-     */
-    //public function __construct()
-    //{
-    //    try {
-    //        $host = 'http://localhost:9515';
-    //        $options = new ChromeOptions();
-    //        $options->addArguments([
-    //            '--headless=old',
-    //            '--window-size=1920,1080',
-    //            '--disable-gpu',
-    //            '--no-sandbox'
-    //        ]);
-    //
-    //        $capabilities = DesiredCapabilities::chrome();
-    //        $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
-    //        $this->driver = RemoteWebDriver::create($host, $capabilities, 5000);
-    //    } catch (Exception $e) {
-    //        exit($e->getMessage());
-    //        exit('Webdriver not running');
-    //        // Do nothing for now
-    //    }
-    //}
-
-    /**
      * @param $url
      * @param $file
+     * @param $slideId
+     * @param $class
+     * @param $collection
+     * @return void
      */
-    public function screenshot($url, $file)
+    public function screenshot($url, $file, $slideId, $class, $collection)
     {
-        try {
-            Browsershot::url($url)->setChromePath('/usr/bin/chromium')->newHeadless()->windowSize(1920, 1080)->save($file);
-            //if ($this->driver) {
-            //    $this->driver->get($url);
-            //    $this->driver->takeScreenshot($file);
-            //}
-        } catch (Exception $e) {
-            Log::error("Screenshothelper: ". $e->getMessage());
-        }
+        $this->enqueue($url, $file, $slideId, $class, $collection);
     }
 
     /**
-     * Throw away the browser
+     * @param string $url
+     * @param string $filename
+     * @param int $slideId
+     * @param string $class
+     * @param string $collection
+     * @return void
      */
-    //public function __destruct()
-    //{
-    //    if ($this->driver instanceof RemoteWebDriver) {
-    //        $this->driver->close();
-    //    }
-    //}
+    public function enqueue(string $url, string $filename, int $slideId, string $class, string $collection): void
+    {
+        // Define queue name
+        $queueName = 'screenshot';
+
+        // 1. Generate job ID (auto-increment)
+        $jobId = Redis::incr("bull:$queueName:id");
+
+        // 2. Build job payload
+        $jobKey = "bull:$queueName:$jobId";
+        $data = [
+            'url'        => $url,
+            'fileName'   => $filename,
+            'slideId'    => $slideId,
+            'class'      => $class,
+            'collection' => $collection,
+        ];
+
+        $job = [
+            'name'         => 'screenshot', // Job name
+            'data'         => json_encode($data),
+            'opts'         => json_encode([]),
+            'progress'     => 0,
+            'attemptsMade' => 0,
+            'finishedOn'   => null,
+            'processedOn'  => null,
+            'timestamp'    => (string) now()->timestamp * 1000,
+        ];
+
+        // 3. Store the job hash
+        Redis::hmset($jobKey, $job);
+
+        // 4. Push job ID to the 'wait' list
+        Redis::rpush("bull:$queueName:wait", $jobId);
+
+        // (Optional) Notify workers
+        Redis::publish("bull:$queueName:events", json_encode([
+            'event' => 'waiting',
+            'jobId' => $jobId,
+            'prev'  => null,
+        ]));
+    }
 }
