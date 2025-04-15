@@ -7,7 +7,6 @@ export default {
     },
     methods: {
         addListener(e) {
-            console.log(e.key);
             switch (e.key) {
                 case 'F1':
                     this.playJingle('jingle_1');

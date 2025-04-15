@@ -267,7 +267,7 @@ export default {
 
     },
     prepareTransition(currentItem, hard) {
-      this.beforeSeek();
+      this.beforeSeek(hard);
       if (!hard) {
         setTimeout(() => {
           if (this.next.slide_type !== 'slidemeister_winners') {
@@ -284,7 +284,7 @@ export default {
       }
     },
     seekToNextItem(hard) {
-      console.log('Seek to next item');
+      console.log('[SEEK] next', hard);
       this.clearTimeouts();
 
       let currentItem = this.currentItem;
@@ -306,7 +306,7 @@ export default {
       this.prepareTransition(currentItem, hard);
     },
     seekToPreviousItem(hard) {
-      console.log('Seek to previous item');
+      console.log('[SEEK] previous', hard);
       this.clearTimeouts();
 
       let currentItem = this.currentItem;
@@ -356,9 +356,9 @@ export default {
       this.currentOpacity = 1;
       this.nextOpacity = 1;
 
-      console.log("START FADE IN");
+      console.log("[TRANSITION] start fade in");
       this.animateCSS('.next', transitionGroup[0], () => {
-        console.log('Transition done - swapping items');
+        console.log('[TRANSITION] done - swapping items');
         document.querySelector('.next').style.zIndex = 1001;
         if (this.clearPlayNowAfter) {
           this.playNow = false;
@@ -381,7 +381,7 @@ export default {
         }, 0);
       });
 
-      console.log("START FADE OUT");
+      console.log("[TRANSITION] start fade out");
       this.animateCSS('.current', transitionGroup[1], () => {
       });
     },
@@ -402,7 +402,7 @@ export default {
     },
     setCallbackDelay() {
       if (this.currentItem === 'playnow') {
-        console.log("playnow?");
+        console.log("[PLAY NOW]");
         return;
       }
       if (this.playlist.callbacks !== undefined && this.playlist.callbacks) {
@@ -411,9 +411,9 @@ export default {
           this.callbackTimeout = setTimeout(() => {
             // console.log('Excuting callback ' + this.items[this.currentItem].callback_hash);
             axios.get(this.playlist.callback_url + this.items[this.currentItem].callback_hash).then(result => {
-              console.log('Callback successfully executed');
+              console.log('[CALLBACK] successful');
             }).catch(e => {
-              console.log('Error executing callback');
+              console.log('[CALLBACK] Error');
             });
           }, this.items[this.currentItem].callback_delay * 1000)
         }
@@ -425,7 +425,7 @@ export default {
       window.clearTimeout(this.slideTimeout);
     },
 
-    beforeSeek() {
+    beforeSeek(hard = false) {
       if (this.nextItem === false || this.nextItem === undefined || this.nextItem === null) {
         console.log("SKIPPING BEFORE SEEK");
         return;
@@ -480,17 +480,17 @@ export default {
       //   this.currentBackground = 'announce';
       // }
 
-      console.log("Background: ", this.currentBackground);
+      console.log("[BEFORE SEEK]] set background to: ", this.currentBackground);
       CABLES.patch.setVariable('SLIDETYPE', this.currentBackground); // only for deadline / darya
       switch (this.currentBackground) {
         case 'siegmeister_winners':
-          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: !hard, time: Date.now()});
           break;
         case 'siegmeister_bars':
-          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: !hard, time: Date.now()});
           break;
         case 'comingup':
-          let comingupSlide = {scene: 2, transition: true, time: Date.now()};
+          let comingupSlide = {scene: 2, transition: !hard, time: Date.now()};
           console.log("COMING UP", comingupSlide);
           // console.log(comingupSlide, competition.innerText);
           CABLES.patch.setVariable('currentSlide', comingupSlide);
@@ -500,15 +500,17 @@ export default {
             if (competition.innerText.length > 8) {
               CABLES.patch.setVariable("eventOrCompoName", '');
               CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
+              console.log("eventOrCompoNameLong", competition.innerText);
             } else {
               CABLES.patch.setVariable("eventOrCompoNameLong", '');
               CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
+              console.log("eventOrCompoName", competition.innerText);
             }
           }, 500);
 
           break;
         case 'now':
-          let nowSlide = {scene: 2, transition: true, time: Date.now()};
+          let nowSlide = {scene: 2, transition: !hard, time: Date.now()};
           console.log("NOW", nowSlide);
           CABLES.patch.setVariable('currentSlide', nowSlide);
 
@@ -517,15 +519,17 @@ export default {
             if (competition.innerText.length > 8) {
               CABLES.patch.setVariable("eventOrCompoName", '');
               CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
+              console.log("eventOrCompoNameLong", competition.innerText);
             } else {
               CABLES.patch.setVariable("eventOrCompoNameLong", '');
               CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
+              console.log("eventOrCompoName", competition.innerText);
             }
           }, 500);
 
           break;
         case 'end':
-          let endSlide = {scene: 2, transition: true, time: Date.now()};
+          let endSlide = {scene: 2, transition: !hard, time: Date.now()};
           console.log("END", endSlide);
           CABLES.patch.setVariable('currentSlide', endSlide);
 
@@ -534,23 +538,32 @@ export default {
             if (competition.innerText.length > 8) {
               CABLES.patch.setVariable("eventOrCompoName", '');
               CABLES.patch.setVariable("eventOrCompoNameLong", competition.innerText);
+              console.log("eventOrCompoNameLong", competition.innerText);
             } else {
               CABLES.patch.setVariable("eventOrCompoNameLong", '');
               CABLES.patch.setVariable("eventOrCompoName", competition.innerText);
+              console.log("eventOrCompoName", competition.innerText);
             }
           }, 500);
 
           break;
         case 'comments':
-          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: !hard, time: Date.now()});
           break;
         case 'announce':
-          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: !hard, time: Date.now()});
           break;
         case 'announce_important':
-          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: !hard, time: Date.now()});
           break;
         case 'compo':
+
+
+          try {
+            this.items[this.nextItem].metadata = JSON.parse(this.items[this.nextItem].metadata);
+          } catch (e) {
+            // do nothing
+          }
 
           console.log("Metadata", this.items[this.nextItem].metadata);
           let remoteType = 'party';
@@ -558,16 +571,16 @@ export default {
             remoteType = this.items[this.nextItem].metadata?.remote_type;
            // remoteType = this.items[this.nextItem].metadata?.remote_type.toLowerCase();
           }
-          let compoSlide = {scene: 3, transition: true, entryType: remoteType, time: Date.now()};
+          let compoSlide = {scene: 3, transition: !hard, entryType: remoteType.toLowerCase(), time: Date.now()};
           console.log("COMPO", compoSlide);
           CABLES.patch.setVariable('currentSlide', compoSlide);
           break;
         case 'timetable':
           console.log("TIMETABLE");
-          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 1, transition: !hard, time: Date.now()});
           break;
         default:
-          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: true, time: Date.now()});
+          CABLES.patch.setVariable('currentSlide', {scene: 0, transition: !hard, time: Date.now()});
       }
 
     },
