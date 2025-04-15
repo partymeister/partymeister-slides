@@ -4,6 +4,7 @@ namespace Partymeister\Slides\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
+use Partymeister\Slides\Events\ScreenshotUpdated;
 
 class PartymeisterSlidesListenForScreenshotCommand extends Command
 {
@@ -32,6 +33,7 @@ class PartymeisterSlidesListenForScreenshotCommand extends Command
 
                     // Dispatch job or handle inline
                     \Partymeister\Slides\Jobs\ProcessScreenshotJob::dispatch($model, $event['fileName'], $event['collection']);
+                    ScreenshotUpdated::dispatch($model);
 
                     $lastId = $id;
                     Redis::set('stream:screenshot:count', $lastId); // Update lastId in Redis

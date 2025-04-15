@@ -160,9 +160,17 @@
               data = file.file_association.file;
             }
             return data;
-          }
+          },
         },
         mounted: function () {
+          this.$eventHub.$on('screenshot-updated', (data) => {
+            for (let file of this.droppedFiles) {
+              if (data.slide.id == file.slide.id) {
+                file.slide.file_preview = { conversions: { preview: data.slide.media.preview_url } };
+              }
+            }
+          });
+
             let files = [];
             if (IsJsonString(this.files)) {
                 files = JSON.parse(this.files);

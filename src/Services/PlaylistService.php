@@ -102,6 +102,10 @@ class PlaylistService extends BaseService
             $transition = Transition::where('identifier', $transitionIdentifier)
                                     ->first();
 
+            $transitionSlidemeister = Transition::where('client_type', 'slidemeister-web')
+                                                ->where('identifier', 255)
+                                                ->first();
+
             $callback = null;
 
             switch ($type) {
@@ -135,6 +139,9 @@ class PlaylistService extends BaseService
             $i->metadata = $meta;
             if (! is_null($transition)) {
                 $i->transition_id = $transition->id;
+            }
+            if (! is_null($transitionSlidemeister)) {
+                $i->transition_slidemeister_id = $transitionSlidemeister->id;
             }
             $i->transition_duration = $transitionDuration;
             $i->duration = $duration;

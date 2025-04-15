@@ -6,6 +6,7 @@ use Motor\Backend\Grid\Grid;
 use Motor\Backend\Grid\Renderers\BladeRenderer;
 use Motor\Backend\Grid\Renderers\FileRenderer;
 use Motor\Backend\Grid\Renderers\TranslateRenderer;
+use Partymeister\Slides\Grid\Renderers\SlideRenderer;
 
 /**
  * Class SlideGrid
@@ -15,7 +16,7 @@ class SlideGrid extends Grid
     protected function setup()
     {
         $this->addColumn('preview', trans('motor-media::backend/files.file'))
-             ->renderer(FileRenderer::class, ['file' => 'preview']);
+             ->renderer(SlideRenderer::class, ['file' => 'preview']);
         $this->addColumn('link', trans('motor-media::backend/files.file'))
              ->renderer(BladeRenderer::class, ['template' => 'partymeister-slides::grid.slides.slide']);
         $this->addColumn('name', trans('motor-backend::backend/global.name'), true);
