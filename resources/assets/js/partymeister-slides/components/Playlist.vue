@@ -108,7 +108,9 @@
                 fakeObject.overwrite_slide_type = '';
                 fakeObject.callback_delay = 20;
                 fakeObject.is_advanced_manually = false;
+                fakeObject.slide = Object.assign({}, this.droppedFiles[event.newIndex]);
                 Vue.set(this.droppedFiles, event.newIndex, fakeObject);
+                console.log("droppedItem", fakeObject);
                 // Vue.set(this.droppedFiles[event.newIndex], 'duration', 20);
                 // Vue.set(this.droppedFiles[event.newIndex], 'midi_note', 0);
                 // Vue.set(this.droppedFiles[event.newIndex], 'transition', {identifier: 255})
