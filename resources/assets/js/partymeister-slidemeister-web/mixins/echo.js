@@ -2,6 +2,7 @@ import Echo from "laravel-echo";
 
 let Pusher = require('pusher-js');
 import Vue from 'vue';
+import {getFromStorage, saveToStorage} from "./storage";
 
 let siegmeisterInProgress = false;
 
@@ -13,10 +14,12 @@ export default {
             listening: false,
         };
     },
-    created() {
-        this.$eventHub.$on('server-configuration-update', () => {
-            let serverConfiguration = localStorage.getItem('serverConfiguration');
+    async created() {
+        this.$eventHub.$on('server-configuration-update', async () => {
+            let serverConfiguration = await getFromStorage('serverConfiguration');
+            // let serverConfiguration = localStorage.getItem('serverConfiguration');
             if (serverConfiguration !== null && serverConfiguration !== undefined) {
+                console.log("No server configuration found");
                 serverConfiguration = JSON.parse(serverConfiguration);
 
                 Vue.set(this, 'serverConfiguration', serverConfiguration);
@@ -29,7 +32,8 @@ export default {
             }
         });
 
-        let serverConfiguration = localStorage.getItem('serverConfiguration');
+        let serverConfiguration = await getFromStorage('serverConfiguration');
+        // let serverConfiguration = localStorage.getItem('serverConfiguration');
         if (this.standalone && serverConfiguration === null) {
             this.$router.push({name: 'configuration'});
         } else if (serverConfiguration !== null) {
@@ -155,7 +159,7 @@ export default {
                         siegmeisterInProgress = false;
                     }, 2000);
                 })
-                .listen('.Partymeister\\Slides\\Events\\PlaylistRequest', (e) => {
+                .listen('.Partymeister\\Slides\\Events\\PlaylistRequest', async (e) => {
                     // console.log('PlaylistRequest incoming');
 
                     let found = false;
@@ -177,9 +181,13 @@ export default {
                                     this.playlist = e.playlist;
                                     this.items = e.playlist.items;
 
-                                    localStorage.setItem('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
-                                    localStorage.setItem('currentItem', this.currentItem);
-                                    localStorage.setItem('playlist', JSON.stringify(this.playlist));
+                                    await saveToStorage('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
+                                    await saveToStorage('currentItem', this.currentItem);
+                                    await saveToStorage('playlist', JSON.stringify(this.playlist));
+
+                                    // localStorage.setItem('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
+                                    // localStorage.setItem('currentItem', this.currentItem);
+                                    // localStorage.setItem('playlist', JSON.stringify(this.playlist));
                                 }
                             }
                             found = true;
@@ -188,11 +196,12 @@ export default {
                     if (!found) {
                         console.log('Playlist does not exist yet. Caching it');
                         this.cachedPlaylists.push(e.playlist);
-                        localStorage.setItem('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
+                        await saveToStorage('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
+                        // localStorage.setItem('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
                     }
                     this.updateStatus();
                 })
-                .listen('.Partymeister\\Slides\\Events\\PlaylistSeekRequest', (e) => {
+                .listen('.Partymeister\\Slides\\Events\\PlaylistSeekRequest', async (e) => {
                     console.log('PlaylistSeekRequest incoming');
 
                     let found = false;
@@ -202,7 +211,8 @@ export default {
                             if (this.playlist.id === e.playlist_id) {
                                 console.log('Playlist is running, seeking to item ' + e.index);
                                 if (e.index === false) {
-                                    e.index = parseInt(localStorage.getItem('currentItem'));
+                                    // e.index = parseInt(localStorage.getItem('currentItem'));
+                                    e.index = parseInt(await getFromStorage('currentItem'));
                                     if (!e.index) {
                                         e.index = 0;
                                     }
@@ -213,10 +223,12 @@ export default {
                                 this.playlist = p;
                                 this.items = p.items;
                                 this.playNow = false;
-                                localStorage.setItem('playlist', JSON.stringify(this.playlist));
-                                setTimeout(() => {
+                                // localStorage.setItem('playlist', JSON.stringify(this.playlist));
+                                await saveToStorage('playlist', JSON.stringify(this.playlist));
+                                setTimeout(async () => {
                                     if (e.index === false) {
-                                        e.index = parseInt(localStorage.getItem('currentItem'));
+                                        e.index = parseInt(await getFromStorage('currentItem'));
+                                        // e.index = parseInt(localStorage.getItem('currentItem'));
                                         if (!e.index) {
                                             e.index = 0;
                                         }

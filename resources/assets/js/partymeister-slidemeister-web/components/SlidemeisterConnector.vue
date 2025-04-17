@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { saveToStorage} from "../mixins/storage";
+
     const axios = require('axios');
     import toast from "../mixins/toast";
 
@@ -15,7 +17,7 @@
             };
         },
         mixins: [
-            toast
+            toast,
         ],
         mounted() {
             this.$eventHub.$on('socket-unavailable', () => {
@@ -30,16 +32,19 @@
             this.getConfigFromServer();
         },
         methods: {
-            getConfigFromServer() {
+            async getConfigFromServer() {
                 let url = BASE_URL + '/api/slide_clients/' + window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
                 // Get data from partymeister server (jingles etc.)
-                axios.get(url+'?api_token='+TOKEN).then(result => {
-                    localStorage.setItem('slideClientConfiguration', JSON.stringify(result.data.data));
+                axios.get(url+'?api_token='+TOKEN).then(async result => {
+                    console.log("Query done - saving slideClientConfiguration to storage");
+                    await saveToStorage('slideClientConfiguration', JSON.stringify(result.data.data));
+                    //localStorage.setItem('slideClientConfiguration', JSON.stringify(result.data.data));
                     this.$eventHub.$emit('slide-client-loaded');
                     this.error = false;
                     let serverConfiguration = result.data.data.websocket;
                     serverConfiguration.client = result.data.data.id;
-                    localStorage.setItem('serverConfiguration', JSON.stringify(serverConfiguration));
+                    await saveToStorage('serverConfiguration', JSON.stringify(serverConfiguration));
+                    // localStorage.setItem('serverConfiguration', JSON.stringify(serverConfiguration));
                     document.querySelector('.server-error').classList.add('d-none');
                     this.toast('Slide client configuration loaded');
                     this.$eventHub.$emit('server-configuration-update');

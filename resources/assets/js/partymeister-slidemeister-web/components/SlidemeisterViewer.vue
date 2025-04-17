@@ -69,6 +69,8 @@
 
 <script>
 
+import {getFromStorage, saveToStorage} from "../mixins/storage";
+
 const axios = require('axios');
 import Vue from 'vue';
 import keybindings from "../mixins/keybindings";
@@ -175,9 +177,10 @@ export default {
         this.playTransition();
       });
     },
-    afterSeek() {
+    async afterSeek() {
       console.log('AFTERSEEK');
-      localStorage.setItem('currentItem', this.currentItem);
+      // localStorage.setItem('currentItem', this.currentItem);
+      await saveToStorage('currentItem', this.currentItem);
 
       if (this.currentItem && parseInt(this.items[this.currentItem].midi_note) > 0) {
         console.log("CurrentItem and Midi Note Exist");
@@ -632,7 +635,7 @@ export default {
 
       node.addEventListener('animationend', handleAnimationEnd);
     },
-    deleteStorage() {
+    async deleteStorage() {
       this.cachedPlaylists = [];
       this.playlist = {};
       this.items = [];
@@ -644,18 +647,20 @@ export default {
       this.fragmentShader = '';
       // this.unloadScene();
 
-      localStorage.clear();
+      await clearStorage();
+      // localStorage.clear();
       this.updateStatus();
     },
-    getSlideClientConfiguration() {
-      let configuration = localStorage.getItem('slideClientConfiguration');
+    async getSlideClientConfiguration() {
+      // let configuration = localStorage.getItem('slideClientConfiguration');
+      let configuration = await getFromStorage('slideClientConfiguration');
       if (configuration !== undefined && configuration !== null) {
         configuration = JSON.parse(configuration);
         Vue.set(this, 'configuration', configuration.configuration);
       }
     },
   },
-  created() {
+  async created() {
     this.$eventHub.$on('show-viewer', () => {
       window.addEventListener('keydown', this.addListener, false);
     });
@@ -675,13 +680,15 @@ export default {
 
     // Check if we have playlists in local storage
     if (this.cachedPlaylists.length === 0) {
-      let cachedPlaylists = localStorage.getItem('cachedPlaylists');
+      let cachedPlaylists = await getFromStorage('cachedPlaylists');
+      // let cachedPlaylists = localStorage.getItem('cachedPlaylists');
       if (cachedPlaylists !== undefined && cachedPlaylists != null) {
         this.cachedPlaylists = JSON.parse(cachedPlaylists);
       }
     }
     if (Object.keys(this.playlist).length === 0) {
-      let playlist = localStorage.getItem('playlist');
+      let playlist = await getFromStorage('playlist');
+      // let playlist = localStorage.getItem('playlist');
       if (playlist !== undefined && playlist != null) {
         this.playlist = JSON.parse(playlist);
         this.items = this.playlist.items;
@@ -703,7 +710,8 @@ export default {
     }
 
     if (this.currentItem === null) {
-      let currentItem = localStorage.getItem('currentItem');
+      // let currentItem = localStorage.getItem('currentItem');
+      let currentItem = await getFromStorage('currentItem');
       if (currentItem !== undefined && currentItem !== null) {
         // Delay is necessary to correctly load the background shader on first load
         setTimeout(() => {
