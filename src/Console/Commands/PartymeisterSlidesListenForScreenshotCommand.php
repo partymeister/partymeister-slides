@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Partymeister\Slides\Events\ScreenshotUpdated;
 
@@ -31,9 +32,13 @@ class PartymeisterSlidesListenForScreenshotCommand extends Command
 
                     $model = $event['class']::find((int)$event['slideId']);
 
-                    // Dispatch job or handle inline
-                    \Partymeister\Slides\Jobs\ProcessScreenshotJob::dispatch($model, $event['fileName'], $event['collection']);
-                    ScreenshotUpdated::dispatch($model);
+                    if (!is_null($model)) {
+                        // Dispatch job or handle inline
+                        \Partymeister\Slides\Jobs\ProcessScreenshotJob::dispatch($model, $event['fileName'], $event['collection']);
+                        ScreenshotUpdated::dispatch($model);
+                    } else {
+                        Log::warning("Model not found for class: {$event['class']} and slideId: {$event['slideId']}");
+                    }
 
                     $lastId = $id;
                     Redis::set('stream:screenshot:count', $lastId); // Update lastId in Redis
