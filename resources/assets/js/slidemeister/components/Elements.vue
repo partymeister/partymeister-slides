@@ -150,6 +150,9 @@
                             case 'timetable':
                                 this.renderTimetable(data.replacements);
                                 break;
+                            case 'event-support':
+                                this.renderEventSupport(data.replacements);
+                                break;
                             case 'competition-support':
                                 this.renderCompetitionSupport(data.replacements);
                                 break;

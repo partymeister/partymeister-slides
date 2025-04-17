@@ -416,6 +416,188 @@ class PlaylistService extends BaseService
         }
     }
 
+    /**
+     * @param $competition
+     * @param $data
+     *
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
+     */
+    public static function generateEventPlaylist($event, $data)
+    {
+        ini_set('max_execution_time', 1200);
+
+        // 1. find out if we have an existing playlist and delete it
+        $playlists = Playlist::where('name', 'Event: '.$event->name)
+                             ->get();
+        foreach ($playlists as $playlist) {
+            foreach ($playlist->items as $item) {
+                if ($item->slide != null) {
+                    $item->slide->delete();
+                }
+            }
+            $playlist->delete();
+        }
+
+        // 2. create a slide category for this competition in case it does not exist yet
+        $eventCategory = Category::where('scope', 'slides')
+                                 ->where('name', 'Events')
+                                 ->first();
+        if (is_null($eventCategory)) {
+            $rootNode = Category::where('scope', 'slides')
+                                ->where('_lft', 1)
+                                ->first();
+            if (is_null($rootNode)) {
+                exit('Root node for slide category tree does not exist');
+            }
+            $c = new Category();
+            $c->scope = 'slides';
+            $c->name = 'Events';
+            $rootNode->appendNode($c);
+        }
+        $category = Category::where('scope', 'slides')
+                            ->where('name', $event->name)
+                            ->first();
+        if (is_null($category)) {
+            $rootNode = Category::where('scope', 'slides')
+                                ->where('name', 'Competitions')
+                                ->first();
+            $category = new Category();
+            $category->scope = 'slides';
+            $category->name = $event->name;
+            $rootNode->appendNode($category);
+            $category->refresh();
+        }
+
+        // 4. create playlist
+        $playlist = new Playlist();
+        $playlist->name = 'Event: '.$event->name;
+        $playlist->type = 'video';
+        $playlist->save();
+
+        // 3. save slides
+        $count = 0;
+
+        if (config('partymeister-slides.screenshots')) {
+            $browser = new ScreenshotHelper();
+        }
+
+        foreach (Arr::get($data, 'slide', []) as $slideName => $definitions) {
+            $count++;
+            $type = Arr::get($data, 'type.'.$slideName);
+            $name = Arr::get($data, 'name.'.$slideName);
+            $id = Arr::get($data, 'id.'.$slideName, null);
+            $slideType = config('partymeister-competitions-slides.'.$type.'.slide_type', 'default');
+            $midiNote = config('partymeister-competitions-slides.'.$type.'.midi_note', 0);
+            $transitionIdentifier = config('partymeister-competitions-slides.'.$type.'.transition', 5);
+            $transitionDuration = config('partymeister-competitions-slides.'.$type.'.transition_duration', 2000);
+            $duration = config('partymeister-competitions-slides.'.$type.'.duration', 20);
+            $isAdvancedManually = config('partymeister-competitions-slides.'.$type.'.is_advanced_manually', true);
+
+            $transition = Transition::where('identifier', $transitionIdentifier)
+                                    ->first();
+
+            $transitionSlidemeister = Transition::where('client_type', 'slidemeister-web')
+                                                ->where('identifier', 255)
+                                                ->first();
+
+            $callback = null;
+
+            switch ($type) {
+                case 'comingup':
+                case 'now':
+                case 'end':
+                case 'empty':
+                    $s = new Slide();
+                    $s->category_id = $category->id;
+                    $s->name = $name;
+                    $s->slide_type = $slideType;
+                    $s->definitions = stripslashes($definitions);
+                    $s->cached_html_preview = Arr::get($data, 'cached_html_preview.'.$slideName, '');
+                    $s->cached_html_final = Arr::get($data, 'cached_html_final.'.$slideName, '');
+
+                    $s->save();
+
+                    $i = new PlaylistItem();
+                    $i->playlist_id = $playlist->id;
+                    $i->type = 'image';
+                    $i->slide_type = $s->slide_type;
+
+                    $i->slide_id = $s->id;
+                    $i->is_advanced_manually = $isAdvancedManually;
+                    $i->midi_note = $midiNote;
+                    if (! is_null($transition)) {
+                        $i->transition_id = $transition->id;
+                    }
+                    if (! is_null($transitionSlidemeister)) {
+                        $i->transition_slidemeister_id = $transitionSlidemeister->id;
+                    }
+                    $i->transition_duration = $transitionDuration;
+                    $i->duration = $duration;
+                    if (! is_null($callback)) {
+                        $i->callback_hash = $callback->hash;
+                        $i->callback_delay = 20;
+                    }
+
+                    $i->sort_position = $count;
+                    $i->save();
+
+                    // 7. generate slides
+                    if (isset($browser)) {
+                        $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false).'?preview=true', storage_path().'/preview_'.$slideName.'.png', $s->id, Slide::class, 'preview');
+                        $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$s->id], false), storage_path().'/final_'.$slideName.'.png', $s->id, Slide::class, 'final');
+                    }
+
+                    break;
+                case 'video_1':
+                case 'video_2':
+                case 'video_3':
+                    $d = json_decode($definitions, true);
+
+                    // Load file and check mime type
+                    $file = File::find($d['file_id']);
+                    if (is_null($file)) {
+                        break;
+                    }
+
+                    if ($file->media()
+                             ->first() != null && ($file->media()
+                                                        ->first()->mime_type == 'video/x-m4v' || $file->media()
+                                                                                                      ->first()->mime_type == 'video/mp4')) {
+                        $type = 'video';
+                    } else {
+                        $type = 'image';
+                    }
+
+                    $i = new PlaylistItem();
+                    $i->playlist_id = $playlist->id;
+                    $i->type = $type;
+                    $i->is_advanced_manually = $isAdvancedManually;
+                    $i->midi_note = $midiNote;
+                    if (! is_null($transition)) {
+                        $i->transition_id = $transition->id;
+                    }
+                    if (! is_null($transitionSlidemeister)) {
+                        $i->transition_slidemeister_id = $transitionSlidemeister->id;
+                    }
+                    $i->transition_duration = $transitionDuration;
+                    $i->duration = $duration;
+                    $i->sort_position = $count;
+                    $i->save();
+
+                    // Create file association
+                    $fa = new FileAssociation();
+                    $fa->file_id = $d['file_id'];
+                    $fa->model_type = get_class($i);
+                    $fa->model_id = $i->id;
+                    $fa->identifier = 'playlist_item';
+                    $fa->save();
+                    break;
+            }
+        }
+    }
+
     public function filters()
     {
         $this->filter->add(new SelectRenderer('type'))

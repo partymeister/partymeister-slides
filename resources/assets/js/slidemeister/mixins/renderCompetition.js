@@ -1,5 +1,11 @@
 export default {
     methods: {
+        renderEventSupport(replacements) {
+            Object.entries(this.elements).forEach(([key, element]) => {
+                this.replaceContent(element, 'headline', replacements.headline);
+                this.replaceContent(element, 'body', replacements.entry.name);
+            });
+        },
         renderCompetitionSupport(replacements) {
             Object.entries(this.elements).forEach(([key, element]) => {
                 this.replaceContent(element, 'headline', replacements.headline);
