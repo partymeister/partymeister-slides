@@ -22,6 +22,7 @@ return [
         'announce_nobg' => 'Announce (no background)',
         'compo'         => 'Compo entry',
         'timetable'     => 'Timetable',
+        'default'       => 'Default',
     ],
 
     'latest'     => 'Latest slides',

@@ -508,7 +508,7 @@ class PlaylistService extends BaseService
                 case 'comingup':
                 case 'now':
                 case 'end':
-                case 'empty':
+                case 'default':
                     $s = new Slide();
                     $s->category_id = $category->id;
                     $s->name = $name;
