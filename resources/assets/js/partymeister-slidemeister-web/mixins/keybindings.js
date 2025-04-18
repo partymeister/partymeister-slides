@@ -1,3 +1,5 @@
+import WebMidi from "webmidi";
+
 export default {
     created() {
         window.addEventListener('keydown', this.addListener, false);
@@ -55,6 +57,7 @@ export default {
                 player.pause();
                 player.currentTime = 0;
                 e.preventDefault();
+                WebMidi.outputs[0].playNote(103, 1, {velocity: 1, duration: 1000});
             }
 
             if (this.standalone && e.key === 'c') {
