@@ -44,6 +44,7 @@ class PartymeisterSlidesListenForScreenshotCommand extends Command
                     Redis::set('stream:screenshot:count', $lastId); // Update lastId in Redis
                 }
             }
+            sleep(1); // Sleep for a second to avoid busy waiting
         }
     }
 }
