@@ -15,7 +15,6 @@ export default {
         this.$eventHub.$on('server-configuration-update', () => {
             let serverConfiguration = localStorage.getItem('serverConfiguration');
             if (serverConfiguration !== null && serverConfiguration !== undefined) {
-                serverConfiguration = JSON.parse(serverConfiguration);
 
                 Vue.set(this, 'serverConfiguration', serverConfiguration);
 

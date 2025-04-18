@@ -37,13 +37,13 @@ import { saveToStorage} from "../mixins/storage";
                 // Get data from partymeister server (jingles etc.)
                 axios.get(url+'?api_token='+TOKEN).then(async result => {
                     console.log("Query done - saving slideClientConfiguration to storage");
-                    await saveToStorage('slideClientConfiguration', JSON.stringify(result.data.data));
+                    await saveToStorage('slideClientConfiguration', result.data.data);
                     //localStorage.setItem('slideClientConfiguration', JSON.stringify(result.data.data));
                     this.$eventHub.$emit('slide-client-loaded');
                     this.error = false;
                     let serverConfiguration = result.data.data.websocket;
                     serverConfiguration.client = result.data.data.id;
-                    await saveToStorage('serverConfiguration', JSON.stringify(serverConfiguration));
+                    await saveToStorage('serverConfiguration', serverConfiguration);
                     // localStorage.setItem('serverConfiguration', JSON.stringify(serverConfiguration));
                     document.querySelector('.server-error').classList.add('d-none');
                     this.toast('Slide client configuration loaded');

@@ -69,7 +69,7 @@
 
 <script>
 
-import {getFromStorage, saveToStorage} from "../mixins/storage";
+import {clearStorage, getFromStorage, saveToStorage} from "../mixins/storage";
 
 const axios = require('axios');
 import Vue from 'vue';
@@ -655,7 +655,6 @@ export default {
       // let configuration = localStorage.getItem('slideClientConfiguration');
       let configuration = await getFromStorage('slideClientConfiguration');
       if (configuration !== undefined && configuration !== null) {
-        configuration = JSON.parse(configuration);
         Vue.set(this, 'configuration', configuration.configuration);
       }
     },
@@ -683,14 +682,14 @@ export default {
       let cachedPlaylists = await getFromStorage('cachedPlaylists');
       // let cachedPlaylists = localStorage.getItem('cachedPlaylists');
       if (cachedPlaylists !== undefined && cachedPlaylists != null) {
-        this.cachedPlaylists = JSON.parse(cachedPlaylists);
+        this.cachedPlaylists = cachedPlaylists;
       }
     }
     if (Object.keys(this.playlist).length === 0) {
       let playlist = await getFromStorage('playlist');
       // let playlist = localStorage.getItem('playlist');
       if (playlist !== undefined && playlist != null) {
-        this.playlist = JSON.parse(playlist);
+        this.playlist = playlist;
         this.items = this.playlist.items;
 
         // preload images

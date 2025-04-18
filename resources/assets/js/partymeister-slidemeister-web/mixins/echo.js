@@ -18,9 +18,8 @@ export default {
         this.$eventHub.$on('server-configuration-update', async () => {
             let serverConfiguration = await getFromStorage('serverConfiguration');
             // let serverConfiguration = localStorage.getItem('serverConfiguration');
-            if (serverConfiguration !== null && serverConfiguration !== undefined) {
+            if (serverConfiguration === null || serverConfiguration === undefined) {
                 console.log("No server configuration found");
-                serverConfiguration = JSON.parse(serverConfiguration);
 
                 Vue.set(this, 'serverConfiguration', serverConfiguration);
 
@@ -37,7 +36,6 @@ export default {
         if (this.standalone && serverConfiguration === null) {
             this.$router.push({name: 'configuration'});
         } else if (serverConfiguration !== null) {
-            serverConfiguration = JSON.parse(serverConfiguration);
 
             Vue.set(this, 'serverConfiguration', serverConfiguration);
             if (this.listening) {
@@ -181,9 +179,9 @@ export default {
                                     this.playlist = e.playlist;
                                     this.items = e.playlist.items;
 
-                                    await saveToStorage('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
+                                    await saveToStorage('cachedPlaylists', this.cachedPlaylists);
                                     await saveToStorage('currentItem', this.currentItem);
-                                    await saveToStorage('playlist', JSON.stringify(this.playlist));
+                                    await saveToStorage('playlist', this.playlist);
 
                                     // localStorage.setItem('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
                                     // localStorage.setItem('currentItem', this.currentItem);
@@ -196,7 +194,7 @@ export default {
                     if (!found) {
                         console.log('Playlist does not exist yet. Caching it');
                         this.cachedPlaylists.push(e.playlist);
-                        await saveToStorage('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
+                        await saveToStorage('cachedPlaylists', this.cachedPlaylists);
                         // localStorage.setItem('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
                     }
                     this.updateStatus();
@@ -224,7 +222,7 @@ export default {
                                 this.items = p.items;
                                 this.playNow = false;
                                 // localStorage.setItem('playlist', JSON.stringify(this.playlist));
-                                await saveToStorage('playlist', JSON.stringify(this.playlist));
+                                await saveToStorage('playlist', this.playlist);
                                 setTimeout(async () => {
                                     if (e.index === false) {
                                         e.index = parseInt(await getFromStorage('currentItem'));
