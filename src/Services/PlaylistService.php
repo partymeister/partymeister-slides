@@ -680,7 +680,7 @@ class PlaylistService extends BaseService
             }
 
             // Fixme: implement this
-            $i->metadata = json_encode($i->metadata);
+            //$i->metadata = json_encode($i->metadata);
             $i->is_muted = false;
 
             $i->save();

@@ -16,41 +16,44 @@ export default {
     },
     async created() {
         this.$eventHub.$on('server-configuration-update', async () => {
+            console.log("[START] Server configuration update event received");
             let serverConfiguration = await getFromStorage('serverConfiguration');
-            // let serverConfiguration = localStorage.getItem('serverConfiguration');
             if (serverConfiguration === null || serverConfiguration === undefined) {
-                console.log("No server configuration found");
-
-                Vue.set(this, 'serverConfiguration', serverConfiguration);
-
-                if (this.listening) {
-                    this.removeListeners();
-                }
-                this.createServer();
-                this.addListeners();
+                console.log("[START] No server configuration found");
+                return;
             }
-        });
-
-        let serverConfiguration = await getFromStorage('serverConfiguration');
-        // let serverConfiguration = localStorage.getItem('serverConfiguration');
-        if (this.standalone && serverConfiguration === null) {
-            this.$router.push({name: 'configuration'});
-        } else if (serverConfiguration !== null) {
 
             Vue.set(this, 'serverConfiguration', serverConfiguration);
+
             if (this.listening) {
                 this.removeListeners();
             }
             this.createServer();
             this.addListeners();
+        });
+
+        console.log('[START] Starting socket connection');
+
+        let serverConfiguration = await getFromStorage('serverConfiguration');
+        if (serverConfiguration === null || serverConfiguration === undefined) {
+            console.log("[START] No server configuration found");
+            return;
         }
+        Vue.set(this, 'serverConfiguration', serverConfiguration);
+        if (this.listening) {
+            this.removeListeners();
+        }
+        this.createServer();
+        this.addListeners();
     },
     beforeDestroy() {
         this.$eventHub.$off();
     },
     methods: {
         createServer() {
+            console.log("[SOCKET] Creating server connection");
             delete this.server;
+
 
             this.server = new Echo({
                 broadcaster: 'pusher',
@@ -71,15 +74,15 @@ export default {
             });
         },
         removeListeners() {
-            console.log("LEAVING CHANNEL");
+            console.log("[SOCKET] Leaving channel", 'partymeister.slidemeister-web.' + this.serverConfiguration.client);
             this.server.leaveChannel('partymeister.slidemeister-web.' + this.serverConfiguration.client);
         },
         addListeners() {
-            console.log("LISTENING TO CHANNEL");
+            console.log("[SOCKET] Listening to channel", 'partymeister.slidemeister-web.' + this.serverConfiguration.client);
             this.listening = true;
             this.server.channel('partymeister.slidemeister-web.' + this.serverConfiguration.client)
                 .listen('.Partymeister\\Slides\\Events\\PlayNowRequest', (e) => {
-                    console.log('PlayNowRequest incoming');
+                    console.log('[PlayNowRequest] incoming');
                     if (this.playlist.id !== undefined) {
                         // console.log('Playlist is running - saving position and playlist');
                         this.playlistSaved = this.playlist;
@@ -128,7 +131,7 @@ export default {
                     this.seekToPlayNow();
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistNextRequest', (e) => {
-                    console.log('PlaylistNextRequest incoming');
+                    console.log('[PlaylistNextRequest] incoming');
                     if (this.playlist.id == undefined) {
                         // console.log('No playlist is running, aborting');
                     } else {
@@ -138,7 +141,7 @@ export default {
                     this.updateStatus();
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistPreviousRequest', (e) => {
-                    console.log('PlaylistPreviousRequest incoming');
+                    console.log('[PlaylistPreviousRequest] incoming');
                     if (this.playlist.id == undefined) {
                         // console.log('No playlist is running, aborting');
                     } else {
@@ -148,7 +151,7 @@ export default {
                     this.updateStatus();
                 })
                 .listen('.Partymeister\\Slides\\Events\\SiegmeisterRequest', (e) => {
-                    console.log("Siegmeister request received");
+                    console.log("[SiegmeisterRequest] request received");
                     if (siegmeisterInProgress === false) {
                         this.renderPrizegivingBars();
                     }
@@ -158,21 +161,21 @@ export default {
                     }, 2000);
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistRequest', async (e) => {
-                    // console.log('PlaylistRequest incoming');
+                    console.log('[PlaylistRequest] incoming request for playlist', e.playlist.name);
 
                     let found = false;
                     for (const [index, p] of this.cachedPlaylists.entries()) {
                         if (p.id === e.playlist.id) {
-                            // console.log('Playlist exists, checking if it needs to be updated');
+                            console.log('[PlaylistRequest] Playlist exists, checking if it needs to be updated');
                             // Update callback status
                             this.cachedPlaylists[index].callbacks = e.playlist.callbacks;
                             if (p.updated_at !== e.playlist.updated_at.date) {
-                                // console.log('Playlist outdated, checking if it is currently playing');
+                                console.log('[PlaylistRequest] outdated, checking if it is currently playing');
                                 this.cachedPlaylists[index] = e.playlist;
                                 if (this.playlist.id === p.id) {
-                                    // console.log('Playlist is currently playing. Updating');
+                                    console.log('[PlaylistRequest] is currently playing. Updating');
                                     if (this.currentItem > (e.playlist.items.length - 1)) {
-                                        // console.log('Updated playlist has fewer items, resetting index of currently playing item');
+                                        console.log('[PlaylistRequest] Updated playlist has fewer items, resetting index of currently playing item');
                                         this.currentItem = e.items.length - 1;
                                     }
 
@@ -182,34 +185,28 @@ export default {
                                     await saveToStorage('cachedPlaylists', this.cachedPlaylists);
                                     await saveToStorage('currentItem', this.currentItem);
                                     await saveToStorage('playlist', this.playlist);
-
-                                    // localStorage.setItem('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
-                                    // localStorage.setItem('currentItem', this.currentItem);
-                                    // localStorage.setItem('playlist', JSON.stringify(this.playlist));
                                 }
                             }
                             found = true;
                         }
                     }
                     if (!found) {
-                        console.log('Playlist does not exist yet. Caching it');
+                        console.log('[PlaylistRequest] Playlist does not exist yet. Caching it', e.playlist.name);
                         this.cachedPlaylists.push(e.playlist);
                         await saveToStorage('cachedPlaylists', this.cachedPlaylists);
-                        // localStorage.setItem('cachedPlaylists', JSON.stringify(this.cachedPlaylists));
                     }
                     this.updateStatus();
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistSeekRequest', async (e) => {
-                    console.log('PlaylistSeekRequest incoming');
+                    console.log('[PlaylistSeekRequest] PlaylistSeekRequest incoming', e.playlist_id, e.index);
 
                     let found = false;
                     for (const [index, p] of this.cachedPlaylists.entries()) {
                         if (p.id === e.playlist_id) {
-                            console.log('Playlist exists, seeking to item ' + e.index);
+                            console.log('[PlaylistSeekRequest] Playlist exists, seeking to item', p.name, e.index);
                             if (this.playlist.id === e.playlist_id) {
-                                console.log('Playlist is running, seeking to item ' + e.index);
+                                console.log('[PlaylistSeekRequest] Playlist is running, seeking to item', e.index);
                                 if (e.index === false) {
-                                    // e.index = parseInt(localStorage.getItem('currentItem'));
                                     e.index = parseInt(await getFromStorage('currentItem'));
                                     if (!e.index) {
                                         e.index = 0;
@@ -217,29 +214,37 @@ export default {
                                 }
                                 this.seekToIndex(parseInt(e.index));
                             } else {
-                                console.log('Playlist is not running yet. Setting it and seeking to item ' + e.index);
+                                console.log('[PlaylistSeekRequest] Playlist is not running yet. Setting it and seeking to item', p.name, e.index);
+                                this.playlistSaved = this.playlist;
+                                this.currentItemSaved = this.currentItem;
+
                                 this.playlist = p;
                                 this.items = p.items;
                                 this.playNow = false;
-                                // localStorage.setItem('playlist', JSON.stringify(this.playlist));
+
                                 await saveToStorage('playlist', this.playlist);
                                 setTimeout(async () => {
                                     if (e.index === false) {
                                         e.index = parseInt(await getFromStorage('currentItem'));
-                                        // e.index = parseInt(localStorage.getItem('currentItem'));
                                         if (!e.index) {
+                                            console.log('[PlaylistSeekRequest] No index found, setting to 0');
                                             e.index = 0;
                                         }
                                     }
                                     this.seekToIndex(parseInt(e.index));
+
+                                    // reset after transition
+                                    setTimeout(() => {
+                                        this.playlistSaved = null ;
+                                        this.currentItemSaved = null ;
+                                    }, 500);
                                 }, 200);
                             }
-
                             found = true;
                         }
                     }
                     if (!found) {
-                        console.log('Playlist not found, cannot seek to index ' + e.index);
+                        console.log('[PlaylistSeekRequest] Playlist not found, cannot seek to index ' + e.index);
                     }
                     this.updateStatus();
                 });

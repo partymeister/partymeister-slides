@@ -1,11 +1,11 @@
 <template>
   <main class="main">
     <script id="vertexShader" type="x-shader/x-vertex">
-            varying vec2 vUv;
-            void main()	{
-                vUv = uv;
-                gl_Position = vec4( position, 1.0 );
-            }
+      varying vec2 vUv;
+      void main()	{
+          vUv = uv;
+          gl_Position = vec4( position, 1.0 );
+      }
 
     </script>
 
@@ -116,6 +116,9 @@ export default {
       nextPlayNowItem: null,
       currentItemSaved: null,
 
+      itemChain: [],
+      playlistChain: [],
+
       playlistSaved: {},
       playlist: {},
       playlistImages: [],
@@ -143,10 +146,20 @@ export default {
     // a computed getter
     current: function () {
       console.log('CURRENT updated');
+
+      // Handle playnow
       if (this.playNow && this.playNowItems[this.currentPlayNowItem] !== undefined) {
+        console.log('[UPDATING] playnow active, set current to playnow');
         // console.log('playnow current', this.playNowItems[this.currentPlayNowItem]);
         return this.playNowItems[this.currentPlayNowItem];
       }
+
+      // Handle playlist-switch
+      // if (this.playlistSaved && this.currentItemSaved) {
+      //   console.log('[UPDATING] playlist switching, do not modify current item');
+      //   return this.playlistSaved.items[this.currentItemSaved];
+      // }
+
       return this.items[this.currentItem];
     },
     next: function () {
@@ -179,7 +192,6 @@ export default {
     },
     async afterSeek() {
       console.log('AFTERSEEK');
-      // localStorage.setItem('currentItem', this.currentItem);
       await saveToStorage('currentItem', this.currentItem);
 
       if (this.currentItem && parseInt(this.items[this.currentItem].midi_note) > 0) {
@@ -208,7 +220,7 @@ export default {
 
     },
     seekToIndex(index) {
-      console.log('SEEK TO INDEX ' + index);
+      console.log('[SEEK] Index', index);
 
       this.clearTimeouts();
 
@@ -217,11 +229,11 @@ export default {
       if (this.items[index] !== undefined) {
         currentItem = index;
       } else {
-        console.log('Cannot seek to ' + index);
+        console.log('[SEEK] Cannot seek to', index);
         return;
       }
 
-      console.log("SET CURRENT ITEM TO", currentItem, index);
+      console.log("[SEEK] set current item to", currentItem, index);
 
       if (currentItem === 0) {
         this.nextItem = 0;
@@ -232,8 +244,6 @@ export default {
 
       this.next;
       this.prepareTransition(currentItem, true);
-
-
 
 
       return;
@@ -572,9 +582,9 @@ export default {
           let remoteType = 'party';
           if (this.items[this.nextItem].metadata?.remote_type != '') {
             remoteType = this.items[this.nextItem].metadata?.remote_type;
-           // remoteType = this.items[this.nextItem].metadata?.remote_type.toLowerCase();
+            // remoteType = this.items[this.nextItem].metadata?.remote_type.toLowerCase();
           }
-          let compoSlide = {scene: 3, transition: !hard, entryType: remoteType.toLowerCase(), time: Date.now()};
+          let compoSlide = {scene: 3, transition: !hard, entryType: remoteType?.toLowerCase(), time: Date.now()};
           console.log("COMPO", compoSlide);
           CABLES.patch.setVariable('currentSlide', compoSlide);
           break;
@@ -667,7 +677,7 @@ export default {
       this.getSlideClientConfiguration();
     });
 
-    this.getSlideClientConfiguration();
+    await this.getSlideClientConfiguration();
 
     window.onresize = () => {
       this.resizeWindow();

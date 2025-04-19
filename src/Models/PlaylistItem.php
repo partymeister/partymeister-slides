@@ -111,6 +111,8 @@ class PlaylistItem extends Model
         'sort_position',
     ];
 
+    protected $casts = ['metadata' => 'json'];
+
     /**
      * @return BelongsTo
      */

@@ -19,7 +19,7 @@ import { saveToStorage} from "../mixins/storage";
         mixins: [
             toast,
         ],
-        mounted() {
+        async mounted() {
             this.$eventHub.$on('socket-unavailable', () => {
                 this.error = 'Socket connection not available. Please check your configuration';
                 document.querySelector('.server-error').classList.remove('d-none');
@@ -29,14 +29,14 @@ import { saveToStorage} from "../mixins/storage";
                 document.querySelector('.server-error').classList.add('d-none');
             });
 
-            this.getConfigFromServer();
+            await this.getConfigFromServer();
         },
         methods: {
             async getConfigFromServer() {
                 let url = BASE_URL + '/api/slide_clients/' + window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
                 // Get data from partymeister server (jingles etc.)
                 axios.get(url+'?api_token='+TOKEN).then(async result => {
-                    console.log("Query done - saving slideClientConfiguration to storage");
+                    console.log("[CONFIG] Loaded client config");
                     await saveToStorage('slideClientConfiguration', result.data.data);
                     //localStorage.setItem('slideClientConfiguration', JSON.stringify(result.data.data));
                     this.$eventHub.$emit('slide-client-loaded');
@@ -50,7 +50,7 @@ import { saveToStorage} from "../mixins/storage";
                     this.$eventHub.$emit('server-configuration-update');
                     this.$eventHub.$emit('jingles-loaded', result.data.data.jingles);
                 }).catch(e => {
-                    this.error = 'Problems getting slide client configuration from server. Please check your configuration. (' + e.message + ')';
+                    this.error = '[CONFIG] Problems getting slide client configuration from server. Please check your configuration. (' + e.message + ')';
                     document.querySelector('.server-error').classList.remove('d-none');
                 });
             }
