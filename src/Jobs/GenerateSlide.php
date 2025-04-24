@@ -22,16 +22,10 @@ class GenerateSlide implements ShouldQueue
      */
     public $slide;
 
-    /**
-     * @var
-     */
     public $namePrefix;
 
     /**
      * Create a new job instance.
-     *
-     * @param  Model  $slide
-     * @param    $namePrefix
      */
     public function __construct(Model $slide, $namePrefix)
     {
@@ -50,24 +44,24 @@ class GenerateSlide implements ShouldQueue
         $filenameForFinal = base_path().'/storage/app/temp/'.$this->namePrefix.'_final_'.$this->slide->id.'.png';
 
         Browsershot::url(url('/backend/'.$this->namePrefix.'/'.$this->slide->id))
-                   ->setBinPath(__DIR__.'/../../resources/assets/bin/browser.js')
-                   ->waitUntilNetworkIdle()
-                   ->windowSize(1920, 1080)//->debug()
-            //->fit(Manipulations::FIT_CONTAIN, 1920, 1080)
-                   ->save($filenameForFinal);
+            ->setBinPath(__DIR__.'/../../resources/assets/bin/browser.js')
+            ->waitUntilNetworkIdle()
+            ->windowSize(1920, 1080)// ->debug()
+            // ->fit(Manipulations::FIT_CONTAIN, 1920, 1080)
+            ->save($filenameForFinal);
 
         Browsershot::url(url('/backend/'.$this->namePrefix.'/'.$this->slide->id.'?preview=true'))
-                   ->setBinPath(__DIR__.'/../../resources/assets/bin/browser.js')
-                   ->waitUntilNetworkIdle()
-                   ->windowSize(1920, 1080)//->debug()
-            //->fit(Manipulations::FIT_CONTAIN, 1920, 1080)
-                   ->save($filenameForPreview);
+            ->setBinPath(__DIR__.'/../../resources/assets/bin/browser.js')
+            ->waitUntilNetworkIdle()
+            ->windowSize(1920, 1080)// ->debug()
+            // ->fit(Manipulations::FIT_CONTAIN, 1920, 1080)
+            ->save($filenameForPreview);
 
         $this->slide->clearMediaCollection('preview');
         $this->slide->clearMediaCollection('final');
         $this->slide->addMedia($filenameForPreview)
-                    ->toMediaCollection('preview', 'media');
+            ->toMediaCollection('preview', 'media');
         $this->slide->addMedia($filenameForFinal)
-                    ->toMediaCollection('final', 'media');
+            ->toMediaCollection('final', 'media');
     }
 }

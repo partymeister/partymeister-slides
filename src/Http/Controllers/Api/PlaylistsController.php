@@ -23,7 +23,9 @@ class PlaylistsController extends ApiController
      *   tags={"PlaylistsController"},
      *   path="/api/playlists",
      *   summary="Get playlist collection",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -31,15 +33,20 @@ class PlaylistsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="array",
+     *
      *         @OA\Items(ref="#/components/schemas/PlaylistResource")
      *       ),
+     *
      *       @OA\Property(
      *         property="meta",
      *         ref="#/components/schemas/PaginationMeta"
@@ -55,9 +62,11 @@ class PlaylistsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   )
      * )
@@ -69,7 +78,7 @@ class PlaylistsController extends ApiController
     public function index()
     {
         $paginator = PlaylistService::collection()
-                                    ->getPaginator();
+            ->getPaginator();
 
         return (new PlaylistCollection($paginator))->additional(['message' => 'Playlist collection read']);
     }
@@ -79,10 +88,14 @@ class PlaylistsController extends ApiController
      *   tags={"PlaylistsController"},
      *   path="/api/playlists",
      *   summary="Create new playlist",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/PlaylistRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -90,10 +103,13 @@ class PlaylistsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -106,31 +122,34 @@ class PlaylistsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Store a newly created resource in storage.
      *
-     * @param  PlaylistRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(PlaylistRequest $request)
     {
         $result = PlaylistService::create($request)
-                                 ->getResult();
+            ->getResult();
 
         return (new PlaylistResource($result))->additional(['message' => 'Playlist created'])
-                                              ->response()
-                                              ->setStatusCode(201);
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -138,7 +157,9 @@ class PlaylistsController extends ApiController
      *   tags={"PlaylistsController"},
      *   path="/api/playlists/{playlist}",
      *   summary="Get single playlist",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -146,17 +167,22 @@ class PlaylistsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="playlist",
      *     parameter="playlist",
      *     description="Playlist id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -169,27 +195,30 @@ class PlaylistsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Display the specified resource.
      *
-     * @param  Playlist  $record
      * @return PlaylistResource
      */
     public function show(Playlist $record)
     {
         $result = PlaylistService::show($record)
-                                 ->getResult();
+            ->getResult();
 
         return (new PlaylistResource($result))->additional(['message' => 'Playlist read']);
     }
@@ -199,10 +228,14 @@ class PlaylistsController extends ApiController
      *   tags={"PlaylistsController"},
      *   path="/api/playlists/{playlist}",
      *   summary="Update an existing playlist",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/PlaylistRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -210,17 +243,22 @@ class PlaylistsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="playlist",
      *     parameter="playlist",
      *     description="Playlist id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -233,28 +271,30 @@ class PlaylistsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Update the specified resource in storage.
      *
-     * @param  PlaylistRequest  $request
-     * @param  Playlist  $record
      * @return PlaylistResource
      */
     public function update(PlaylistRequest $request, Playlist $record)
     {
         $result = PlaylistService::update($record, $request)
-                                 ->getResult();
+            ->getResult();
 
         return (new PlaylistResource($result))->additional(['message' => 'Playlist updated']);
     }
@@ -264,7 +304,9 @@ class PlaylistsController extends ApiController
      *   tags={"PlaylistsController"},
      *   path="/api/playlists/{playlist}",
      *   summary="Delete a playlist",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -272,17 +314,22 @@ class PlaylistsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="playlist",
      *     parameter="playlist",
      *     description="Playlist id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -290,20 +337,27 @@ class PlaylistsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   ),
+     *
      *   @OA\Response(
      *     response="400",
      *     description="Bad request",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -315,13 +369,12 @@ class PlaylistsController extends ApiController
      *
      * Remove the specified resource from storage.
      *
-     * @param  Playlist  $record
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Playlist $record)
     {
         $result = PlaylistService::delete($record)
-                                 ->getResult();
+            ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'Playlist deleted']);

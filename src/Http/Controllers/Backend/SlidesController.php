@@ -40,7 +40,6 @@ class SlidesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  SlideRequest  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(SlideRequest $request)
@@ -63,7 +62,6 @@ class SlidesController extends Controller
     }
 
     /**
-     * @param  Slide  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function duplicate(Slide $record)
@@ -81,16 +79,15 @@ class SlidesController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create($record
-    ) // no type hint here because it can either be Slide or SlideTemplate and PHP doesn't support union types
-    {
+    ) { // no type hint here because it can either be Slide or SlideTemplate and PHP doesn't support union types
         if ($record instanceof SlideTemplate) {
             $record->slide_template_id = $record->id;
         }
         $form = $this->form(SlideForm::class, [
-            'method'  => 'POST',
-            'route'   => 'backend.slides.store',
+            'method' => 'POST',
+            'route' => 'backend.slides.store',
             'enctype' => 'multipart/form-data',
-            'model'   => $record,
+            'model' => $record,
         ]);
 
         $motorShowRightSidebar = true;
@@ -102,7 +99,6 @@ class SlidesController extends Controller
      * Display the specified resource.
      *
      * @param  SlideRequest  $request
-     * @param  Slide  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(Slide $record)
@@ -120,16 +116,15 @@ class SlidesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Slide  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Slide $record)
     {
         $form = $this->form(SlideForm::class, [
-            'method'  => 'PATCH',
-            'url'     => route('backend.slides.update', [$record->id]),
+            'method' => 'PATCH',
+            'url' => route('backend.slides.update', [$record->id]),
             'enctype' => 'multipart/form-data',
-            'model'   => $record,
+            'model' => $record,
         ]);
 
         $motorShowRightSidebar = true;
@@ -140,8 +135,6 @@ class SlidesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  SlideRequest  $request
-     * @param  Slide  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(SlideRequest $request, Slide $record)
@@ -166,7 +159,6 @@ class SlidesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Slide  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Slide $record)

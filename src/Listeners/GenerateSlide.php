@@ -22,16 +22,15 @@ class GenerateSlide
     /**
      * Handle the event.
      *
-     * @param  SlideSaved  $event
      * @return void
      */
     public function handle(SlideSaved $event)
     {
         \Partymeister\Slides\Jobs\GenerateSlide::dispatch($event->slide, $event->namePrefix);
 
-        //foreach ($event->playlist->playlist_items as $item) {
+        // foreach ($event->playlist->playlist_items as $item) {
         //    if ($item->slide_id != null) {
         //    }
-        //}
+        // }
     }
 }

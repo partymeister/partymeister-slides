@@ -9,11 +9,6 @@ class ScreenshotHelper
     protected $driver = null;
 
     /**
-     * @param $url
-     * @param $file
-     * @param $slideId
-     * @param $class
-     * @param $collection
      * @return void
      */
     public function screenshot($url, $file, $slideId, $class, $collection)
@@ -21,14 +16,6 @@ class ScreenshotHelper
         $this->enqueue($url, $file, $slideId, $class, $collection);
     }
 
-    /**
-     * @param string $url
-     * @param string $filename
-     * @param int $slideId
-     * @param string $class
-     * @param string $collection
-     * @return void
-     */
     public function enqueue(string $url, string $filename, int $slideId, string $class, string $collection): void
     {
         // Define queue name
@@ -40,22 +27,22 @@ class ScreenshotHelper
         // 2. Build job payload
         $jobKey = "bull:$queueName:$jobId";
         $data = [
-            'url'        => $url,
-            'fileName'   => $filename,
-            'slideId'    => $slideId,
-            'class'      => $class,
+            'url' => $url,
+            'fileName' => $filename,
+            'slideId' => $slideId,
+            'class' => $class,
             'collection' => $collection,
         ];
 
         $job = [
-            'name'         => 'screenshot', // Job name
-            'data'         => json_encode($data),
-            'opts'         => json_encode([]),
-            'progress'     => 0,
+            'name' => 'screenshot', // Job name
+            'data' => json_encode($data),
+            'opts' => json_encode([]),
+            'progress' => 0,
             'attemptsMade' => 0,
-            'finishedOn'   => null,
-            'processedOn'  => null,
-            'timestamp'    => (string) now()->timestamp * 1000,
+            'finishedOn' => null,
+            'processedOn' => null,
+            'timestamp' => (string) now()->timestamp * 1000,
         ];
 
         // 3. Store the job hash
@@ -68,7 +55,7 @@ class ScreenshotHelper
         Redis::publish("bull:$queueName:events", json_encode([
             'event' => 'waiting',
             'jobId' => $jobId,
-            'prev'  => null,
+            'prev' => null,
         ]));
     }
 }

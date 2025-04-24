@@ -27,7 +27,7 @@ class PartymeisterSlidesApiPlaylistTest extends TestCase
         'media',
     ];
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

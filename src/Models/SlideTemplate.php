@@ -5,10 +5,10 @@ namespace Partymeister\Slides\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Motor\Backend\Models\User;
 use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
@@ -56,16 +56,16 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder|SlideTemplate whereTemplateFor($value)
  * @method static Builder|SlideTemplate whereUpdatedAt($value)
  * @method static Builder|SlideTemplate whereUpdatedBy($value)
+ *
  * @mixin Eloquent
  */
 class SlideTemplate extends Model implements HasMedia
 {
-    use Searchable;
-    use Filterable;
     use BlameableTrait;
-    use InteractsWithMedia;
+    use Filterable;
     use HasShortflakePrimary;
-
+    use InteractsWithMedia;
+    use Searchable;
 
     /**
      * Searchable columns for the searchable trait
@@ -90,31 +90,29 @@ class SlideTemplate extends Model implements HasMedia
     ];
 
     /**
-     * @param  Media|null  $media
-     *
      * @throws InvalidManipulation
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-             ->width(400)
-             ->height(400)
-             ->nonQueued();
+            ->width(400)
+            ->height(400)
+            ->nonQueued();
         $this->addMediaConversion('preview')
-             ->width(400)
-             ->height(400)
-             ->format('png')
-             ->nonQueued();
+            ->width(400)
+            ->height(400)
+            ->format('png')
+            ->nonQueued();
     }
 
-    ///**
+    // /**
     // * The attributes that should be cast to native types.
     // *
     // * @var array
     // */
-    //protected $casts = [
+    // protected $casts = [
     //    'definitions' => 'array',
-    //];
+    // ];
 
     /**
      * @return HasMany

@@ -30,9 +30,6 @@ class SlideCollectionSaved
      * Create a new event instance.
      *
      * SlideCollectionSaved constructor.
-     *
-     * @param  Collection  $slideIds
-     * @param    $namePrefix
      */
     public function __construct(Collection $slideIds, $namePrefix)
     {

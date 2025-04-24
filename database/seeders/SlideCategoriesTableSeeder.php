@@ -17,39 +17,39 @@ class SlideCategoriesTableSeeder extends Seeder
     public function run()
     {
         \Motor\Backend\Models\Category::create([
-            'name'       => 'Slides',
-            'scope'      => 'slides',
+            'name' => 'Slides',
+            'scope' => 'slides',
             'created_by' => 1,
             'updated_by' => 1,
 
             'children' => [
                 [
-                    'name'       => 'Announcements',
-                    'scope'      => 'slides',
+                    'name' => 'Announcements',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],
                 [
-                    'name'       => 'Timetable',
-                    'scope'      => 'slides',
+                    'name' => 'Timetable',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],
                 [
-                    'name'       => 'Sponsors',
-                    'scope'      => 'slides',
+                    'name' => 'Sponsors',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],
                 [
-                    'name'       => 'Party & Demoscene promotions',
-                    'scope'      => 'slides',
+                    'name' => 'Party & Demoscene promotions',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],
                 [
-                    'name'       => 'Competitions',
-                    'scope'      => 'slides',
+                    'name' => 'Competitions',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],

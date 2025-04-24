@@ -12,6 +12,7 @@ class PlaylistItemRequest extends Request
     /**
      * @OA\Schema(
      *   schema="PlaylistItemRequest",
+     *
      *   @OA\Property(
      *     property="playlist_id",
      *     type="integer",
@@ -109,21 +110,21 @@ class PlaylistItemRequest extends Request
     public function rules()
     {
         return [
-            'playlist_id'                => 'required|integer',
-            'type'                       => 'nullable',
-            'slide_type'                 => 'nullable',
-            'slide_id'                   => 'nullable|integer',
-            'duration'                   => 'nullable|integer',
-            'transition_id'              => 'nullable|integer',
+            'playlist_id' => 'required|integer',
+            'type' => 'nullable',
+            'slide_type' => 'nullable',
+            'slide_id' => 'nullable|integer',
+            'duration' => 'nullable|integer',
+            'transition_id' => 'nullable|integer',
             'transition_slidemeister_id' => 'nullable|integer',
-            'transition_duration'        => 'nullable|integer',
-            'is_advanced_manually'       => 'nullable|boolean',
-            'is_muted'                   => 'nullable|boolean',
-            'midi_note'                  => 'nullable|integer',
-            'metadata'                   => 'nullable|json',
-            'callback_hash'              => 'nullable',
-            'callback_delay'             => 'nullable|integer',
-            'sort_position'              => 'nullable|integer',
+            'transition_duration' => 'nullable|integer',
+            'is_advanced_manually' => 'nullable|boolean',
+            'is_muted' => 'nullable|boolean',
+            'midi_note' => 'nullable|integer',
+            'metadata' => 'nullable|json',
+            'callback_hash' => 'nullable',
+            'callback_delay' => 'nullable|integer',
+            'sort_position' => 'nullable|integer',
         ];
     }
 }

@@ -5,11 +5,11 @@ namespace Partymeister\Slides\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Motor\Backend\Models\Category;
 use Motor\Backend\Models\User;
 use Motor\Core\Filter\Filter;
@@ -63,15 +63,16 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder|Slide whereSlideType($value)
  * @method static Builder|Slide whereUpdatedAt($value)
  * @method static Builder|Slide whereUpdatedBy($value)
+ *
  * @mixin Eloquent
  */
 class Slide extends Model implements HasMedia
 {
-    use Searchable;
-    use Filterable;
     use BlameableTrait;
-    use InteractsWithMedia;
+    use Filterable;
     use HasShortflakePrimary;
+    use InteractsWithMedia;
+    use Searchable;
 
     /**
      * Searchable columns for the searchable trait
@@ -97,33 +98,27 @@ class Slide extends Model implements HasMedia
         'cached_html_final',
     ];
 
-    ///**
+    // /**
     // * The attributes that should be cast to native types.
     // *
     // * @var array
     // */
-    //protected $casts = [
+    // protected $casts = [
     //    'definitions' => 'array',
-    //];
+    // ];
 
-    /**
-     * @param  Media|null  $media
-     */
-    /**
-     * @param  Media|null  $media
-     */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         try {
             $this->addMediaConversion('thumb')
-                 ->width(400)
-                 ->height(400)
-                 ->nonQueued();
+                ->width(400)
+                ->height(400)
+                ->nonQueued();
             $this->addMediaConversion('preview')
-                 ->width(400)
-                 ->height(400)
-                 ->format('png')
-                 ->nonQueued();
+                ->width(400)
+                ->height(400)
+                ->format('png')
+                ->nonQueued();
         } catch (InvalidManipulation $e) {
             Log::error($e->getMessage());
         }

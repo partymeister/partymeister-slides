@@ -30,9 +30,6 @@ class SlideSaved
      * Create a new event instance.
      *
      * SlideSaved constructor.
-     *
-     * @param  Model  $slide
-     * @param    $namePrefix
      */
     public function __construct(Model $slide, $namePrefix)
     {

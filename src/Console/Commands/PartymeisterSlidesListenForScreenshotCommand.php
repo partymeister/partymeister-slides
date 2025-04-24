@@ -17,8 +17,8 @@ class PartymeisterSlidesListenForScreenshotCommand extends Command
     {
         $streamKey = 'stream:screenshot:done';
         $lastId = Redis::get('stream:screenshot:count'); // or use '$' to only get new entries
-        if (!$lastId) {
-            $lastId = (int)0;
+        if (! $lastId) {
+            $lastId = (int) 0;
         }
 
         while (true) {
@@ -28,11 +28,11 @@ class PartymeisterSlidesListenForScreenshotCommand extends Command
                 foreach ($result[$streamKey] as $id => $event) {
 
                     $this->info("Received new message from stream: {$streamKey} with id: {$id}");
-                    //var_dump($event);
+                    // var_dump($event);
 
-                    $model = $event['class']::find((int)$event['slideId']);
+                    $model = $event['class']::find((int) $event['slideId']);
 
-                    if (!is_null($model)) {
+                    if (! is_null($model)) {
                         // Dispatch job or handle inline
                         \Partymeister\Slides\Jobs\ProcessScreenshotJob::dispatch($model, $event['fileName'], $event['collection']);
                         ScreenshotUpdated::dispatch($model);

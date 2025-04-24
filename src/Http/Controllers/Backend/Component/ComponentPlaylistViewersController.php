@@ -28,7 +28,6 @@ class ComponentPlaylistViewersController extends ComponentController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -62,7 +61,6 @@ class ComponentPlaylistViewersController extends ComponentController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

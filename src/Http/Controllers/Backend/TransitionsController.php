@@ -44,8 +44,8 @@ class TransitionsController extends Controller
     public function create()
     {
         $form = $this->form(TransitionForm::class, [
-            'method'  => 'POST',
-            'route'   => 'backend.transitions.store',
+            'method' => 'POST',
+            'route' => 'backend.transitions.store',
             'enctype' => 'multipart/form-data',
         ]);
 
@@ -55,7 +55,6 @@ class TransitionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  TransitionRequest  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(TransitionRequest $request)
@@ -79,8 +78,6 @@ class TransitionsController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param $id
      */
     public function show($id)
     {
@@ -90,16 +87,15 @@ class TransitionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Transition  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Transition $record)
     {
         $form = $this->form(TransitionForm::class, [
-            'method'  => 'PATCH',
-            'url'     => route('backend.transitions.update', [$record->id]),
+            'method' => 'PATCH',
+            'url' => route('backend.transitions.update', [$record->id]),
             'enctype' => 'multipart/form-data',
-            'model'   => $record,
+            'model' => $record,
         ]);
 
         return view('partymeister-slides::backend.transitions.edit', compact('form'));
@@ -108,8 +104,6 @@ class TransitionsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  TransitionRequest  $request
-     * @param  Transition  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(TransitionRequest $request, Transition $record)
@@ -134,7 +128,6 @@ class TransitionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Transition  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Transition $record)

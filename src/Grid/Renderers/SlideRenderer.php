@@ -18,12 +18,8 @@ class SlideRenderer
 
     /**
      * FileRenderer constructor.
-     *
-     * @param    $value
-     * @param  array  $options
-     * @param  Model|null  $record
      */
-    public function __construct($value, array $options = [], Model $record = null)
+    public function __construct($value, array $options = [], ?Model $record = null)
     {
         $this->value = $value;
         $this->options = $options;
@@ -39,9 +35,9 @@ class SlideRenderer
     {
         $media = $this->record->getFirstMedia(Arr::get($this->options, 'file'));
 
-        return view('partymeister-slides::grid.slide', ['media'   => $media,
-                                                         'record'  => $this->record,
-                                                         'options' => $this->options,
+        return view('partymeister-slides::grid.slide', ['media' => $media,
+            'record' => $this->record,
+            'options' => $this->options,
         ])->render();
     }
 }

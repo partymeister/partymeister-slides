@@ -5,10 +5,10 @@ namespace Partymeister\Slides\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Motor\Backend\Models\User;
 use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
@@ -48,14 +48,15 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  * @method static Builder|Playlist whereType($value)
  * @method static Builder|Playlist whereUpdatedAt($value)
  * @method static Builder|Playlist whereUpdatedBy($value)
+ *
  * @mixin Eloquent
  */
 class Playlist extends Model
 {
-    use Searchable;
-    use Filterable;
     use BlameableTrait;
+    use Filterable;
     use HasShortflakePrimary;
+    use Searchable;
 
     /**
      * Searchable columns for the searchable trait
@@ -86,7 +87,7 @@ class Playlist extends Model
     public function getItemCountAttribute()
     {
         return $this->items()
-                    ->count();
+            ->count();
     }
 
     /**

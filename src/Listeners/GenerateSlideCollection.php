@@ -21,16 +21,14 @@ class GenerateSlideCollection
 
     /**
      * Handle the event.
-     *
-     * @param  SlideCollectionSaved  $event
      */
     public function handle(SlideCollectionSaved $event)
     {
         \Partymeister\Slides\Jobs\GenerateSlideCollection::dispatch($event->slideIds, $event->namePrefix);
 
-        //foreach ($event->playlist->playlist_items as $item) {
+        // foreach ($event->playlist->playlist_items as $item) {
         //    if ($item->slide_id != null) {
         //    }
-        //}
+        // }
     }
 }

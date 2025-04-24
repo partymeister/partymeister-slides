@@ -14,7 +14,6 @@ class ItemsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  PlaylistItem  $record
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(PlaylistItem $record)

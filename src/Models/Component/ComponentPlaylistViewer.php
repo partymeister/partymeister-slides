@@ -7,7 +7,6 @@ use Motor\CMS\Models\ComponentBaseModel;
 
 class ComponentPlaylistViewer extends ComponentBaseModel
 {
-
     use HasShortflakePrimary;
 
     /**
@@ -27,7 +26,7 @@ class ComponentPlaylistViewer extends ComponentBaseModel
     public function preview()
     {
         return [
-            'name'    => trans('partymeister-slides::component/playlist-viewers.component'),
+            'name' => trans('partymeister-slides::component/playlist-viewers.component'),
             'preview' => 'Preview for ComponentPlaylistViewer component',
         ];
     }

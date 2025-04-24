@@ -19,8 +19,8 @@ class TransitionService extends BaseService
     public function filters()
     {
         $this->filter->add(new SelectRenderer('client_type'))
-                     ->setOptionPrefix(trans('partymeister-slides::backend/slide_clients.type'))
-                     ->setEmptyOption('-- '.trans('partymeister-slides::backend/slide_clients.type').' --')
-                     ->setOptions(trans('partymeister-slides::backend/slide_clients.types'));
+            ->setOptionPrefix(trans('partymeister-slides::backend/slide_clients.type'))
+            ->setEmptyOption('-- '.trans('partymeister-slides::backend/slide_clients.type').' --')
+            ->setOptions(trans('partymeister-slides::backend/slide_clients.types'));
     }
 }

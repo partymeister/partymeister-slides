@@ -21,18 +21,12 @@ class PlaylistSeekRequest implements ShouldBroadcastNow
      */
     public $playlist_id;
 
-    /**
-     * @var
-     */
     public $index;
 
     /**
      * Create a new event instance.
      *
      * PlaylistSeekRequest constructor.
-     *
-     * @param  Playlist  $playlist
-     * @param    $index
      */
     public function __construct(Playlist $playlist, $index = false)
     {

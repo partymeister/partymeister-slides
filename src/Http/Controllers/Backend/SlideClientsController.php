@@ -22,7 +22,6 @@ class SlideClientsController extends Controller
     use FormBuilderTrait;
 
     /**
-     * @param  SlideClient  $record
      * @return RedirectResponse|Redirector
      */
     public function activate(Request $request, SlideClient $record)
@@ -58,8 +57,8 @@ class SlideClientsController extends Controller
     public function create()
     {
         $form = $this->form(SlideClientForm::class, [
-            'method'  => 'POST',
-            'route'   => 'backend.slide_clients.store',
+            'method' => 'POST',
+            'route' => 'backend.slide_clients.store',
             'enctype' => 'multipart/form-data',
         ]);
 
@@ -71,7 +70,6 @@ class SlideClientsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  SlideClientRequest  $request
      * @return RedirectResponse|Redirector
      */
     public function store(SlideClientRequest $request)
@@ -95,8 +93,6 @@ class SlideClientsController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param $id
      */
     public function show($id)
     {
@@ -106,16 +102,15 @@ class SlideClientsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  SlideClient  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(SlideClient $record)
     {
         $form = $this->form(SlideClientForm::class, [
-            'method'  => 'PATCH',
-            'url'     => route('backend.slide_clients.update', [$record->id]),
+            'method' => 'PATCH',
+            'url' => route('backend.slide_clients.update', [$record->id]),
             'enctype' => 'multipart/form-data',
-            'model'   => $record,
+            'model' => $record,
         ]);
 
         $motorShowRightSidebar = true;
@@ -126,8 +121,6 @@ class SlideClientsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  SlideClientRequest  $request
-     * @param  SlideClient  $record
      * @return RedirectResponse|Redirector
      */
     public function update(SlideClientRequest $request, SlideClient $record)
@@ -152,7 +145,6 @@ class SlideClientsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  SlideClient  $record
      * @return RedirectResponse|Redirector
      */
     public function destroy(SlideClient $record)

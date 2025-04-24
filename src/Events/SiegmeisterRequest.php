@@ -20,9 +20,7 @@ class SiegmeisterRequest implements ShouldBroadcastNow
      *
      * PlaylistNextRequest constructor.
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Get the channels the event should broadcast on.

@@ -4,10 +4,10 @@ namespace Partymeister\Slides\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Motor\Backend\Models\User;
 use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
@@ -54,14 +54,15 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  * @method static Builder|SlideClient whereType($value)
  * @method static Builder|SlideClient whereUpdatedAt($value)
  * @method static Builder|SlideClient whereUpdatedBy($value)
+ *
  * @mixin Eloquent
  */
 class SlideClient extends Model
 {
-    use Searchable;
-    use Filterable;
     use BlameableTrait;
+    use Filterable;
     use HasShortflakePrimary;
+    use Searchable;
 
     /**
      * Searchable columns for the searchable trait

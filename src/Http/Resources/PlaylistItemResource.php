@@ -8,6 +8,7 @@ use Motor\Media\Http\Resources\FileResource;
 /**
  * @OA\Schema(
  *   schema="PlaylistItemResource",
+ *
  *   @OA\Property(
  *     property="id",
  *     type="integer",
@@ -101,23 +102,23 @@ class PlaylistItemResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'id'                      => (int) $this->id,
-            'playlist'                => new PlaylistResource($this->whenLoaded('playlist')),
-            'type'                    => $this->type,
-            'slide_type'              => $this->slide_type,
-            'slide'                   => new SlideResource($this->slide),
-            'duration'                => (int) $this->duration,
-            'transition'              => new TransitionResource($this->transition),
+            'id' => (int) $this->id,
+            'playlist' => new PlaylistResource($this->whenLoaded('playlist')),
+            'type' => $this->type,
+            'slide_type' => $this->slide_type,
+            'slide' => new SlideResource($this->slide),
+            'duration' => (int) $this->duration,
+            'transition' => new TransitionResource($this->transition),
             'transition_slidemeister' => new TransitionResource($this->transition_slidemeister),
-            'transition_duration'     => (int) $this->transition_duration,
-            'is_advanced_manually'    => (bool) $this->is_advanced_manually,
-            'is_muted'                => (bool) $this->is_muted,
-            'midi_note'               => (int) $this->midi_note,
-            'metadata'                => $this->metadata,
-            'callback_hash'           => $this->callback_hash,
-            'callback_delay'          => (int) $this->callback_delay,
-            'sort_position'           => (int) $this->sort_position,
-            'file_association'        => (! is_null($this->file_association) ? new FileResource($this->file_association->file) : null),
+            'transition_duration' => (int) $this->transition_duration,
+            'is_advanced_manually' => (bool) $this->is_advanced_manually,
+            'is_muted' => (bool) $this->is_muted,
+            'midi_note' => (int) $this->midi_note,
+            'metadata' => $this->metadata,
+            'callback_hash' => $this->callback_hash,
+            'callback_delay' => (int) $this->callback_delay,
+            'sort_position' => (int) $this->sort_position,
+            'file_association' => (! is_null($this->file_association) ? new FileResource($this->file_association->file) : null),
             // FIXME: this is fishy AF
         ];
     }

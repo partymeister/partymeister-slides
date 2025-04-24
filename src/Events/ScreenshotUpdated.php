@@ -16,14 +16,11 @@ class ScreenshotUpdated implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var
-     */
     public $slide;
 
     public function __construct(Model $slide)
     {
-        $this->slide = new \stdClass();
+        $this->slide = new \stdClass;
         $this->slide->id = $slide->id;
         $this->slide->media = $slide->getFirstMedia('preview') ? $slide->getFirstMedia('preview') : '';
     }

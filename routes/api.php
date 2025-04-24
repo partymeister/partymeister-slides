@@ -13,9 +13,9 @@ use Partymeister\Slides\Services\XMLService;
  */
 Route::group([
     'middleware' => ['auth:api', 'bindings', 'permission'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix'     => 'api',
-    'as'         => 'api.',
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'api',
+    'as' => 'api.',
 ], function () {
     Route::apiResource('slides', 'SlidesController');
     Route::apiResource('slide_templates', 'SlideTemplatesController');
@@ -27,9 +27,9 @@ Route::group([
 
 Route::group([
     'middleware' => ['bindings'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix'     => 'api/v2',
-    'as'         => 'api.v2.',
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'api/v2',
+    'as' => 'api.v2.',
 ], function () {
     Route::apiResource('slide_clients', 'SlideClientsController');
 });
@@ -38,9 +38,9 @@ Route::group([
  */
 Route::group([
     'middleware' => ['bindings'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix'     => 'api',
-    'as'         => 'api.',
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'api',
+    'as' => 'api.',
 ], function () {
     Route::get('slidemeister/fonts', [FontsController::class, 'index']);
 });
@@ -48,58 +48,58 @@ Route::group([
 // FIXME: put this in a controller so we can use route caching
 Route::post('ajax/slidemeister-web/{slide_client}/status', function (Request $request, $slide_client) {
     Cache::store('redis')
-         ->put(config('cache.prefix').':slidemeister-web.'.$slide_client, $request->all(), 3600);
+        ->put(config('cache.prefix').':slidemeister-web.'.$slide_client, $request->all(), 3600);
 })
-     ->name('ajax.slidemeister-web.status.update');
+    ->name('ajax.slidemeister-web.status.update');
 
 Route::group([
     'middleware' => ['web', 'web_auth', 'bindings', 'permission'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix'     => 'ajax',
-    'as'         => 'ajax.',
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'ajax',
+    'as' => 'ajax.',
 ], function () {
     Route::get('transitions', 'TransitionsController@index')
-         ->name('transitions.index');
+        ->name('transitions.index');
     Route::get('playlists', 'PlaylistsController@show')
-         ->name('playlists.index');
+        ->name('playlists.index');
     Route::get('playlist_items/{playlist_item}', 'PlaylistItemsController@show')
-         ->name('playlist_items.show');
+        ->name('playlist_items.show');
     Route::post('slide_templates', 'SlideTemplatesController@preview')
-         ->name('slide_templates.preview');
+        ->name('slide_templates.preview');
     Route::get('slides', 'SlidesController@index')
-         ->name('slides.index');
+        ->name('slides.index');
     Route::post('slide_clients/communication/playlist', 'SlideClients\CommunicationController@playlist')
-         ->name('slide_clients.communication.playlist');
+        ->name('slide_clients.communication.playlist');
     Route::post('slide_clients/communication/playnow', 'SlideClients\CommunicationController@playnow')
-         ->name('slide_clients.communication.playnow');
+        ->name('slide_clients.communication.playnow');
     Route::post('slide_clients/communication/seek', 'SlideClients\CommunicationController@seek')
-         ->name('slide_clients.communication.seek');
+        ->name('slide_clients.communication.seek');
     Route::post('slide_clients/communication/seek_continue', 'SlideClients\CommunicationController@seek_continue')
-         ->name('slide_clients.communication.seek_continue');
+        ->name('slide_clients.communication.seek_continue');
     Route::post('slide_clients/communication/siegmeister', 'SlideClients\CommunicationController@siegmeister')
-         ->name('slide_clients.communication.siegmeister');
+        ->name('slide_clients.communication.siegmeister');
     Route::post('slide_clients/communication/skip', 'SlideClients\CommunicationController@skip')
-         ->name('slide_clients.communication.skip');
+        ->name('slide_clients.communication.skip');
     Route::get('slide_clients/communication/system', 'SlideClients\CommunicationController@get_system_info')
-         ->name('slide_clients.communication.system');
+        ->name('slide_clients.communication.system');
     Route::get('slide_clients/communication/playlists', 'SlideClients\CommunicationController@get_playlists')
-         ->name('slide_clients.communication.playlists');
+        ->name('slide_clients.communication.playlists');
 });
 
-//Route::group([
+// Route::group([
 //    'middleware' => ['bindings'],
 //    //'namespace'  => '',
 //    'prefix' => 'ajax',
 //    'as' => 'ajax.frontend.',
-//], function () {
+// ], function () {
 //    Route::get('frontend-playlists/{playlist}', 'Partymeister\Slides\Http\Controllers\Api\PlaylistsController@show')->name('playlists.show');
-//});
+// });
 
 Route::group([
     'middleware' => ['bindings'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix'     => 'ajax',
-    'as'         => 'ajax.',
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'ajax',
+    'as' => 'ajax.',
 ], function () {
     Route::post('slide_clients/{slide_client}/communication/skip-for-revision', static function (
         Request $request,
@@ -118,7 +118,7 @@ Route::group([
                 } else {
                     return response()->json(['result' => $result]);
                 }
-            // no break
+                // no break
             case 'slidemeister-web':
                 switch ($request->get('direction')) {
                     case 'previous':
@@ -137,9 +137,9 @@ Route::group([
 
 Route::group([
     'middleware' => ['bindings'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
-    'prefix'     => 'ajax',
-    'as'         => 'ajax.',
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix' => 'ajax',
+    'as' => 'ajax.',
 ], function () {
     Route::post('slide_clients/{slide_client}/communication/prizegiving-for-revision', static function (
         Request $request,
@@ -152,7 +152,7 @@ Route::group([
 
         switch ($client->type) {
             case 'slidemeister-web':
-                event(new SiegmeisterRequest());
+                event(new SiegmeisterRequest);
 
                 return response()->json(['result' => 'Siegmeister event sent']);
                 break;

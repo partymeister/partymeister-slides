@@ -8,6 +8,7 @@ use Motor\Backend\Http\Resources\BaseResource;
 /**
  * @OA\Schema(
  *   schema="FontResource",
+ *
  *   @OA\Property(
  *     property="name",
  *     type="string",
@@ -30,14 +31,14 @@ class FontResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'name'   => Arr::get($this, 'name'),
-            'path'   => Arr::get($this, 'path'),
+            'name' => Arr::get($this, 'name'),
+            'path' => Arr::get($this, 'path'),
             'family' => Arr::get($this, 'family'),
         ];
     }

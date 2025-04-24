@@ -7,6 +7,7 @@ use Motor\Backend\Http\Resources\BaseResource;
 /**
  * @OA\Schema(
  *   schema="PlaylistResource",
+ *
  *   @OA\Property(
  *     property="id",
  *     type="integer",
@@ -40,12 +41,12 @@ class PlaylistResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'id'             => (int) $this->id,
-            'name'           => $this->name,
-            'type'           => $this->type,
+            'id' => (int) $this->id,
+            'name' => $this->name,
+            'type' => $this->type,
             'is_competition' => (bool) $this->is_competition,
-            'items'          => PlaylistItemResource::collection($this->items),
-            'updated_at'     => $this->updated_at,
+            'items' => PlaylistItemResource::collection($this->items),
+            'updated_at' => $this->updated_at,
         ];
     }
 }

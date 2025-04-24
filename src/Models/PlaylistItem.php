@@ -4,11 +4,11 @@ namespace Partymeister\Slides\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Motor\Backend\Models\User;
 use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
@@ -72,14 +72,15 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  * @method static Builder|PlaylistItem whereType($value)
  * @method static Builder|PlaylistItem whereUpdatedAt($value)
  * @method static Builder|PlaylistItem whereUpdatedBy($value)
+ *
  * @mixin Eloquent
  */
 class PlaylistItem extends Model
 {
-    use Searchable;
-    use Filterable;
     use BlameableTrait;
+    use Filterable;
     use HasShortflakePrimary;
+    use Searchable;
 
     /**
      * Searchable columns for the searchable trait

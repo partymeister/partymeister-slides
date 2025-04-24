@@ -4,9 +4,9 @@ namespace Partymeister\Slides\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Motor\Backend\Models\User;
 use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
@@ -44,14 +44,15 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  * @method static Builder|Transition whereName($value)
  * @method static Builder|Transition whereUpdatedAt($value)
  * @method static Builder|Transition whereUpdatedBy($value)
+ *
  * @mixin Eloquent
  */
 class Transition extends Model
 {
-    use Searchable;
-    use Filterable;
     use BlameableTrait;
+    use Filterable;
     use HasShortflakePrimary;
+    use Searchable;
 
     /**
      * Searchable columns for the searchable trait

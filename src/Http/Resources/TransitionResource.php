@@ -7,6 +7,7 @@ use Motor\Backend\Http\Resources\BaseResource;
 /**
  * @OA\Schema(
  *   schema="TransitionResource",
+ *
  *   @OA\Property(
  *     property="id",
  *     type="integer",
@@ -40,10 +41,10 @@ class TransitionResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'id'          => (int) $this->id,
-            'name'        => $this->name,
+            'id' => (int) $this->id,
+            'name' => $this->name,
             'client_type' => $this->client_type,
-            'identifier'  => $this->identifier,
+            'identifier' => $this->identifier,
         ];
     }
 }

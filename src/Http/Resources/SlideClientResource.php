@@ -8,6 +8,7 @@ use Motor\Backend\Http\Resources\MediaResource;
 /**
  * @OA\Schema(
  *   schema="SlideClientResource",
+ *
  *   @OA\Property(
  *     property="id",
  *     type="integer",
@@ -56,14 +57,18 @@ use Motor\Backend\Http\Resources\MediaResource;
  *   @OA\Property(
  *     property="jingles",
  *     type="array",
+ *
  *     @OA\Items(
  *       ref="#/components/schemas/MediaResource"
  *     ),
  *   ),
+ *
  *   @OA\Property(
  *     property="websocket",
  *     type="array",
+ *
  *     @OA\Items(
+ *
  *       @OA\Property(
  *         property="key",
  *         type="string",
@@ -110,18 +115,18 @@ class SlideClientResource extends BaseResource
         $configuration['client'] = $this->id;
 
         return [
-            'id'            => (int) $this->id,
-            'name'          => $this->name,
-            'type'          => $this->type,
-            'ip_address'    => $this->ip_address,
-            'port'          => $this->port,
+            'id' => (int) $this->id,
+            'name' => $this->name,
+            'type' => $this->type,
+            'ip_address' => $this->ip_address,
+            'port' => $this->port,
             'sort_position' => (int) $this->sort_position,
-            'playlist'      => new PlaylistResource($this->playlist),
-            'slide'         => new SlideResource($this->slide),
+            'playlist' => new PlaylistResource($this->playlist),
+            'slide' => new SlideResource($this->slide),
             'configuration' => $configuration,
-            'jingles'       => $jingles,
-            'websocket'     => [
-                'key'  => config('broadcasting.connections.pusher.key'),
+            'jingles' => $jingles,
+            'websocket' => [
+                'key' => config('broadcasting.connections.pusher.key'),
                 'host' => config('partymeister-slides-slidemeister.host'),
                 'port' => config('partymeister-slides-slidemeister.port'),
                 'path' => config('partymeister-slides-slidemeister.path'),

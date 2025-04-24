@@ -2,9 +2,9 @@
 
 namespace Partymeister\Slides\Providers;
 
-use Partymeister\Slides\Console\Commands\PartymeisterSlidesListenForScreenshotCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Partymeister\Slides\Console\Commands\PartymeisterSlidesListenForScreenshotCommand;
 use Partymeister\Slides\Console\Commands\PartymeisterWebdriverCommand;
 use Partymeister\Slides\Models\Component\ComponentPlaylistViewer;
 use Partymeister\Slides\Models\Playlist;
@@ -45,7 +45,7 @@ class PartymeisterServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 PartymeisterWebdriverCommand::class,
-                PartymeisterSlidesListenForScreenshotCommand::class
+                PartymeisterSlidesListenForScreenshotCommand::class,
             ]);
         }
     }
@@ -128,9 +128,9 @@ class PartymeisterServiceProvider extends ServiceProvider
     {
         $assets = [
             __DIR__.'/../../resources/assets/images' => resource_path('assets/images'),
-            __DIR__.'/../../resources/assets/sass'   => resource_path('assets/sass'),
-            __DIR__.'/../../resources/assets/npm'    => resource_path('assets/npm'),
-            __DIR__.'/../../resources/assets/js'     => resource_path('assets/js'),
+            __DIR__.'/../../resources/assets/sass' => resource_path('assets/sass'),
+            __DIR__.'/../../resources/assets/npm' => resource_path('assets/npm'),
+            __DIR__.'/../../resources/assets/js' => resource_path('assets/js'),
         ];
 
         $this->publishes($assets, 'partymeister-slides-install-resources');

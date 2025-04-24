@@ -17,18 +17,12 @@ class PlaylistRequest implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var
-     */
     public $playlist;
 
     /**
      * Create a new event instance.
      *
      * PlaylistRequest constructor.
-     *
-     * @param  Playlist  $playlist
-     * @param    $callbacks
      */
     public function __construct(Playlist $playlist, $callbacks)
     {

@@ -21,16 +21,10 @@ class GenerateSlideCollection implements ShouldQueue
      */
     public $slideIds;
 
-    /**
-     * @var
-     */
     public $namePrefix;
 
     /**
      * Create a new job instance.
-     *
-     * @param  Collection  $slideIds
-     * @param    $namePrefix
      */
     public function __construct(Collection $slideIds, $namePrefix)
     {
@@ -45,20 +39,20 @@ class GenerateSlideCollection implements ShouldQueue
      */
     public function handle()
     {
-        //foreach ($this->slideIds as $slideId) {
+        // foreach ($this->slideIds as $slideId) {
         //    $filenameForPreview = base_path() . '/storage/app/' . $this->namePrefix . '_preview_' . $slideId . '.png';
         //    $filenameForFinal   = base_path() . '/storage/app/' . $this->namePrefix . '_final_' . $slideId . '.png';
-        //}
+        // }
 
         $command = 'node '.__DIR__.'/../../resources/assets/bin/hack.js \''.json_encode(['slides' => $this->slideIds]).'\'';
 
         exec($command);
 
-        //dd($result);
+        // dd($result);
 
-        //$this->slide->clearMediaCollection('preview');
-        //$this->slide->clearMediaCollection('final');
-        //$this->slide->addMedia($filenameForPreview)->toMediaCollection('preview', 'media');
-        //$this->slide->addMedia($filenameForFinal)->toMediaCollection('final', 'media');
+        // $this->slide->clearMediaCollection('preview');
+        // $this->slide->clearMediaCollection('final');
+        // $this->slide->addMedia($filenameForPreview)->toMediaCollection('preview', 'media');
+        // $this->slide->addMedia($filenameForFinal)->toMediaCollection('final', 'media');
     }
 }

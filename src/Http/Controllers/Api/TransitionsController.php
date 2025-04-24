@@ -23,7 +23,9 @@ class TransitionsController extends ApiController
      *   tags={"TransitionsController"},
      *   path="/api/transitions",
      *   summary="Get transition collection",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -31,15 +33,20 @@ class TransitionsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="array",
+     *
      *         @OA\Items(ref="#/components/schemas/TransitionResource")
      *       ),
+     *
      *       @OA\Property(
      *         property="meta",
      *         ref="#/components/schemas/PaginationMeta"
@@ -55,9 +62,11 @@ class TransitionsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   )
      * )
@@ -69,7 +78,7 @@ class TransitionsController extends ApiController
     public function index()
     {
         $paginator = TransitionService::collection()
-                                      ->getPaginator();
+            ->getPaginator();
 
         return (new TransitionCollection($paginator))->additional(['message' => 'Transition collection read']);
     }
@@ -79,10 +88,14 @@ class TransitionsController extends ApiController
      *   tags={"TransitionsController"},
      *   path="/api/transitions",
      *   summary="Create new transition",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/TransitionRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -90,10 +103,13 @@ class TransitionsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -106,31 +122,34 @@ class TransitionsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Store a newly created resource in storage.
      *
-     * @param  TransitionRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(TransitionRequest $request)
     {
         $result = TransitionService::create($request)
-                                   ->getResult();
+            ->getResult();
 
         return (new TransitionResource($result))->additional(['message' => 'Transition created'])
-                                                ->response()
-                                                ->setStatusCode(201);
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -138,7 +157,9 @@ class TransitionsController extends ApiController
      *   tags={"TransitionsController"},
      *   path="/api/transitions/{transition}",
      *   summary="Get single transition",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -146,17 +167,22 @@ class TransitionsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="transition",
      *     parameter="transition",
      *     description="Transition id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -169,27 +195,30 @@ class TransitionsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Display the specified resource.
      *
-     * @param  Transition  $record
      * @return TransitionResource
      */
     public function show(Transition $record)
     {
         $result = TransitionService::show($record)
-                                   ->getResult();
+            ->getResult();
 
         return (new TransitionResource($result))->additional(['message' => 'Transition read']);
     }
@@ -199,10 +228,14 @@ class TransitionsController extends ApiController
      *   tags={"TransitionsController"},
      *   path="/api/transitions/{transition}",
      *   summary="Update an existing transition",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/TransitionRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -210,17 +243,22 @@ class TransitionsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="transition",
      *     parameter="transition",
      *     description="Transition id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -233,28 +271,30 @@ class TransitionsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Update the specified resource in storage.
      *
-     * @param  TransitionRequest  $request
-     * @param  Transition  $record
      * @return TransitionResource
      */
     public function update(TransitionRequest $request, Transition $record)
     {
         $result = TransitionService::update($record, $request)
-                                   ->getResult();
+            ->getResult();
 
         return (new TransitionResource($result))->additional(['message' => 'Transition updated']);
     }
@@ -264,7 +304,9 @@ class TransitionsController extends ApiController
      *   tags={"TransitionsController"},
      *   path="/api/transitions/{transition}",
      *   summary="Delete a transition",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -272,17 +314,22 @@ class TransitionsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="transition",
      *     parameter="transition",
      *     description="Transition id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -290,20 +337,27 @@ class TransitionsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   ),
+     *
      *   @OA\Response(
      *     response="400",
      *     description="Bad request",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -315,13 +369,12 @@ class TransitionsController extends ApiController
      *
      * Remove the specified resource from storage.
      *
-     * @param  Transition  $record
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Transition $record)
     {
         $result = TransitionService::delete($record)
-                                   ->getResult();
+            ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'Transition deleted']);

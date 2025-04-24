@@ -7,6 +7,7 @@ use Motor\Backend\Http\Resources\BaseResource;
 /**
  * @OA\Schema(
  *   schema="SlideTemplateResource",
+ *
  *   @OA\Property(
  *     property="id",
  *     type="integer",
@@ -48,12 +49,12 @@ class SlideTemplateResource extends BaseResource
     public function toArray($request)
     {
         return [
-            'id'                  => (int) $this->id,
-            'name'                => $this->name,
-            'template_for'        => $this->template_for,
-            'definitions'         => $this->definitions,
+            'id' => (int) $this->id,
+            'name' => $this->name,
+            'template_for' => $this->template_for,
+            'definitions' => $this->definitions,
             'cached_html_preview' => $this->cached_html_preview,
-            'cached_html_final'   => $this->cached_html_final,
+            'cached_html_final' => $this->cached_html_final,
         ];
     }
 }

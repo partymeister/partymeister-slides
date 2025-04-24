@@ -46,8 +46,8 @@ class PlaylistsController extends Controller
     public function create()
     {
         $form = $this->form(PlaylistForm::class, [
-            'method'  => 'POST',
-            'route'   => 'backend.playlists.store',
+            'method' => 'POST',
+            'route' => 'backend.playlists.store',
             'enctype' => 'multipart/form-data',
         ]);
 
@@ -60,7 +60,6 @@ class PlaylistsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  PlaylistRequest  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(PlaylistRequest $request)
@@ -84,8 +83,6 @@ class PlaylistsController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param $id
      */
     public function show($id)
     {
@@ -95,21 +92,20 @@ class PlaylistsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Playlist  $record
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Request $request, Playlist $record)
     {
         $form = $this->form(PlaylistForm::class, [
-            'method'  => 'PATCH',
-            'url'     => route('backend.playlists.update', [$record->id]),
+            'method' => 'PATCH',
+            'url' => route('backend.playlists.update', [$record->id]),
             'enctype' => 'multipart/form-data',
-            'model'   => $record,
+            'model' => $record,
         ]);
 
         $motorShowRightSidebar = true;
 
-        $this->fractal = new Manager();
+        $this->fractal = new Manager;
 
         $playlistItemCollection = PlaylistItemResource::collection($record->items);
         $playlistItems = $playlistItemCollection->toArrayRecursive();
@@ -121,8 +117,6 @@ class PlaylistsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  PlaylistRequest  $request
-     * @param  Playlist  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(PlaylistRequest $request, Playlist $record)
@@ -147,7 +141,6 @@ class PlaylistsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Playlist  $record
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Playlist $record)

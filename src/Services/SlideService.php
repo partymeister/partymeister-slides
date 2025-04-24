@@ -21,16 +21,16 @@ class SlideService extends BaseService
     public function filters()
     {
         $this->filter->add(new SelectRenderer('slide_type'))
-                     ->setEmptyOption('-- '.trans('partymeister-slides::backend/slides.slide_type').' --')
-                     ->setOptions(trans('partymeister-slides::backend/slides.slide_types'));
+            ->setEmptyOption('-- '.trans('partymeister-slides::backend/slides.slide_type').' --')
+            ->setOptions(trans('partymeister-slides::backend/slides.slide_types'));
 
         $categories = Category::where('scope', 'slides')
-                              ->where('_lft', '>', 1)
-                              ->orderBy('_lft', 'ASC')
-                              ->pluck('name', 'id');
+            ->where('_lft', '>', 1)
+            ->orderBy('_lft', 'ASC')
+            ->pluck('name', 'id');
         $this->filter->add(new SelectRenderer('category_id'))
-                     ->setEmptyOption('-- '.trans('motor-backend::backend/categories.categories').' --')
-                     ->setOptions($categories);
+            ->setEmptyOption('-- '.trans('motor-backend::backend/categories.categories').' --')
+            ->setOptions($categories);
     }
 
     public function beforeUpdate()
@@ -57,7 +57,7 @@ class SlideService extends BaseService
     protected function generatePreview()
     {
         if (config('partymeister-slides.screenshots')) {
-            $browser = new ScreenshotHelper();
+            $browser = new ScreenshotHelper;
         }
 
         if (isset($browser)) {
@@ -65,13 +65,13 @@ class SlideService extends BaseService
             $browser->screenshot(config('app.url_internal').route('backend.slides.show', [$this->record->id], false), storage_path().'/final_'.$this->record->id.'.png', $this->record->id, Slide::class, 'final');
         }
 
-        //$this->record->clearMediaCollection('preview');
-        //$this->record->clearMediaCollection('final');
+        // $this->record->clearMediaCollection('preview');
+        // $this->record->clearMediaCollection('final');
         //
-        //if (is_file(storage_path().'/preview_'.$this->record->id.'.png')) {
+        // if (is_file(storage_path().'/preview_'.$this->record->id.'.png')) {
         //    $this->record->addMedia(storage_path().'/preview_'.$this->record->id.'.png')
         //                 ->toMediaCollection('preview', 'media');
-        //}
+        // }
     }
 
     public function afterUpdate()
