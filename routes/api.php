@@ -25,6 +25,14 @@ Route::group([
     Route::apiResource('slide_clients', 'SlideClientsController');
 });
 
+Route::group([
+    'middleware' => ['bindings'],
+    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix'     => 'api/v2',
+    'as'         => 'api.v2.',
+], function () {
+    Route::apiResource('slide_clients', 'SlideClientsController');
+});
 /**
  * Groups without token necessary
  */

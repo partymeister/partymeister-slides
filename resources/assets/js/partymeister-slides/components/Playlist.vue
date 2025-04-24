@@ -191,7 +191,7 @@
                 }
             });
 
-            axios.get(route('ajax.callbacks.index')+'?per_page=500').then((response) => {
+            axios.get(route('ajax.callbacks.index')+'?per_page=1000').then((response) => {
                 this.callbacks = response.data.data;
             });
         }

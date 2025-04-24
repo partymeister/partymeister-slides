@@ -70,12 +70,14 @@ export default {
                         blinkingBars.push(index);
                         barValues.push(bar.x2);
                     } else {
-                        if (barValues.includes(bar.x2)) {
-                            blinkingBars.push(index);
-                            barValues.push(bar.x2);
-                        } else if (barValues.length < 3) {
-                            blinkingBars.push(index);
-                            barValues.push(bar.x2);
+                        if (this.items[this.currentItem].slide.name != 'Special: Bars') {
+                            if (barValues.includes(bar.x2)) {
+                                blinkingBars.push(index);
+                                barValues.push(bar.x2);
+                            } else if (barValues.length < 3) {
+                                blinkingBars.push(index);
+                                barValues.push(bar.x2);
+                            }
                         }
                     }
                 }

@@ -12,8 +12,6 @@
     }
   ],
   "require": {
-    "php-webdriver/webdriver": "^1.14",
-    "beyondcode/laravel-websockets": "^1.14"
   },
   "autoload": {
     "psr-4": {

@@ -16,7 +16,7 @@ class SlideClientsController extends ApiController
 {
     protected string $model = 'Partymeister\Slides\Models\SlideClient';
 
-    protected string $modelResource = 'slide_client';
+    //protected string $modelResource = 'slide_client';
 
     /**
      * @OA\Get (
