@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "paths": { "@/*": ["./*"] },
+    "types": ["vite/client"]
+  },
+  "include": ["**/*.ts", "**/*.vue", "env.d.ts"]
+}
