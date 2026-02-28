@@ -4,6 +4,13 @@ Route::get('slidemeister-web/{slide_client}', '\Partymeister\Slides\Http\Control
      ->middleware(['bindings'])
      ->name('backend.slidemeister-web.show');
 
+Route::get('slidemeister-editor/{slide_template?}', function ($slideTemplate = null) {
+    return view('partymeister-slides::slidemeister-editor.index', [
+        'template_id' => $slideTemplate,
+        'api_token' => auth()->user()?->api_token ?? '',
+    ]);
+})->middleware(['web', 'web_auth'])->name('backend.slidemeister-editor.show');
+
 Route::group([
     'as'         => 'component.',
     'prefix'     => 'component',
