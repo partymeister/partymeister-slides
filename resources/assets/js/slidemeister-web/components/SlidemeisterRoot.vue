@@ -5,6 +5,8 @@
     <SlideLayer
       ref="slideLayerRef"
       :zoom="playlistStore.zoom"
+      :window-width="playlistStore.windowWidth"
+      :window-height="playlistStore.windowHeight"
       @transition-complete="engine.onTransitionComplete"
     />
 
@@ -19,7 +21,12 @@
       ref="debugPanelRef"
       :tier="keyboard.debugTier.value"
       :midi-output-name="midi.outputName.value"
+      :slide-timer-end="engine.slideTimerEnd.value"
+      :slide-timer-duration="engine.slideTimerDuration.value"
+      :callback-timer-end="engine.callbackTimerEnd.value"
+      :callback-timer-duration="engine.callbackTimerDuration.value"
       @clear-cache="clearCache"
+      @remove-playlist="removePlaylist"
     />
 
     <KeyboardHelp
@@ -80,6 +87,31 @@ const storage = useStorage()
 const midi = useMidi()
 const cables = useCables()
 
+// Siegmeister (declared before engine so clearSiegmeisterBars can reference it)
+const siegmeisterAnimating = ref(false)
+let siegmeisterBarElements: HTMLElement[] = []
+let siegmeisterMetadata: SiegmeisterBarData[] = []
+
+let skipBarClear = false
+
+const siegmeister = useSiegmeister(
+  () => configStore.prizegivingBarColor,
+  () => configStore.prizegivingBarBlinkColor,
+  () => {
+    siegmeisterAnimating.value = false
+    skipBarClear = true
+    engine.seekToNext(true)
+    skipBarClear = false
+  },
+)
+
+function clearSiegmeisterBars() {
+  if (skipBarClear) return
+  const container = siegmeisterOverlayRef.value?.containerRef
+  if (container) siegmeister.clearBars(container)
+  siegmeisterAnimating.value = false
+}
+
 const engine = usePlaylistEngine(
   playlistStore,
   storage,
@@ -87,20 +119,8 @@ const engine = usePlaylistEngine(
   cables,
   slideLayerRef,
   updateStatus,
-)
-
-// Siegmeister
-const siegmeisterAnimating = ref(false)
-let siegmeisterBarElements: HTMLElement[] = []
-let siegmeisterMetadata: SiegmeisterBarData[] = []
-
-const siegmeister = useSiegmeister(
-  () => configStore.prizegivingBarColor,
-  () => configStore.prizegivingBarBlinkColor,
-  () => {
-    siegmeisterAnimating.value = false
-    engine.seekToNext(true)
-  },
+  clearSiegmeisterBars,
+  log,
 )
 
 function triggerSiegmeister() {
@@ -121,7 +141,7 @@ function triggerSiegmeister() {
   siegmeister.clearBars(container)
   siegmeisterAnimating.value = true
   siegmeisterMetadata = metadata as SiegmeisterBarData[]
-  siegmeisterBarElements = siegmeister.renderBars(siegmeisterMetadata, playlistStore.zoom, container)
+  siegmeisterBarElements = siegmeister.renderBars(siegmeisterMetadata, playlistStore.zoom, container, playlistStore.windowWidth, playlistStore.windowHeight)
   siegmeister.animateBars(siegmeisterMetadata, siegmeisterBarElements, playlistStore.zoom)
 }
 
@@ -133,6 +153,11 @@ const jingles = useJingles(
   (note: number) => midi.playNote(note),
 )
 
+// Debug event log helper
+function log(type: 'socket' | 'transition' | 'midi' | 'error', message: string) {
+  debugPanelRef.value?.addLogEvent(type, message)
+}
+
 // Echo (WebSocket)
 const echo = useEcho(
   playlistStore,
@@ -140,24 +165,46 @@ const echo = useEcho(
   engine,
   triggerSiegmeister,
   storage,
+  undefined, // echoFactory
+  log,
 )
 
 // Keyboard
 const keyboard = useKeyboard({
-  seekToNext: (hard) => engine.seekToNext(hard),
-  seekToPrevious: (hard) => engine.seekToPrevious(hard),
-  playJingle: (index) => jingles.play(index),
+  seekToNext: (hard) => {
+    log('transition', `Next (${hard ? 'hard' : 'soft'})`)
+    engine.seekToNext(hard)
+  },
+  seekToPrevious: (hard) => {
+    log('transition', `Previous (${hard ? 'hard' : 'soft'})`)
+    engine.seekToPrevious(hard)
+  },
+  playJingle: (index) => {
+    log('midi', `Jingle ${index}`)
+    jingles.play(index)
+  },
   playMidiOnly: (index) => {
     const note = configStore.getMidiNote(index)
+    log('midi', `MIDI note ${note} (F${index})`)
     if (note > 0) midi.playNote(note)
   },
-  sendStopSignal: () => midi.sendStopSignal(),
+  sendStopSignal: () => {
+    log('midi', 'Stop signal (Escape)')
+    midi.sendStopSignal()
+  },
   stopJingle: () => jingles.stop(),
-  triggerSiegmeister,
+  triggerSiegmeister: () => {
+    log('transition', 'Siegmeister triggered')
+    triggerSiegmeister()
+  },
   getCurrentSlideType: () => playlistStore.effectiveCurrentItem?.slide_type ?? '',
   hasPlaylistItems: () => playlistStore.items.length > 0,
   isPlayNow: () => playlistStore.playNow,
   setClearPlayNowAfter: () => engine.setClearPlayNowAfter(),
+  toggleMute: () => {
+    playlistStore.videoMuted = !playlistStore.videoMuted
+    log('midi', `Video ${playlistStore.videoMuted ? 'muted' : 'unmuted'}`)
+  },
 })
 
 // Window resize
@@ -196,6 +243,13 @@ async function updateStatus(): Promise<void> {
   } catch {
     // Status update failures are non-critical
   }
+}
+
+// Remove single playlist from cache
+async function removePlaylist(id: number) {
+  playlistStore.removeFromCache(id)
+  await storage.save('cachedPlaylists', playlistStore.cachedPlaylists)
+  updateStatus()
 }
 
 // Cache clearing
@@ -245,6 +299,7 @@ async function loadConfiguration(): Promise<void> {
     )
 
     const data = response.data.data
+    configStore.clientName = data.name ?? null
     configStore.setSlideClientConfig(data.configuration)
     const serverConfig = { ...data.websocket, client: String(data.id) }
     configStore.setServerConfig(serverConfig)
@@ -298,8 +353,8 @@ async function restoreState(): Promise<void> {
     })
   }
 
-  // Seek to saved position
-  engine.seekToIndex(savedIndex ?? 0)
+  // Seek to saved position (hard = instant, no animation on restore)
+  engine.seekToIndex(savedIndex ?? 0, true)
 }
 </script>
 

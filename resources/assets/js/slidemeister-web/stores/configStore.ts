@@ -7,6 +7,7 @@ export const useConfigStore = defineStore('config', () => {
   const slideClientConfig = ref<SlideClientConfiguration | null>(null)
   const serverConfig = ref<ServerConfiguration | null>(null)
   const jingles = ref<JingleConfig | null>(null)
+  const clientName = ref<string | null>(null)
 
   const prizegivingBarColor = computed(() => {
     return slideClientConfig.value?.prizegiving_bar_color ?? '#00ff00'
@@ -38,6 +39,7 @@ export const useConfigStore = defineStore('config', () => {
     slideClientConfig,
     serverConfig,
     jingles,
+    clientName,
     prizegivingBarColor,
     prizegivingBarBlinkColor,
     setSlideClientConfig,

@@ -36,6 +36,8 @@ export interface JingleConfig {
 
 export interface SlideClientApiResponse {
   data: {
+    id: number
+    name: string
     configuration: SlideClientConfiguration
     websocket: ServerConfiguration
     jingles: JingleConfig

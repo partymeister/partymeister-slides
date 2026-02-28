@@ -191,6 +191,8 @@ class PlaylistsController extends ApiController
         $result = PlaylistService::show($record)
                                  ->getResult();
 
+        $result->load('items.slide', 'items.transition', 'items.transition_slidemeister', 'items.file_association.file');
+
         return (new PlaylistResource($result))->additional(['message' => 'Playlist read']);
     }
 

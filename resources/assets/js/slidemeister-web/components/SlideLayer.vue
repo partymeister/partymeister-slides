@@ -1,5 +1,5 @@
 <template>
-  <div class="slide-layer" :style="{ transform: `scale(${zoom})`, transformOrigin: 'top left' }">
+  <div class="slide-layer" :style="slideLayerStyle">
     <!-- Displayed slide (currently visible) -->
     <SlideRenderer
       ref="displayedRef"
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import SlideRenderer from './SlideRenderer.vue'
 import type { PlaylistItem } from '@/types/playlist'
 
@@ -43,7 +43,20 @@ const DEFAULT_TRANSITION: [string, string] = ['animate__fadeIn', 'animate__fadeO
 
 const props = defineProps<{
   zoom: number
+  windowWidth: number
+  windowHeight: number
 }>()
+
+const slideLayerStyle = computed(() => {
+  const scaledW = 960 * props.zoom
+  const scaledH = 540 * props.zoom
+  const offsetX = (props.windowWidth - scaledW) / 2
+  const offsetY = (props.windowHeight - scaledH) / 2
+  return {
+    transform: `translate(${offsetX}px, ${offsetY}px) scale(${props.zoom})`,
+    transformOrigin: 'top left',
+  }
+})
 
 const emit = defineEmits<{
   transitionComplete: []
@@ -171,7 +184,9 @@ defineExpose({ transition, setDisplayed })
 
 <style scoped>
 .slide-layer {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 960px;
   height: 540px;
   overflow: hidden;

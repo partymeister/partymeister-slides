@@ -22,8 +22,16 @@ export const usePlaylistStore = defineStore('playlist', () => {
   const savedPlaylistId = ref<number | null>(null)
   const savedItemIndex = ref<number | null>(null)
 
+  // Per-playlist position tracking
+  const playlistPositions = ref<Record<number, number>>({})
+
+  // Audio
+  const videoMuted = ref(false)
+
   // Display
   const zoom = ref(2)
+  const windowWidth = ref(window.innerWidth)
+  const windowHeight = ref(window.innerHeight)
   const currentBackground = ref<string | null>(null)
 
   // Navigation indices
@@ -66,6 +74,17 @@ export const usePlaylistStore = defineStore('playlist', () => {
 
     if (existingIndex >= 0) {
       const existing = cachedPlaylists.value[existingIndex]
+
+      // Always update callback metadata (comes from WebSocket event, not API)
+      if (playlist.callbacks !== undefined) {
+        existing.callbacks = playlist.callbacks
+        if (currentPlaylist.value?.id === playlist.id) currentPlaylist.value.callbacks = playlist.callbacks
+      }
+      if (playlist.callback_url !== undefined) {
+        existing.callback_url = playlist.callback_url
+        if (currentPlaylist.value?.id === playlist.id) currentPlaylist.value.callback_url = playlist.callback_url
+      }
+
       if (existing.updated_at.date !== playlist.updated_at.date) {
         cachedPlaylists.value[existingIndex] = playlist
 
@@ -84,13 +103,36 @@ export const usePlaylistStore = defineStore('playlist', () => {
     }
   }
 
+  function removeFromCache(playlistId: number): void {
+    cachedPlaylists.value = cachedPlaylists.value.filter(p => p.id !== playlistId)
+    delete playlistPositions.value[playlistId]
+    if (currentPlaylist.value?.id === playlistId) {
+      currentPlaylist.value = null
+      items.value = []
+      currentItemIndex.value = null
+    }
+  }
+
   function setActivePlaylist(playlistId: number): boolean {
     const playlist = cachedPlaylists.value.find((p) => p.id === playlistId)
     if (!playlist) return false
 
+    // Save current position before switching
+    if (currentPlaylist.value && currentItemIndex.value !== null) {
+      playlistPositions.value[currentPlaylist.value.id] = currentItemIndex.value
+    }
+
     currentPlaylist.value = playlist
     items.value = playlist.items
     return true
+  }
+
+  function getSavedPosition(playlistId: number): number | undefined {
+    return playlistPositions.value[playlistId]
+  }
+
+  function savePosition(playlistId: number, index: number): void {
+    playlistPositions.value[playlistId] = index
   }
 
   function enterPlayNow(item: PlaylistItem) {
@@ -121,10 +163,12 @@ export const usePlaylistStore = defineStore('playlist', () => {
     savedItemIndex.value = null
   }
 
-  function updateZoom(windowWidth: number, windowHeight: number) {
-    const scaleX = windowWidth / BASE_WIDTH
-    const scaleY = windowHeight / BASE_HEIGHT
+  function updateZoom(w: number, h: number) {
+    const scaleX = w / BASE_WIDTH
+    const scaleY = h / BASE_HEIGHT
     zoom.value = Math.min(scaleX, scaleY)
+    windowWidth.value = w
+    windowHeight.value = h
   }
 
   return {
@@ -139,7 +183,10 @@ export const usePlaylistStore = defineStore('playlist', () => {
     savedPlaylistId,
     savedItemIndex,
     zoom,
+    windowWidth,
+    windowHeight,
     currentBackground,
+    videoMuted,
     // Getters
     nextIndex,
     previousIndex,
@@ -149,7 +196,11 @@ export const usePlaylistStore = defineStore('playlist', () => {
     effectiveCurrentItem,
     // Actions
     cachePlaylist,
+    removeFromCache,
     setActivePlaylist,
+    getSavedPosition,
+    savePosition,
+    playlistPositions,
     enterPlayNow,
     exitPlayNow,
     updateZoom,

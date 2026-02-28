@@ -4,14 +4,15 @@
   <!-- Tier 1: Minimal status bar -->
   <div v-if="tier === 1" class="debug-bar">
     <span class="status-dot" :class="connectionStore.isConnected ? 'connected' : 'disconnected'" />
-    <span>WS: {{ connectionStore.isConnected ? 'Connected' : 'Disconnected' }}</span>
-    <span class="separator">|</span>
-    <span>MIDI: {{ midiOutputName || 'None' }}</span>
+    <span v-if="configStore.clientName" class="client-name">{{ configStore.clientName }}</span>
     <span class="separator">|</span>
     <span v-if="playlistStore.currentPlaylist">
-      Slide {{ (playlistStore.currentItemIndex ?? 0) + 1 }}/{{ playlistStore.items.length }}
+      {{ playlistStore.currentPlaylist.name }} — {{ (playlistStore.currentItemIndex ?? 0) + 1 }}/{{ playlistStore.items.length }}
     </span>
     <span v-else>No playlist</span>
+    <span class="separator">|</span>
+    <span>MIDI: {{ midiOutputName || 'None' }}</span>
+    <span v-if="playlistStore.videoMuted" class="mute-badge">MUTED</span>
     <span v-if="playlistStore.playNow" class="playnow-badge">PLAY NOW</span>
   </div>
 
@@ -19,11 +20,15 @@
   <div v-else-if="tier === 2" class="debug-panel">
     <div class="debug-section">
       <h4>Connection</h4>
+      <div v-if="configStore.clientName">Client: <span class="text-green">{{ configStore.clientName }}</span></div>
       <div>WebSocket: <span :class="connectionStore.isConnected ? 'text-green' : 'text-red'">
         {{ connectionStore.isConnected ? 'Connected' : 'Disconnected' }}
       </span></div>
       <div>Channel: {{ connectionStore.channelName || 'None' }}</div>
       <div>MIDI: {{ midiOutputName || 'No device' }}</div>
+      <div>Video audio: <span :class="playlistStore.videoMuted ? 'text-red' : 'text-green'">
+        {{ playlistStore.videoMuted ? 'Muted' : 'On' }}
+      </span></div>
       <div v-if="connectionStore.lastEventAt">
         Last event: {{ timeSinceLastEvent }}
       </div>
@@ -46,10 +51,27 @@
     <div class="debug-section">
       <h4>Cache</h4>
       <div v-for="p in playlistStore.cachedPlaylists" :key="p.id" class="cache-entry">
-        {{ p.name }} ({{ p.items.length }} items)
+        <span :class="{ 'text-green': playlistStore.currentPlaylist?.id === p.id }">
+          {{ p.name }} ({{ p.items.length }} items)
+        </span>
+        <button class="debug-btn-sm" @click="$emit('removePlaylist', p.id)" title="Remove from cache">x</button>
       </div>
       <div v-if="playlistStore.cachedPlaylists.length === 0">Empty</div>
       <button class="debug-btn" @click="$emit('clearCache')">Empty cache</button>
+    </div>
+
+    <div class="debug-section">
+      <h4>Timers</h4>
+      <div v-if="slideTimerEnd">
+        Auto-advance: <span class="text-green">{{ slideCountdown }}s</span>
+        / {{ ((slideTimerDuration ?? 0) / 1000).toFixed(1) }}s
+      </div>
+      <div v-else>Auto-advance: <span class="text-dim">Manual</span></div>
+      <div v-if="callbackTimerEnd">
+        Callback: <span class="text-yellow">{{ callbackCountdown }}s</span>
+        / {{ ((callbackTimerDuration ?? 0) / 1000).toFixed(1) }}s
+      </div>
+      <div v-else>Callback: <span class="text-dim">None</span></div>
     </div>
 
     <div class="debug-section">
@@ -69,18 +91,25 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { usePlaylistStore } from '@/stores/playlistStore'
 import { useConnectionStore } from '@/stores/connectionStore'
+import { useConfigStore } from '@/stores/configStore'
 
 const props = defineProps<{
   tier: 0 | 1 | 2
   midiOutputName: string | null
+  slideTimerEnd: number | null
+  slideTimerDuration: number | null
+  callbackTimerEnd: number | null
+  callbackTimerDuration: number | null
 }>()
 
 defineEmits<{
   clearCache: []
+  removePlaylist: [id: number]
 }>()
 
 const playlistStore = usePlaylistStore()
 const connectionStore = useConnectionStore()
+const configStore = useConfigStore()
 
 // Event log
 export interface LogEvent {
@@ -94,19 +123,31 @@ const recentEvents = ref<LogEvent[]>([])
 let eventId = 0
 
 function addLogEvent(type: LogEvent['type'], message: string) {
-  const time = new Date().toLocaleTimeString()
+  const now = new Date()
+  const time = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
   recentEvents.value.unshift({ id: ++eventId, type, message, time })
   if (recentEvents.value.length > 50) {
     recentEvents.value.pop()
   }
 }
 
-// Time since last event
+// Time ticker (200ms for smooth countdowns)
 const now = ref(Date.now())
 let timer: ReturnType<typeof setInterval> | null = null
 
 onMounted(() => {
-  timer = setInterval(() => { now.value = Date.now() }, 1000)
+  timer = setInterval(() => { now.value = Date.now() }, 200)
+})
+
+// Countdown computeds
+const slideCountdown = computed(() => {
+  if (!props.slideTimerEnd) return '0.0'
+  return Math.max(0, (props.slideTimerEnd - now.value) / 1000).toFixed(1)
+})
+
+const callbackCountdown = computed(() => {
+  if (!props.callbackTimerEnd) return '0.0'
+  return Math.max(0, (props.callbackTimerEnd - now.value) / 1000).toFixed(1)
 })
 
 onUnmounted(() => {
@@ -150,7 +191,7 @@ defineExpose({ addLogEvent })
   font-family: monospace;
   font-size: 12px;
   padding: 12px;
-  max-width: 360px;
+  max-width: 480px;
   max-height: 100vh;
   overflow-y: auto;
 }
@@ -178,7 +219,19 @@ h4 {
 .disconnected { background: #ef4444; }
 .text-green { color: #22c55e; }
 .text-red { color: #ef4444; }
+.text-yellow { color: #f59e0b; }
+.text-dim { color: #555; }
 .separator { color: #555; }
+.client-name { color: #60a5fa; font-weight: bold; }
+
+.mute-badge {
+  background: #ef4444;
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 11px;
+}
 
 .playnow-badge, .playnow-indicator {
   background: #f59e0b;
@@ -226,6 +279,26 @@ h4 {
 
 .cache-entry {
   padding: 2px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.debug-btn-sm {
+  background: #433;
+  color: #f87171;
+  border: 1px solid #555;
+  padding: 0 5px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 10px;
+  line-height: 16px;
+  flex-shrink: 0;
+}
+
+.debug-btn-sm:hover {
+  background: #644;
 }
 
 .log-empty {

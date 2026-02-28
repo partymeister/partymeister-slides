@@ -7,7 +7,6 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Partymeister\Slides\Http\Resources\PlaylistResource;
 use Partymeister\Slides\Models\Playlist;
 
 /**
@@ -17,24 +16,23 @@ class PlaylistRequest implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var
-     */
-    public $playlist;
+    public int $playlist_id;
+
+    public $callbacks;
+
+    public string $callback_url;
 
     /**
      * Create a new event instance.
-     *
-     * PlaylistRequest constructor.
      *
      * @param  Playlist  $playlist
      * @param    $callbacks
      */
     public function __construct(Playlist $playlist, $callbacks)
     {
-        $this->playlist = (new PlaylistResource($playlist->load('items')))->toArrayRecursive();
-        $this->playlist['callbacks'] = $callbacks;
-        $this->playlist['callback_url'] = config('app.url').'/api-rpc/callback/';
+        $this->playlist_id = $playlist->id;
+        $this->callbacks = $callbacks;
+        $this->callback_url = config('app.url').'/api-rpc/callback/';
     }
 
     /**

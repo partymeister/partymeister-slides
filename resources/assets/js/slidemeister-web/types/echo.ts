@@ -6,7 +6,9 @@ export interface EchoChannel {
 }
 
 export interface PlaylistRequestEvent {
-  playlist: import('./playlist').Playlist
+  playlist_id: number
+  callbacks: any
+  callback_url: string
 }
 
 export interface PlaylistSeekRequestEvent {

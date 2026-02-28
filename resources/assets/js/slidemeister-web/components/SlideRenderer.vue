@@ -7,7 +7,7 @@
         ref="videoRef"
         :src="item.file_association.file.url"
         class="slide-video"
-        muted
+        :muted="playlistStore.videoMuted"
         playsinline
         @error="hasError = true"
       />
@@ -35,8 +35,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { PlaylistItem } from '@/types/playlist'
+import { usePlaylistStore } from '@/stores/playlistStore'
 
 defineProps<{ item?: PlaylistItem }>()
+
+const playlistStore = usePlaylistStore()
 
 const videoRef = ref<HTMLVideoElement | null>(null)
 const hasError = ref(false)
@@ -119,6 +122,18 @@ defineExpose({ playVideo, pauseVideo })
   margin: 0 auto;
   text-align: left;
   font-family: Arial, sans-serif;
+  -webkit-user-modify: read-only;
+}
+
+/* Disable all interactivity on injected slide HTML */
+.slide-html [contenteditable] {
+  -webkit-user-modify: read-only;
+}
+
+.slide-html * {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .slide-html .medium-editor-element p {

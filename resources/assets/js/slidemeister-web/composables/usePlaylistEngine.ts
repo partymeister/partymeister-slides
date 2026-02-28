@@ -17,11 +17,19 @@ export function usePlaylistEngine(
   cables: ReturnType<typeof useCables>,
   slideLayerRef: Ref<SlideLayerRef | null>,
   statusCallback?: () => void,
+  beforeSeekCallback?: () => void,
+  logEvent?: (type: 'socket' | 'transition' | 'midi' | 'error', message: string) => void,
 ) {
   const clearPlayNowAfter = ref(false)
 
   let slideTimeout: ReturnType<typeof setTimeout> | null = null
   let callbackTimeout: ReturnType<typeof setTimeout> | null = null
+
+  // Reactive timer state for debug panel countdowns
+  const slideTimerEnd = ref<number | null>(null)
+  const slideTimerDuration = ref<number | null>(null)
+  const callbackTimerEnd = ref<number | null>(null)
+  const callbackTimerDuration = ref<number | null>(null)
 
   // ── Timeouts ──────────────────────────────────────────────────────
 
@@ -30,13 +38,25 @@ export function usePlaylistEngine(
       clearTimeout(slideTimeout)
       slideTimeout = null
     }
+    slideTimerEnd.value = null
+    slideTimerDuration.value = null
     if (callbackTimeout !== null) {
       clearTimeout(callbackTimeout)
       callbackTimeout = null
     }
+    callbackTimerEnd.value = null
+    callbackTimerDuration.value = null
   }
 
   function setSlideTimeout(): void {
+    // Clear any existing slide timeout to prevent double-fire
+    if (slideTimeout !== null) {
+      clearTimeout(slideTimeout)
+      slideTimeout = null
+    }
+    slideTimerEnd.value = null
+    slideTimerDuration.value = null
+
     if (playlistStore.playNow) return
     if (playlistStore.currentItemIndex === null) return
     if (playlistStore.items.length === 0) return
@@ -44,12 +64,26 @@ export function usePlaylistEngine(
     const item = playlistStore.items[playlistStore.currentItemIndex]
     if (!item || item.is_advanced_manually) return
 
+    const durationMs = item.duration * 1000
+    slideTimerEnd.value = Date.now() + durationMs
+    slideTimerDuration.value = durationMs
+
     slideTimeout = setTimeout(() => {
+      slideTimerEnd.value = null
+      slideTimerDuration.value = null
       seekToNext(false)
-    }, item.duration * 1000)
+    }, durationMs)
   }
 
   function setCallbackDelay(): void {
+    // Clear any existing callback timeout to prevent double-fire
+    if (callbackTimeout !== null) {
+      clearTimeout(callbackTimeout)
+      callbackTimeout = null
+    }
+    callbackTimerEnd.value = null
+    callbackTimerDuration.value = null
+
     if (playlistStore.playNow) return
     if (playlistStore.currentItemIndex === null) return
 
@@ -59,19 +93,43 @@ export function usePlaylistEngine(
     const item = playlistStore.items[playlistStore.currentItemIndex]
     if (!item || !item.callback_hash) return
 
+    const durationMs = item.callback_delay * 1000
+    callbackTimerEnd.value = Date.now() + durationMs
+    callbackTimerDuration.value = durationMs
+
     callbackTimeout = setTimeout(async () => {
+      callbackTimerEnd.value = null
+      callbackTimerDuration.value = null
       try {
-        await fetch(playlist.callback_url + item.callback_hash)
-      } catch {
-        // ignore callback errors
+        const response = await fetch(playlist.callback_url + item.callback_hash, {
+          credentials: 'same-origin',
+        })
+        if (response.ok) {
+          const data = await response.json().catch(() => null)
+          if (data?.status === 'already_fired') {
+            logEvent?.('socket', `Callback ${item.callback_hash.slice(0, 8)}… already fired`)
+          } else {
+            logEvent?.('socket', `Callback ${item.callback_hash.slice(0, 8)}… fired OK`)
+          }
+        } else {
+          logEvent?.('error', `Callback ${item.callback_hash.slice(0, 8)}… HTTP ${response.status}`)
+        }
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err)
+        logEvent?.('error', `Callback ${item.callback_hash.slice(0, 8)}… failed: ${msg}`)
       }
-    }, item.callback_delay * 1000)
+    }, durationMs)
   }
 
   // ── After Seek ────────────────────────────────────────────────────
 
   async function afterSeek(): Promise<void> {
     await storage.save('currentItem', playlistStore.currentItemIndex)
+
+    // Track position per playlist
+    if (playlistStore.currentPlaylist && playlistStore.currentItemIndex !== null) {
+      playlistStore.savePosition(playlistStore.currentPlaylist.id, playlistStore.currentItemIndex)
+    }
 
     if (playlistStore.currentItemIndex !== null) {
       const item = playlistStore.items[playlistStore.currentItemIndex]
@@ -120,6 +178,7 @@ export function usePlaylistEngine(
 
   function seekToNext(hard = true): void {
     clearTimeouts()
+    if (beforeSeekCallback) beforeSeekCallback()
 
     let baseIndex = playlistStore.currentItemIndex ?? 0
     if (playlistStore.playNow && playlistStore.savedItemIndex !== null) {
@@ -144,6 +203,7 @@ export function usePlaylistEngine(
 
   function seekToPrevious(hard = true): void {
     clearTimeouts()
+    if (beforeSeekCallback) beforeSeekCallback()
 
     let baseIndex = playlistStore.currentItemIndex ?? 0
     if (playlistStore.playNow && playlistStore.savedItemIndex !== null) {
@@ -164,17 +224,18 @@ export function usePlaylistEngine(
     if (hard) afterSeek()
   }
 
-  function seekToIndex(index: number): void {
+  function seekToIndex(index: number, hard = false): void {
     if (index < 0 || index >= playlistStore.items.length) return
 
     clearTimeouts()
+    if (beforeSeekCallback) beforeSeekCallback()
 
     const targetItem = playlistStore.items[index]
     playlistStore.currentItemIndex = index
 
-    updateCablesForItem(targetItem, false)
-    slideLayerRef.value?.transition(targetItem, true)
-    afterSeek()
+    updateCablesForItem(targetItem, !hard)
+    slideLayerRef.value?.transition(targetItem, hard)
+    if (hard) afterSeek()
   }
 
   // ── PlayNow ───────────────────────────────────────────────────────
@@ -207,6 +268,10 @@ export function usePlaylistEngine(
     setSlideTimeout,
     setCallbackDelay,
     clearTimeouts,
+    slideTimerEnd,
+    slideTimerDuration,
+    callbackTimerEnd,
+    callbackTimerDuration,
 
     // After seek
     afterSeek,

@@ -12,7 +12,9 @@
           <tr><td><kbd>F1</kbd> - <kbd>F4</kbd></td><td>Play jingle + light</td></tr>
           <tr><td><kbd>F5</kbd> - <kbd>F10</kbd></td><td>MIDI trigger only</td></tr>
           <tr><td><kbd>Esc</kbd></td><td>Stop jingle + MIDI stop</td></tr>
-          <tr><td><kbd>d</kbd></td><td>Cycle debug panel</td></tr>
+          <tr><td><kbd>m</kbd></td><td>Toggle video mute</td></tr>
+          <tr><td><kbd>d</kbd></td><td>Toggle status bar</td></tr>
+          <tr><td><kbd>Shift + d</kbd></td><td>Toggle full debug panel</td></tr>
           <tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr>
         </tbody>
       </table>

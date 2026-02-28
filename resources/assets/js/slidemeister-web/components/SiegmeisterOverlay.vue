@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   isAnimating: boolean
 }>()
 
@@ -20,12 +20,33 @@ defineExpose({ containerRef })
 
 <style scoped>
 .siegmeister-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 1002;
   pointer-events: none;
+}
+</style>
+
+<style>
+.slidemeister-bars {
+  position: absolute;
+  opacity: 0.5;
+}
+
+.slidemeister-bars.active {
+  z-index: 10000;
+}
+
+.slidemeister-bars.blink {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.1;
+  }
 }
 </style>
