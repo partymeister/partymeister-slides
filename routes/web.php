@@ -14,14 +14,43 @@ Route::get('slidemeister-editor/{slide_template?}', function ($slideTemplate = n
     ]);
 })->middleware(['bindings'])->name('backend.slidemeister-editor.show');
 
+Route::get('slidemeister-generator', function () {
+    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+
+    return view('partymeister-slides::slidemeister-generator.index', [
+        'generator_type' => 'start',
+        'api_token' => $apiToken,
+    ]);
+})->name('backend.slidemeister-generator.start');
+
 Route::get('slidemeister-generator/competition/{competition}', function (\Partymeister\Competitions\Models\Competition $competition) {
     $apiToken = \Motor\Backend\Models\User::first()->api_token;
 
     return view('partymeister-slides::slidemeister-generator.index', [
+        'generator_type' => 'competition',
         'competition_id' => $competition->id,
         'api_token' => $apiToken,
     ]);
 })->middleware(['bindings'])->name('backend.slidemeister-generator.competition');
+
+Route::get('slidemeister-generator/schedule/{schedule}', function (\Partymeister\Core\Models\Schedule $schedule) {
+    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+
+    return view('partymeister-slides::slidemeister-generator.index', [
+        'generator_type' => 'timetable',
+        'schedule_id' => $schedule->id,
+        'api_token' => $apiToken,
+    ]);
+})->middleware(['bindings'])->name('backend.slidemeister-generator.schedule');
+
+Route::get('slidemeister-generator/prizegiving', function () {
+    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+
+    return view('partymeister-slides::slidemeister-generator.index', [
+        'generator_type' => 'prizegiving',
+        'api_token' => $apiToken,
+    ]);
+})->middleware(['bindings'])->name('backend.slidemeister-generator.prizegiving');
 
 Route::group([
     'as'         => 'component.',

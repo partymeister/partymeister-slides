@@ -1,6 +1,10 @@
 import type { SlideElement, SlideDefinitions } from '@common/types/editor'
 import { serializeElement, serializeElements } from '@common/composables/useHtmlSerializer'
-import type { GeneratedSlide, CompetitionData, EntryData } from '@/types/generator'
+import type {
+  GeneratedSlide, CompetitionData, EntryData,
+  TimetableRow, TimetableData,
+  PrizegivingRow, PrizegivingCompetition, PrizegivingData,
+} from '@/types/generator'
 
 function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj))
@@ -52,8 +56,196 @@ function renderCompetitionSupport(
   for (const element of Object.values(els)) {
     replaceContent(element, 'headline', headline)
     replaceContent(element, 'body', competitionName)
+    sanitizeContent(element)
   }
   return els
+}
+
+function sanitizeContent(element: SlideElement): void {
+  // Strip \r characters — <br /> handles HTML line breaks, raw \r causes MySQL JSON errors
+  element.properties.content = element.properties.content.replace(/\r/g, '')
+}
+
+function cloneElement(
+  elements: Record<string, SlideElement>,
+  element: SlideElement,
+  suffix: string | number,
+  yOffset: number
+): SlideElement {
+  const cloned = deepClone(element)
+  cloned.name = element.name + '_' + suffix
+
+  const transform = cloned.properties.coordinates.transform
+  // Extract matrix(...) and translate(Xpx, Ypx) parts
+  const matrixMatch = transform.match(/matrix\(([^)]+)\)/)
+  const translateMatch = transform.match(/translate\(([^)]+)\)/)
+
+  let tx = 0, ty = 0
+  if (translateMatch) {
+    const parts = translateMatch[1].replace(/px/g, '').split(',').map((s: string) => parseFloat(s.trim()))
+    tx = parts[0] || 0
+    ty = parts[1] || 0
+  }
+
+  ty += yOffset
+
+  const matrixPart = matrixMatch ? matrixMatch[0] : 'matrix(1, 0, 0, 1, 0, 0)'
+  cloned.properties.coordinates.transform = `${matrixPart} translate(${tx}px, ${ty}px)`
+
+  elements[cloned.name] = cloned
+  return cloned
+}
+
+function replaceColor(element: SlideElement, color: string): void {
+  element.properties.color = color
+}
+
+function findElementByPrettyname(
+  elements: Record<string, SlideElement>,
+  prettyname: string
+): SlideElement | undefined {
+  return Object.values(elements).find(el => el.properties.prettyname === prettyname)
+}
+
+function renderTimetable(
+  elements: Record<string, SlideElement>,
+  headline: string,
+  rows: TimetableRow[]
+): Record<string, SlideElement> {
+  const els = deepClone(elements)
+  replaceContentGlobal(els, 'headline', headline)
+
+  const baseTime = findElementByPrettyname(els, 'timetable_time')
+  const baseType = findElementByPrettyname(els, 'timetable_event_type')
+  const baseName = findElementByPrettyname(els, 'timetable_event_name')
+
+  if (!baseTime || !baseType || !baseName) return els
+
+  let previousTime: string | null = null
+  rows.forEach((row, i) => {
+    let timeEl: SlideElement, typeEl: SlideElement, nameEl: SlideElement
+    if (i === 0) {
+      timeEl = baseTime
+      typeEl = baseType
+      nameEl = baseName
+    } else {
+      timeEl = cloneElement(els, baseTime, i, 40 * i)
+      typeEl = cloneElement(els, baseType, i, 40 * i)
+      nameEl = cloneElement(els, baseName, i, 40 * i)
+    }
+
+    replaceColor(typeEl, row.color)
+
+    if (row.time === previousTime) {
+      replaceContent(timeEl, 'time', '')
+    } else {
+      replaceContent(timeEl, 'time', row.time)
+    }
+
+    replaceContent(typeEl, 'type', row.type)
+    replaceContent(nameEl, 'name', row.name)
+
+    previousTime = row.time
+  })
+
+  for (const el of Object.values(els)) {
+    sanitizeContent(el)
+  }
+
+  return els
+}
+
+function renderPrizegivingSlideOrWinners(
+  elements: Record<string, SlideElement>,
+  headline: string,
+  rows: PrizegivingRow[],
+  includeRank: boolean
+): Record<string, SlideElement> {
+  const els = deepClone(elements)
+  replaceContentGlobal(els, 'headline', headline)
+
+  const baseEntry = findElementByPrettyname(els, 'entry')
+  const baseRemoteType = findElementByPrettyname(els, 'remote_type')
+  const baseRank = findElementByPrettyname(els, 'rank')
+
+  if (!baseEntry || !baseRemoteType || !baseRank) return els
+
+  rows.forEach((row, i) => {
+    let entryEl: SlideElement, remoteTypeEl: SlideElement, rankEl: SlideElement
+    if (i === 0) {
+      entryEl = baseEntry
+      remoteTypeEl = baseRemoteType
+      rankEl = baseRank
+    } else {
+      entryEl = cloneElement(els, baseEntry, i, 50 * i)
+      remoteTypeEl = cloneElement(els, baseRemoteType, i, 50 * i)
+      rankEl = cloneElement(els, baseRank, i, 50 * i)
+    }
+
+    replaceContent(entryEl, ['title', 'author'], [row.title, row.author])
+    replaceContent(remoteTypeEl, 'remote_type', row.remote_type)
+
+    if (includeRank) {
+      replaceContent(rankEl, 'rank', '#' + row.rank)
+    } else {
+      replaceContent(rankEl, 'rank', '')
+      // Calculate bar coordinates for bars slide
+      const coords = calculateBarCoordinates(entryEl, row.points, row.max_points)
+      entryEl.properties.prizegivingbarCoordinates = coords
+    }
+  })
+
+  for (const el of Object.values(els)) {
+    stripLeftoverPlaceholders(el)
+    sanitizeContent(el)
+  }
+
+  return els
+}
+
+interface PrizegivingBarCoordinates {
+  x1: number
+  x2: number
+  y1: number
+  y2: number
+}
+
+function calculateBarCoordinates(
+  element: SlideElement,
+  points: number,
+  maxPoints: number
+): PrizegivingBarCoordinates {
+  const transform = element.properties.coordinates.transform
+  const matrixMatch = transform.match(/matrix\(([^)]+)\)/)
+  const translateMatch = transform.match(/translate\(([^)]+)\)/)
+
+  let mx = 0, my = 0
+  if (matrixMatch) {
+    const vals = matrixMatch[1].split(',').map((s: string) => parseFloat(s.trim()))
+    mx = vals[4] || 0
+    my = vals[5] || 0
+  }
+
+  let tx = 0, ty = 0
+  if (translateMatch) {
+    const parts = translateMatch[1].replace(/px/g, '').split(',').map((s: string) => parseFloat(s.trim()))
+    tx = parts[0] || 0
+    ty = parts[1] || 0
+  }
+
+  const totalX = mx + tx
+  const totalY = my + ty
+  const width = element.properties.coordinates.width
+  const height = element.properties.coordinates.height
+
+  const barWidth = maxPoints === 0 ? 0 : (points / maxPoints) * width
+
+  return {
+    x1: Number((totalX / 960).toFixed(10)),
+    x2: Number(((totalX + barWidth) / 960).toFixed(10)),
+    y1: Number((totalY / 540).toFixed(10)),
+    y2: Number(((totalY + height) / 540).toFixed(10)),
+  }
 }
 
 function renderCompetitionEntry(
@@ -70,6 +262,7 @@ function renderCompetitionEntry(
       replaceContent(element, property, strValue)
     }
     stripLeftoverPlaceholders(element)
+    sanitizeContent(element)
   }
   return els
 }
@@ -82,6 +275,7 @@ function renderCompetitionParticipants(
   for (const element of Object.values(els)) {
     replaceContent(element, 'participants', participantsString)
     stripLeftoverPlaceholders(element)
+    sanitizeContent(element)
   }
   return els
 }
@@ -253,6 +447,135 @@ export function generateCompetitionPlaylist(data: CompetitionData): GeneratedSli
   slides.push(generateSlide(
     'end', 'end', 'End',
     renderCompetitionSupport(endElements, 'End', compName)
+  ))
+
+  return slides
+}
+
+export function generateTimetablePlaylist(data: TimetableData): GeneratedSlide[] {
+  const slides: GeneratedSlide[] = []
+
+  for (const [dayName, chunks] of Object.entries(data.days)) {
+    chunks.forEach((chunk, chunkIndex) => {
+      const elements = parseTemplateDefinitions(data.template.definitions)
+      const rendered = renderTimetable(elements, dayName.toUpperCase(), chunk)
+      slides.push(generateSlide(
+        `${dayName}-${chunkIndex}`, 'timetable', `${dayName} (${chunkIndex + 1})`,
+        rendered
+      ))
+    })
+  }
+
+  return slides
+}
+
+function generateSlideWithMeta(
+  key: string,
+  type: string,
+  name: string,
+  elements: Record<string, SlideElement>,
+  meta?: string
+): GeneratedSlide & { meta?: string } {
+  const slide = generateSlide(key, type, name, elements)
+  if (meta) {
+    ;(slide as GeneratedSlide & { meta?: string }).meta = meta
+  }
+  return slide as GeneratedSlide & { meta?: string }
+}
+
+function collectBarCoordinates(elements: Record<string, SlideElement>): string {
+  const coords: Record<string, PrizegivingBarCoordinates> = {}
+  for (const [name, el] of Object.entries(elements)) {
+    if (el.properties.prizegivingbarCoordinates) {
+      coords[name] = el.properties.prizegivingbarCoordinates
+    }
+  }
+  return JSON.stringify(coords)
+}
+
+export function generatePrizegivingPlaylist(data: PrizegivingData): GeneratedSlide[] {
+  const slides: GeneratedSlide[] = []
+  const t = data.templates
+
+  // Global "Coming up" slide
+  const comingUpEls = parseTemplateDefinitions(t.coming_up.definitions)
+  slides.push(generateSlide(
+    'comingup', 'comingup', 'Prizegiving: Coming up',
+    renderCompetitionSupport(comingUpEls, 'Coming up', 'Prizegiving')
+  ))
+
+  // Global "Now" slide
+  const nowEls = parseTemplateDefinitions(t.now.definitions)
+  slides.push(generateSlide(
+    'now', 'now', 'Prizegiving: Now',
+    renderCompetitionSupport(nowEls, 'Now', 'Prizegiving')
+  ))
+
+  // Per-competition slides
+  for (const [key, competition] of Object.entries(data.results)) {
+    // "Now" slide for this competition
+    const compNowEls = parseTemplateDefinitions(t.coming_up.definitions)
+    slides.push(generateSlide(
+      `${key}_now`, 'now', `Competition: ${key} Now`,
+      renderCompetitionSupport(compNowEls, 'Now', competition.name)
+    ))
+
+    // Optional comments slide
+    if (competition.has_comment && data.comments[key] && data.comments[key] !== '') {
+      const commentsEls = parseTemplateDefinitions(t.comments.definitions)
+      slides.push(generateSlide(
+        `${key}_comments`, 'comments', `Competition: ${key} Comments`,
+        renderCompetitionSupport(commentsEls, competition.name, data.comments[key])
+      ))
+    }
+
+    // Bars slide
+    const barsEls = parseTemplateDefinitions(t.prizegiving.definitions)
+    const barsRendered = renderPrizegivingSlideOrWinners(barsEls, competition.name, competition.entries, false)
+    const barsMeta = collectBarCoordinates(barsRendered)
+    slides.push(generateSlideWithMeta(
+      `${key}_slide`, 'siegmeister_bars', `Competition: ${key} Bars`,
+      barsRendered, barsMeta
+    ))
+
+    // Winners slide
+    const winnersEls = parseTemplateDefinitions(t.prizegiving.definitions)
+    const winnersRendered = renderPrizegivingSlideOrWinners(winnersEls, competition.name, competition.entries, true)
+    slides.push(generateSlide(
+      `${key}_winners`, 'siegmeister_winners', `Competition: ${key} Winners`,
+      winnersRendered
+    ))
+  }
+
+  // Special votes (crowd favourite)
+  if (data.specialVotes.length > 0) {
+    const specialNowEls = parseTemplateDefinitions(t.coming_up.definitions)
+    slides.push(generateSlide(
+      'special_now', 'now', 'Special: Now',
+      renderCompetitionSupport(specialNowEls, 'Now', 'Crowd favourite')
+    ))
+
+    const specialBarsEls = parseTemplateDefinitions(t.prizegiving.definitions)
+    const specialBarsRendered = renderPrizegivingSlideOrWinners(specialBarsEls, 'Crowd favourite', data.specialVotes, false)
+    const specialBarsMeta = collectBarCoordinates(specialBarsRendered)
+    slides.push(generateSlideWithMeta(
+      'special_slide', 'siegmeister_bars', 'Special: Bars',
+      specialBarsRendered, specialBarsMeta
+    ))
+
+    const specialWinnersEls = parseTemplateDefinitions(t.prizegiving.definitions)
+    const specialWinnersRendered = renderPrizegivingSlideOrWinners(specialWinnersEls, 'Crowd favourite', data.specialVotes, true)
+    slides.push(generateSlide(
+      'special_winners', 'siegmeister_winners', 'Special: Winners',
+      specialWinnersRendered
+    ))
+  }
+
+  // End slide
+  const endEls = parseTemplateDefinitions(t.end_of_pg.definitions)
+  slides.push(generateSlide(
+    'end', 'end', 'Prizegiving: End',
+    renderCompetitionSupport(endEls, 'End', 'Prizegiving')
   ))
 
   return slides

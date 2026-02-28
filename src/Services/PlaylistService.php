@@ -118,7 +118,7 @@ class PlaylistService extends BaseService
             $s->category_id = $category->id;
             $s->name = $name;
             $s->slide_type = $slideType;
-            $s->definitions = stripslashes($definitions);
+            $s->definitions = $definitions;
             $s->cached_html_preview = Arr::get($data, 'cached_html_preview.'.$slideName, '');
             $s->cached_html_final = Arr::get($data, 'cached_html_final.'.$slideName, '');
 
@@ -299,7 +299,7 @@ class PlaylistService extends BaseService
                     $s->category_id = $category->id;
                     $s->name = $name;
                     $s->slide_type = $slideType;
-                    $s->definitions = stripslashes($definitions);
+                    $s->definitions = $definitions;
                     $s->cached_html_preview = Arr::get($data, 'cached_html_preview.'.$slideName, '');
                     $s->cached_html_final = Arr::get($data, 'cached_html_final.'.$slideName, '');
 
@@ -513,7 +513,7 @@ class PlaylistService extends BaseService
                     $s->category_id = $category->id;
                     $s->name = $name;
                     $s->slide_type = $slideType;
-                    $s->definitions = stripslashes($definitions);
+                    $s->definitions = $definitions;
                     $s->cached_html_preview = Arr::get($data, 'cached_html_preview.'.$slideName, '');
                     $s->cached_html_final = Arr::get($data, 'cached_html_final.'.$slideName, '');
 

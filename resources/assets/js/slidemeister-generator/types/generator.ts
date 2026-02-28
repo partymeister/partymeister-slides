@@ -46,3 +46,46 @@ export interface VideoData {
   preview: string
   data: Record<string, unknown>
 }
+
+// Timetable types
+
+export interface TimetableRow {
+  name: string
+  type: string
+  color: string
+  time: string
+}
+
+export interface TimetableData {
+  schedule: { id: number; name: string }
+  template: { id: number; definitions: string }
+  days: Record<string, TimetableRow[][]>  // day name → chunks of rows
+}
+
+// Prizegiving types
+
+export interface PrizegivingRow {
+  id: number
+  title: string
+  author: string
+  remote_type: string
+  rank: number
+  points: number
+  max_points: number
+  tie: boolean
+}
+
+export interface PrizegivingCompetition {
+  id: number
+  name: string
+  has_comment: boolean
+  entries: PrizegivingRow[]
+}
+
+export interface PrizegivingData {
+  results: Record<string, PrizegivingCompetition>
+  specialVotes: PrizegivingRow[]
+  comments: Record<string, string>
+  templates: Record<string, { id: number; definitions: string }>
+  config: { entries: number; bar_color: string }
+}

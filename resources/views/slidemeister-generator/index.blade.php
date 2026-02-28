@@ -9,9 +9,6 @@
 
     @include('partymeister-slides::layouts.partials.slide_fonts')
 
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-    </style>
 </head>
 
 <body>
@@ -20,7 +17,13 @@
 <script>
     window.TOKEN = '{{ $api_token }}';
     window.BASE_URL = '{{ config('app.url') }}';
+    window.GENERATOR_TYPE = '{{ $generator_type }}';
+    @if(isset($competition_id))
     window.COMPETITION_ID = {{ $competition_id }};
+    @endif
+    @if(isset($schedule_id))
+    window.SCHEDULE_ID = {{ $schedule_id }};
+    @endif
 </script>
 
 @if(app()->environment('local') && file_exists(public_path('hot-slidemeister-generator')))
@@ -29,7 +32,10 @@
 @else
     @php
         $manifest = json_decode(file_get_contents(public_path('build/slidemeister-generator/.vite/manifest.json')), true);
-        $entry = $manifest['main.ts'] ?? $manifest['resources/assets/js/slidemeister-generator/main.ts'] ?? null;
+        $entry = $manifest['main.ts']
+            ?? $manifest['resources/assets/js/slidemeister-generator/main.ts']
+            ?? $manifest['packages/partymeister-slides/resources/assets/js/slidemeister-generator/main.ts']
+            ?? null;
     @endphp
     @if($entry)
         @if(isset($entry['css']))

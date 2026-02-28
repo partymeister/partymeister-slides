@@ -26,6 +26,7 @@ export default defineConfig({
       '@common': path.resolve(__dirname, '../slidemeister-common'),
     },
   },
+  publicDir: false,
   build: {
     outDir: path.resolve(laravelRoot, 'public/build/slidemeister-generator'),
     emptyOutDir: true,

@@ -1,30 +1,53 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useApi } from '@common/composables/useApi'
-import { generateCompetitionPlaylist, resizeTextAndSerialize } from '@/composables/useSlideReplacer'
+import {
+  generateCompetitionPlaylist,
+  generateTimetablePlaylist,
+  generatePrizegivingPlaylist,
+  resizeTextAndSerialize,
+} from '@/composables/useSlideReplacer'
 import SlidePreview from '@/components/SlidePreview.vue'
-import type { CompetitionData, GeneratedSlide } from '@/types/generator'
+import type { CompetitionData, TimetableData, PrizegivingData, GeneratedSlide } from '@/types/generator'
 
 const api = useApi()
 const state = ref<'loading' | 'preview' | 'saving' | 'saved' | 'error'>('loading')
 const errorMessage = ref('')
-const competitionName = ref('')
+const title = ref('')
 const slides = ref<GeneratedSlide[]>([])
-const competitionData = ref<CompetitionData | null>(null)
+const zoom = ref(0.5)
 
+const generatorType = window.GENERATOR_TYPE || 'competition'
 const competitionId = window.COMPETITION_ID
+const scheduleId = window.SCHEDULE_ID
+
+// Start page state
+const competitions = ref<{ id: number; name: string }[]>([])
+const schedules = ref<{ id: number; name: string }[]>([])
+const selectedCompetitionId = ref<number | null>(null)
+const selectedScheduleId = ref<number | null>(null)
+
+// Store raw data for save payloads
+let competitionData: CompetitionData | null = null
 
 onMounted(async () => {
+  if (generatorType === 'start') {
+    await loadStartPage()
+    return
+  }
+
   try {
-    const data = await api.request<CompetitionData>(
-      'GET',
-      `/api/competitions/${competitionId}/playlist-data`
-    )
-    competitionData.value = data
-    competitionName.value = data.competition.name
-    const generated = generateCompetitionPlaylist(data)
-    resizeTextAndSerialize(generated)
-    slides.value = generated
+    switch (generatorType) {
+      case 'competition':
+        await loadCompetition()
+        break
+      case 'timetable':
+        await loadTimetable()
+        break
+      case 'prizegiving':
+        await loadPrizegiving()
+        break
+    }
     state.value = 'preview'
   } catch (err) {
     errorMessage.value = err instanceof Error ? err.message : 'Failed to load data'
@@ -32,31 +55,113 @@ onMounted(async () => {
   }
 })
 
-async function savePlaylist() {
-  if (!competitionData.value) return
+async function loadStartPage() {
+  try {
+    const [comps, scheds] = await Promise.all([
+      api.request<{ data: { id: number; name: string }[] }>('GET', '/api/competitions'),
+      api.request<{ data: { id: number; name: string }[] }>('GET', '/api/schedules'),
+    ])
+    competitions.value = comps.data
+    schedules.value = scheds.data
+    if (comps.data.length > 0) selectedCompetitionId.value = comps.data[0].id
+    if (scheds.data.length > 0) selectedScheduleId.value = scheds.data[0].id
+    state.value = 'preview'
+  } catch (err) {
+    errorMessage.value = err instanceof Error ? err.message : 'Failed to load data'
+    state.value = 'error'
+  }
+}
 
+function navigateTo(url: string) {
+  window.location.href = url
+}
+
+async function loadCompetition() {
+  const data = await api.request<CompetitionData>(
+    'GET',
+    `/api/competitions/${competitionId}/playlist-data`
+  )
+  competitionData = data
+  title.value = data.competition.name
+  const generated = generateCompetitionPlaylist(data)
+  resizeTextAndSerialize(generated)
+  slides.value = generated
+}
+
+async function loadTimetable() {
+  const data = await api.request<TimetableData>(
+    'GET',
+    `/api/schedules/${scheduleId}/playlist-data`
+  )
+  title.value = data.schedule.name
+  const generated = generateTimetablePlaylist(data)
+  resizeTextAndSerialize(generated)
+  slides.value = generated
+}
+
+async function loadPrizegiving() {
+  const data = await api.request<PrizegivingData>(
+    'GET',
+    `/api/prizegiving/playlist-data`
+  )
+  title.value = 'Prizegiving'
+  const generated = generatePrizegivingPlaylist(data)
+  resizeTextAndSerialize(generated)
+  slides.value = generated
+}
+
+function buildSlidePayloads(): Record<string, unknown>[] {
+  return slides.value
+    .filter(s => !s.type.startsWith('video_'))
+    .map(s => {
+      const defs = JSON.stringify({ elements: s.elements })
+      try {
+        JSON.parse(defs)
+      } catch (e) {
+        throw new Error(`Invalid JSON in definitions for slide "${s.name}": ${(e as Error).message}`)
+      }
+      return {
+        key: s.key,
+        type: s.type,
+        name: s.name,
+        definitions: defs,
+        cached_html_preview: s.html,
+        cached_html_final: s.html,
+        ...(s.id !== undefined ? { id: s.id } : {}),
+        ...((s as GeneratedSlide & { meta?: string }).meta !== undefined
+          ? { meta: (s as GeneratedSlide & { meta?: string }).meta }
+          : {}),
+      }
+    })
+}
+
+async function savePlaylist() {
   state.value = 'saving'
   try {
-    const payload = {
-      slides: slides.value
-        .filter(s => !s.type.startsWith('video_'))
-        .map(s => ({
-          key: s.key,
-          type: s.type,
-          name: s.name,
-          definitions: JSON.stringify({ elements: s.elements }),
-          cached_html_preview: s.html,
-          cached_html_final: s.html,
-          ...(s.id !== undefined ? { id: s.id } : {}),
-        })),
-      videos: competitionData.value.videos.map((v, i) => ({
-        key: `video_${i + 1}`,
-        file_id: v.file_id,
-        data: v.data,
-      })),
+    const slidePayloads = buildSlidePayloads()
+
+    switch (generatorType) {
+      case 'competition': {
+        if (!competitionData) return
+        const payload = {
+          slides: slidePayloads,
+          videos: competitionData.videos.map((v, i) => ({
+            key: `video_${i + 1}`,
+            file_id: v.file_id,
+            data: v.data,
+          })),
+        }
+        await api.request('POST', `/api/competitions/${competitionId}/playlist`, payload)
+        break
+      }
+      case 'timetable':
+        await api.request('POST', `/api/schedules/${scheduleId}/playlist`, { slides: slidePayloads })
+        break
+      case 'prizegiving':
+        await api.request('POST', `/api/prizegiving/playlist`, { slides: slidePayloads })
+        break
     }
 
-    await api.request('POST', `/api/competitions/${competitionId}/playlist`, payload)
     state.value = 'saved'
   } catch (err) {
     errorMessage.value = err instanceof Error ? err.message : 'Failed to save'
@@ -65,114 +170,358 @@ async function savePlaylist() {
 }
 
 function getVideoPreview(slide: GeneratedSlide): string {
-  if (!competitionData.value) return ''
+  if (!competitionData) return ''
   const index = parseInt(slide.type.replace('video_', '')) - 1
-  return competitionData.value.videos[index]?.preview ?? ''
+  return competitionData.videos[index]?.preview ?? ''
+}
+
+const loadingLabel: Record<string, string> = {
+  competition: 'Loading competition data...',
+  timetable: 'Loading schedule data...',
+  prizegiving: 'Loading prizegiving data...',
 }
 </script>
 
 <template>
-  <div id="generator">
-    <div v-if="state === 'loading'" class="status">
-      Loading competition data...
-    </div>
-
-    <div v-else-if="state === 'error'" class="status error">
-      {{ errorMessage }}
-    </div>
-
-    <div v-else-if="state === 'preview' || state === 'saving'">
-      <div class="toolbar">
-        <h2>Competition: {{ competitionName }}</h2>
-        <div class="actions">
+  <div class="generator-app">
+    <div class="generator-toolbar">
+      <div v-if="generatorType !== 'start'" class="toolbar-group">
+        <button class="toolbar-btn" @click="navigateTo('/slidemeister-generator')">Back</button>
+      </div>
+      <div class="toolbar-group">
+        <span class="toolbar-title">{{ title || 'Generator' }}</span>
+      </div>
+      <template v-if="generatorType !== 'start'">
+        <div class="toolbar-separator" />
+        <div class="toolbar-group zoom-control">
+          <span class="zoom-label">Zoom</span>
+          <input
+            type="range"
+            min="0.5"
+            max="1"
+            step="0.05"
+            v-model.number="zoom"
+          />
+          <span class="zoom-value">{{ Math.round(zoom * 100) }}%</span>
+        </div>
+        <div class="toolbar-separator" />
+        <div class="toolbar-group">
+          <span class="slide-count">{{ slides.length }} slides</span>
+        </div>
+        <div style="flex:1" />
+        <div class="toolbar-group">
           <button
-            class="btn btn-success"
-            :disabled="state === 'saving'"
+            class="toolbar-btn primary"
+            :disabled="state === 'saving' || state === 'loading'"
             @click="savePlaylist"
           >
             {{ state === 'saving' ? 'Saving...' : 'Save Playlist' }}
           </button>
         </div>
-      </div>
-
-      <div class="slides-grid">
-        <SlidePreview
-          v-for="slide in slides"
-          :key="slide.key"
-          :html="slide.html"
-          :label="slide.name"
-          :is-video="slide.type.startsWith('video_')"
-          :video-preview="getVideoPreview(slide)"
-        />
-      </div>
+      </template>
     </div>
 
-    <div v-else-if="state === 'saved'" class="status success">
-      Playlist saved successfully!
+    <div class="generator-content">
+      <!-- Start / Landing page -->
+      <template v-if="generatorType === 'start'">
+        <div v-if="state === 'loading'" class="status">Loading...</div>
+        <div v-else-if="state === 'error'" class="status error">{{ errorMessage }}</div>
+        <div v-else class="start-page">
+          <div class="start-card">
+            <h2>Competitions</h2>
+            <div class="start-card-body">
+              <select v-model="selectedCompetitionId" :disabled="competitions.length === 0">
+                <option v-if="competitions.length === 0" :value="null">No competitions</option>
+                <option v-for="c in competitions" :key="c.id" :value="c.id">{{ c.name }}</option>
+              </select>
+              <button
+                class="toolbar-btn primary"
+                :disabled="!selectedCompetitionId"
+                @click="navigateTo(`/slidemeister-generator/competition/${selectedCompetitionId}`)"
+              >
+                Generate
+              </button>
+            </div>
+          </div>
+
+          <div class="start-card">
+            <h2>Schedules</h2>
+            <div class="start-card-body">
+              <select v-model="selectedScheduleId" :disabled="schedules.length === 0">
+                <option v-if="schedules.length === 0" :value="null">No schedules</option>
+                <option v-for="s in schedules" :key="s.id" :value="s.id">{{ s.name }}</option>
+              </select>
+              <button
+                class="toolbar-btn primary"
+                :disabled="!selectedScheduleId"
+                @click="navigateTo(`/slidemeister-generator/schedule/${selectedScheduleId}`)"
+              >
+                Generate
+              </button>
+            </div>
+          </div>
+
+          <div class="start-card">
+            <h2>Prizegiving</h2>
+            <div class="start-card-body">
+              <button
+                class="toolbar-btn primary"
+                @click="navigateTo('/slidemeister-generator/prizegiving')"
+              >
+                Generate
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- Generator content -->
+      <template v-else>
+        <div v-if="state === 'loading'" class="status">
+          {{ loadingLabel[generatorType] }}
+        </div>
+
+        <div v-else-if="state === 'error'" class="status error">
+          {{ errorMessage }}
+        </div>
+
+        <div v-else-if="state === 'saved'" class="status success">
+          Playlist saved successfully!
+        </div>
+
+        <div v-else class="slides-grid">
+          <SlidePreview
+            v-for="slide in slides"
+            :key="slide.key"
+            :html="slide.html"
+            :label="slide.name"
+            :is-video="slide.type.startsWith('video_')"
+            :video-preview="getVideoPreview(slide)"
+            :zoom="zoom"
+          />
+        </div>
+      </template>
+    </div>
+
+    <div class="status-bar">
+      <template v-if="generatorType === 'start'">
+        <span>Select a generator type</span>
+      </template>
+      <template v-else>
+        <span v-if="state === 'loading'">Loading...</span>
+        <span v-else-if="state === 'saving'">Saving playlist...</span>
+        <span v-else-if="state === 'saved'" class="saved-text">Saved</span>
+        <span v-else-if="state === 'error'" class="error-text">Error</span>
+        <span v-else>Ready</span>
+        <span class="spacer" />
+        <span>{{ slides.length }} slides</span>
+      </template>
     </div>
   </div>
 </template>
 
 <style>
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #1a1a2e;
-  color: #eee;
-  padding: 20px;
-}
-
-.toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 10px 0;
-  border-bottom: 1px solid #333;
-}
-
-.toolbar h2 {
+* {
   margin: 0;
-  font-size: 18px;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.btn {
-  padding: 8px 20px;
-  border: none;
+html, body, #app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #1a1a1a;
+  color: #eee;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+}
+
+.generator-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.generator-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #1e1e1e;
+  border-bottom: 1px solid #333;
+  flex-shrink: 0;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 24px;
+  background: #444;
+}
+
+.toolbar-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #eee;
+}
+
+.toolbar-btn {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #eee;
+  padding: 4px 12px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
 }
 
-.btn-success {
-  background: #28a745;
-  color: white;
+.toolbar-btn:hover:not(:disabled) {
+  background: #3a3a3a;
 }
 
-.btn-success:hover {
-  background: #218838;
+.toolbar-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
-.btn-success:disabled {
-  background: #666;
-  cursor: not-allowed;
+.toolbar-btn.primary {
+  background: #1a5a2a;
+  border-color: #2a7a3a;
+}
+
+.toolbar-btn.primary:hover:not(:disabled) {
+  background: #2a7a3a;
+}
+
+.zoom-control {
+  gap: 8px;
+}
+
+.zoom-label {
+  color: #888;
+  font-size: 12px;
+}
+
+.zoom-control input[type="range"] {
+  width: 120px;
+  accent-color: #4a9eff;
+}
+
+.zoom-value {
+  color: #aaa;
+  font-size: 12px;
+  font-family: monospace;
+  min-width: 36px;
+}
+
+.slide-count {
+  color: #888;
+  font-size: 12px;
+}
+
+.generator-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
 }
 
 .slides-grid {
   display: flex;
   flex-wrap: wrap;
+  gap: 12px;
 }
 
 .status {
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 14px;
+  color: #888;
 }
 
-.error {
+.status.error {
   color: #ff6b6b;
 }
 
-.success {
-  color: #51cf66;
+.status.success {
+  color: #2a7a3a;
+}
+
+.status-bar {
+  display: flex;
+  gap: 16px;
+  padding: 4px 12px;
+  background: #1a1a1a;
+  border-top: 1px solid #333;
+  font-size: 12px;
+  color: #888;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.status-bar .spacer {
+  flex: 1;
+}
+
+.status-bar .saved-text {
+  color: #2a7a3a;
+  font-weight: 600;
+}
+
+.status-bar .error-text {
+  color: #ff6b6b;
+}
+
+.start-page {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 24px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.start-card {
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 20px;
+  min-width: 280px;
+  max-width: 360px;
+  flex: 1;
+}
+
+.start-card h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #eee;
+  margin-bottom: 12px;
+}
+
+.start-card-body {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.start-card-body select {
+  flex: 1;
+  background: #1a1a1a;
+  border: 1px solid #444;
+  color: #eee;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.start-card-body select:disabled {
+  opacity: 0.4;
 }
 </style>
