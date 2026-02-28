@@ -144,8 +144,9 @@ defineExpose({ playVideo, pauseVideo })
   display: none;
 }
 
-/* Hide preview-only layers (static BG, panels) — CABLES.gl provides the animated background */
+/* Hide preview-only layers (static BG, panels) — CABLES.gl provides the animated background.
+   !important needed to override inline display:flex on serialized elements. */
 .slide-html div[data-partymeister-slides-visibility='preview'] {
-  display: none;
+  display: none !important;
 }
 </style>
