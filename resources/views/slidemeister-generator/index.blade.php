@@ -24,6 +24,9 @@
     @if(isset($schedule_id))
     window.SCHEDULE_ID = {{ $schedule_id }};
     @endif
+    @if(isset($event_id))
+    window.EVENT_ID = {{ $event_id }};
+    @endif
 </script>
 
 @if(app()->environment('local') && file_exists(public_path('hot-slidemeister-generator')))

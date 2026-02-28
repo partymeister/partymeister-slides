@@ -4,6 +4,7 @@ import type {
   GeneratedSlide, CompetitionData, EntryData,
   TimetableRow, TimetableData,
   PrizegivingRow, PrizegivingCompetition, PrizegivingData,
+  EventData,
 } from '@/types/generator'
 
 function deepClone<T>(obj: T): T {
@@ -391,6 +392,63 @@ function generateSlide(
     html: serializeElements(elements),
     ...(id !== undefined ? { id } : {}),
   }
+}
+
+function renderEventSupport(
+  elements: Record<string, SlideElement>,
+  headline: string,
+  eventName: string
+): Record<string, SlideElement> {
+  const els = deepClone(elements)
+  for (const element of Object.values(els)) {
+    replaceContent(element, 'headline', headline)
+    replaceContent(element, 'body', eventName)
+    sanitizeContent(element)
+  }
+  return els
+}
+
+export function generateEventPlaylist(data: EventData): GeneratedSlide[] {
+  const slides: GeneratedSlide[] = []
+  const eventName = data.event.name
+
+  // Coming up
+  if (data.templates.coming_up) {
+    const els = parseTemplateDefinitions(data.templates.coming_up.definitions)
+    slides.push(generateSlide(
+      'comingup', 'comingup', 'Coming up',
+      renderEventSupport(els, 'Coming up', eventName)
+    ))
+  }
+
+  // Now
+  if (data.templates.now) {
+    const els = parseTemplateDefinitions(data.templates.now.definitions)
+    slides.push(generateSlide(
+      'now', 'now', 'Now',
+      renderEventSupport(els, 'Now', eventName)
+    ))
+  }
+
+  // Default (empty)
+  if (data.templates.default) {
+    const els = parseTemplateDefinitions(data.templates.default.definitions)
+    slides.push(generateSlide(
+      'default', 'default', 'Default',
+      renderEventSupport(els, '', eventName)
+    ))
+  }
+
+  // End
+  if (data.templates.end) {
+    const els = parseTemplateDefinitions(data.templates.end.definitions)
+    slides.push(generateSlide(
+      'end', 'end', 'End',
+      renderEventSupport(els, 'End', eventName)
+    ))
+  }
+
+  return slides
 }
 
 export function generateCompetitionPlaylist(data: CompetitionData): GeneratedSlide[] {

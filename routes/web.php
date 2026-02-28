@@ -62,6 +62,16 @@ Route::get('slidemeister-generator/schedule/{schedule}', function (\Partymeister
     ]);
 })->middleware(['bindings'])->name('backend.slidemeister-generator.schedule');
 
+Route::get('slidemeister-generator/event/{event}', function (\Partymeister\Core\Models\Event $event) {
+    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+
+    return view('partymeister-slides::slidemeister-generator.index', [
+        'generator_type' => 'event',
+        'event_id' => $event->id,
+        'api_token' => $apiToken,
+    ]);
+})->middleware(['bindings'])->name('backend.slidemeister-generator.event');
+
 Route::get('slidemeister-generator/prizegiving', function () {
     $apiToken = \Motor\Backend\Models\User::first()->api_token;
 

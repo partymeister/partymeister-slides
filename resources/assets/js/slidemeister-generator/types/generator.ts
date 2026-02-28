@@ -82,6 +82,13 @@ export interface PrizegivingCompetition {
   entries: PrizegivingRow[]
 }
 
+// Event types
+
+export interface EventData {
+  event: { id: number; name: string }
+  templates: Record<string, { id: number; definitions: string }>
+}
+
 export interface PrizegivingData {
   results: Record<string, PrizegivingCompetition>
   specialVotes: PrizegivingRow[]

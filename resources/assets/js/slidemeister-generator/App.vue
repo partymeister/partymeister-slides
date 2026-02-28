@@ -5,10 +5,11 @@ import {
   generateCompetitionPlaylist,
   generateTimetablePlaylist,
   generatePrizegivingPlaylist,
+  generateEventPlaylist,
   resizeTextAndSerialize,
 } from '@/composables/useSlideReplacer'
 import SlidePreview from '@/components/SlidePreview.vue'
-import type { CompetitionData, TimetableData, PrizegivingData, GeneratedSlide } from '@/types/generator'
+import type { CompetitionData, TimetableData, PrizegivingData, EventData, GeneratedSlide } from '@/types/generator'
 
 const api = useApi()
 const state = ref<'loading' | 'preview' | 'saving' | 'saved' | 'error'>('loading')
@@ -20,12 +21,15 @@ const zoom = ref(0.5)
 const generatorType = window.GENERATOR_TYPE || 'competition'
 const competitionId = window.COMPETITION_ID
 const scheduleId = window.SCHEDULE_ID
+const eventId = window.EVENT_ID
 
 // Start page state
 const competitions = ref<{ id: number; name: string }[]>([])
 const schedules = ref<{ id: number; name: string }[]>([])
+const events = ref<{ id: number; name: string }[]>([])
 const selectedCompetitionId = ref<number | null>(null)
 const selectedScheduleId = ref<number | null>(null)
+const selectedEventId = ref<number | null>(null)
 
 // Store raw data for save payloads
 let competitionData: CompetitionData | null = null
@@ -47,6 +51,9 @@ onMounted(async () => {
       case 'prizegiving':
         await loadPrizegiving()
         break
+      case 'event':
+        await loadEvent()
+        break
     }
     state.value = 'preview'
   } catch (err) {
@@ -57,14 +64,17 @@ onMounted(async () => {
 
 async function loadStartPage() {
   try {
-    const [comps, scheds] = await Promise.all([
+    const [comps, scheds, evts] = await Promise.all([
       api.request<{ data: { id: number; name: string }[] }>('GET', '/api/competitions'),
       api.request<{ data: { id: number; name: string }[] }>('GET', '/api/schedules'),
+      api.request<{ data: { id: number; name: string }[] }>('GET', '/api/events'),
     ])
     competitions.value = comps.data
     schedules.value = scheds.data
+    events.value = evts.data
     if (comps.data.length > 0) selectedCompetitionId.value = comps.data[0].id
     if (scheds.data.length > 0) selectedScheduleId.value = scheds.data[0].id
+    if (evts.data.length > 0) selectedEventId.value = evts.data[0].id
     state.value = 'preview'
   } catch (err) {
     errorMessage.value = err instanceof Error ? err.message : 'Failed to load data'
@@ -95,6 +105,17 @@ async function loadTimetable() {
   )
   title.value = data.schedule.name
   const generated = generateTimetablePlaylist(data)
+  resizeTextAndSerialize(generated)
+  slides.value = generated
+}
+
+async function loadEvent() {
+  const data = await api.request<EventData>(
+    'GET',
+    `/api/events/${eventId}/playlist-data`
+  )
+  title.value = data.event.name
+  const generated = generateEventPlaylist(data)
   resizeTextAndSerialize(generated)
   slides.value = generated
 }
@@ -160,6 +181,9 @@ async function savePlaylist() {
       case 'prizegiving':
         await api.request('POST', `/api/prizegiving/playlist`, { slides: slidePayloads })
         break
+      case 'event':
+        await api.request('POST', `/api/events/${eventId}/playlist`, { slides: slidePayloads })
+        break
     }
 
     state.value = 'saved'
@@ -179,6 +203,7 @@ const loadingLabel: Record<string, string> = {
   competition: 'Loading competition data...',
   timetable: 'Loading schedule data...',
   prizegiving: 'Loading prizegiving data...',
+  event: 'Loading event data...',
 }
 </script>
 
@@ -229,48 +254,57 @@ const loadingLabel: Record<string, string> = {
         <div v-else class="start-page">
           <div class="start-card">
             <h2>Competitions</h2>
-            <div class="start-card-body">
-              <select v-model="selectedCompetitionId" :disabled="competitions.length === 0">
-                <option v-if="competitions.length === 0" :value="null">No competitions</option>
-                <option v-for="c in competitions" :key="c.id" :value="c.id">{{ c.name }}</option>
-              </select>
-              <button
-                class="toolbar-btn primary"
-                :disabled="!selectedCompetitionId"
-                @click="navigateTo(`/slidemeister-generator/competition/${selectedCompetitionId}`)"
-              >
-                Generate
-              </button>
-            </div>
+            <select v-model="selectedCompetitionId" :disabled="competitions.length === 0">
+              <option v-if="competitions.length === 0" :value="null">No competitions</option>
+              <option v-for="c in competitions" :key="c.id" :value="c.id">{{ c.name }}</option>
+            </select>
+            <button
+              class="start-card-btn"
+              :disabled="!selectedCompetitionId"
+              @click="navigateTo(`/slidemeister-generator/competition/${selectedCompetitionId}`)"
+            >
+              Generate
+            </button>
           </div>
 
           <div class="start-card">
             <h2>Schedules</h2>
-            <div class="start-card-body">
-              <select v-model="selectedScheduleId" :disabled="schedules.length === 0">
-                <option v-if="schedules.length === 0" :value="null">No schedules</option>
-                <option v-for="s in schedules" :key="s.id" :value="s.id">{{ s.name }}</option>
-              </select>
-              <button
-                class="toolbar-btn primary"
-                :disabled="!selectedScheduleId"
-                @click="navigateTo(`/slidemeister-generator/schedule/${selectedScheduleId}`)"
-              >
-                Generate
-              </button>
-            </div>
+            <select v-model="selectedScheduleId" :disabled="schedules.length === 0">
+              <option v-if="schedules.length === 0" :value="null">No schedules</option>
+              <option v-for="s in schedules" :key="s.id" :value="s.id">{{ s.name }}</option>
+            </select>
+            <button
+              class="start-card-btn"
+              :disabled="!selectedScheduleId"
+              @click="navigateTo(`/slidemeister-generator/schedule/${selectedScheduleId}`)"
+            >
+              Generate
+            </button>
+          </div>
+
+          <div class="start-card">
+            <h2>Events</h2>
+            <select v-model="selectedEventId" :disabled="events.length === 0">
+              <option v-if="events.length === 0" :value="null">No events</option>
+              <option v-for="e in events" :key="e.id" :value="e.id">{{ e.name }}</option>
+            </select>
+            <button
+              class="start-card-btn"
+              :disabled="!selectedEventId"
+              @click="navigateTo(`/slidemeister-generator/event/${selectedEventId}`)"
+            >
+              Generate
+            </button>
           </div>
 
           <div class="start-card">
             <h2>Prizegiving</h2>
-            <div class="start-card-body">
-              <button
-                class="toolbar-btn primary"
-                @click="navigateTo('/slidemeister-generator/prizegiving')"
-              >
-                Generate
-              </button>
-            </div>
+            <button
+              class="start-card-btn"
+              @click="navigateTo('/slidemeister-generator/prizegiving')"
+            >
+              Generate
+            </button>
           </div>
         </div>
       </template>
@@ -480,12 +514,12 @@ html, body, #app {
 }
 
 .start-page {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
   padding: 24px;
-  justify-content: center;
-  align-items: flex-start;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .start-card {
@@ -493,35 +527,50 @@ html, body, #app {
   border: 1px solid #444;
   border-radius: 8px;
   padding: 20px;
-  min-width: 280px;
-  max-width: 360px;
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .start-card h2 {
   font-size: 15px;
   font-weight: 600;
   color: #eee;
-  margin-bottom: 12px;
 }
 
-.start-card-body {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.start-card-body select {
-  flex: 1;
+.start-card select {
+  width: 100%;
   background: #1a1a1a;
   border: 1px solid #444;
   color: #eee;
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-radius: 4px;
   font-size: 13px;
+  min-width: 0;
 }
 
-.start-card-body select:disabled {
+.start-card select:disabled {
   opacity: 0.4;
+}
+
+.start-card-btn {
+  width: 100%;
+  background: #1a5a2a;
+  border: 1px solid #2a7a3a;
+  color: #eee;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.start-card-btn:hover:not(:disabled) {
+  background: #2a7a3a;
+}
+
+.start-card-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 </style>

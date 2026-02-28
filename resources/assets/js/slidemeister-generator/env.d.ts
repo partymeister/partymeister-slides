@@ -5,5 +5,6 @@ interface Window {
   BASE_URL: string
   COMPETITION_ID: number
   SCHEDULE_ID: number
-  GENERATOR_TYPE: 'start' | 'competition' | 'timetable' | 'prizegiving'
+  EVENT_ID: number
+  GENERATOR_TYPE: 'start' | 'competition' | 'timetable' | 'prizegiving' | 'event'
 }
