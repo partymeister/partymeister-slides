@@ -14,6 +14,15 @@ Route::get('slidemeister-editor/{slide_template?}', function ($slideTemplate = n
     ]);
 })->middleware(['bindings'])->name('backend.slidemeister-editor.show');
 
+Route::get('slidemeister-generator/competition/{competition}', function (\Partymeister\Competitions\Models\Competition $competition) {
+    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+
+    return view('partymeister-slides::slidemeister-generator.index', [
+        'competition_id' => $competition->id,
+        'api_token' => $apiToken,
+    ]);
+})->middleware(['bindings'])->name('backend.slidemeister-generator.competition');
+
 Route::group([
     'as'         => 'component.',
     'prefix'     => 'component',
