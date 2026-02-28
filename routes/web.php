@@ -5,9 +5,12 @@ Route::get('slidemeister-web/{slide_client}', '\Partymeister\Slides\Http\Control
      ->name('backend.slidemeister-web.show');
 
 Route::get('slidemeister-editor/{slide_template?}', function ($slideTemplate = null) {
+    // FIXME: same approach as SlidemeisterWebController — use first user's token
+    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+
     return view('partymeister-slides::slidemeister-editor.index', [
         'template_id' => $slideTemplate,
-        'api_token' => auth()->user()?->api_token ?? '',
+        'api_token' => $apiToken,
     ]);
 })->middleware(['web', 'web_auth'])->name('backend.slidemeister-editor.show');
 
