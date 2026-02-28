@@ -24,6 +24,8 @@ class SlidemeisterWebController extends Controller
         // Master api_token
         $apiToken = User::first()->api_token;
 
-        return view('partymeister-slides::slidemeister-web/index', ['api_token' => $apiToken]);
+        $template = config('partymeister-slides.slidemeister_web_template', 'index');
+
+        return view('partymeister-slides::slidemeister-web/' . $template, ['api_token' => $apiToken]);
     }
 }
