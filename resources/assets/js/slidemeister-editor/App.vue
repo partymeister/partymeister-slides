@@ -16,6 +16,10 @@ import PropertiesPanel from '@/components/PropertiesPanel.vue'
 import LayersPanel from '@/components/LayersPanel.vue'
 import MediaPanel from '@/components/MediaPanel.vue'
 import DropZone from '@/components/DropZone.vue'
+import StartPage from '@/components/StartPage.vue'
+
+const editorMode = window.EDITOR_MODE || 'start'
+const entityId = window.ENTITY_ID
 
 const editorStore = useEditorStore()
 const history = useHistory(editorStore)
@@ -252,23 +256,41 @@ async function onSave(): Promise<void> {
   try {
     const api = (await import('@common/composables/useApi')).useApi()
     const defs = editorStore.toDefinitions()
-    const payload = {
-      name: editorStore.templateName,
-      template_for: editorStore.templateType,
-      definitions: JSON.stringify(defs),
-      cached_html_preview: html,
-      cached_html_final: html,
-    }
-    if (editorStore.templateId !== null) {
-      await api.saveTemplate(editorStore.templateId, payload)
+
+    if (editorStore.editorMode === 'slide') {
+      const payload = {
+        name: editorStore.templateName,
+        definitions: JSON.stringify(defs),
+        cached_html_preview: html,
+        cached_html_final: html,
+      }
+      if (editorStore.entityId !== null) {
+        await api.saveSlide(editorStore.entityId, payload)
+      } else {
+        const response = await api.createSlide(payload)
+        editorStore.entityId = response.id
+        window.location.href = `/slidemeister-editor/slide/${response.id}`
+        return
+      }
     } else {
-      const response = await api.createTemplate(payload)
-      editorStore.templateId = response.id
-      window.location.href = `/slidemeister-editor/${response.id}`
-      return
+      const payload = {
+        name: editorStore.templateName,
+        template_for: editorStore.templateType,
+        definitions: JSON.stringify(defs),
+        cached_html_preview: html,
+        cached_html_final: html,
+      }
+      if (editorStore.templateId !== null) {
+        await api.saveTemplate(editorStore.templateId, payload)
+      } else {
+        const response = await api.createTemplate(payload)
+        editorStore.templateId = response.id
+        window.location.href = `/slidemeister-editor/template/${response.id}`
+        return
+      }
     }
+
     editorStore.isDirty = false
-    // Show saved toast
     showSavedToast.value = true
     setTimeout(() => { showSavedToast.value = false }, 2000)
   } finally {
@@ -354,20 +376,22 @@ function onDeleteElement(name: string): void {
   editorStore.deleteElement(name)
 }
 
-// Load template on mount if TEMPLATE_ID is set
+// Load entity on mount based on EDITOR_MODE
 onMounted(async () => {
+  if (editorMode === 'start') return
   fonts.fetchFonts()
-  const templateId = window.TEMPLATE_ID
-  if (templateId) {
-    await editorStore.loadFromApi(templateId)
-    nextTick(() => {
-      setTimeout(() => {
-        resizeAllElements()
-        editorStore.isDirty = false
-        history.reset()
-      }, 100)
-    })
+  if (editorMode === 'template' && entityId) {
+    await editorStore.loadFromApi(entityId)
+  } else if (editorMode === 'slide' && entityId) {
+    await editorStore.loadSlideFromApi(entityId)
   }
+  nextTick(() => {
+    setTimeout(() => {
+      resizeAllElements()
+      editorStore.isDirty = false
+      history.reset()
+    }, 100)
+  })
 })
 
 onUnmounted(() => {
@@ -376,7 +400,9 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <StartPage v-if="editorMode === 'start'" />
   <div
+    v-else
     class="editor-app"
     @dragenter="fileDrop.onDragEnter"
     @dragover="fileDrop.onDragOver"

@@ -42,6 +42,11 @@ function formatType(t: string): string {
     .join(' ')
 }
 
+function goBack(): void {
+  const tab = editorStore.editorMode === 'slide' ? 'slides' : 'templates'
+  window.location.href = `/slidemeister-editor#${tab}`
+}
+
 function onAdd(): void {
   props.checkpoint()
   editorStore.addElement()
@@ -65,6 +70,13 @@ function onDelete(): void {
 
 <template>
   <div class="actions-toolbar">
+    <!-- Back button -->
+    <div class="toolbar-group">
+      <button @click="goBack" class="toolbar-btn" title="Back to start page">Back</button>
+    </div>
+
+    <div class="toolbar-separator" />
+
     <!-- Template metadata -->
     <div class="toolbar-group">
       <input
@@ -74,9 +86,10 @@ function onDelete(): void {
         class="toolbar-input name-input"
         @input="editorStore.isDirty = true"
       />
-      <select v-model="editorStore.templateType" class="toolbar-select" @change="editorStore.isDirty = true">
+      <select v-if="editorStore.editorMode === 'template'" v-model="editorStore.templateType" class="toolbar-select" @change="editorStore.isDirty = true">
         <option v-for="t in templateTypes" :key="t" :value="t">{{ formatType(t) }}</option>
       </select>
+      <span v-else class="toolbar-label">{{ formatType(editorStore.templateType) }}</span>
     </div>
 
     <div class="toolbar-separator" />
@@ -193,6 +206,11 @@ function onDelete(): void {
   background: #1a3a5a;
   border-color: #4a9eff;
   color: #4a9eff;
+}
+
+.toolbar-label {
+  color: #888;
+  font-size: 12px;
 }
 
 .dirty-indicator {

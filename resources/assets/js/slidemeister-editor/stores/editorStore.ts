@@ -8,6 +8,8 @@ export const useEditorStore = defineStore('editor', () => {
   const api = useApi()
 
   // ── Identity ──
+  const entityId = ref<number | null>(null)
+  const editorMode = ref<'template' | 'slide'>('template')
   const templateId = ref<number | null>(null)
   const templateName = ref('')
   const templateType = ref<TemplateType>('basic')
@@ -158,6 +160,17 @@ export const useEditorStore = defineStore('editor', () => {
     const defs: SlideDefinitions = JSON.parse(response.definitions)
     loadDefinitions(defs)
     templateId.value = id
+    entityId.value = id
+    editorMode.value = 'template'
+    templateName.value = response.name
+  }
+
+  async function loadSlideFromApi(id: number): Promise<void> {
+    const response = await api.getSlide(id)
+    const defs: SlideDefinitions = JSON.parse(response.definitions)
+    loadDefinitions(defs)
+    entityId.value = id
+    editorMode.value = 'slide'
     templateName.value = response.name
   }
 
@@ -188,6 +201,8 @@ export const useEditorStore = defineStore('editor', () => {
 
   return {
     // Identity
+    entityId,
+    editorMode,
     templateId,
     templateName,
     templateType,
@@ -226,6 +241,7 @@ export const useEditorStore = defineStore('editor', () => {
 
     // Persistence
     loadFromApi,
+    loadSlideFromApi,
     saveToApi,
   }
 })

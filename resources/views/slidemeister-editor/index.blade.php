@@ -11,7 +11,7 @@
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; overflow: hidden; }
+        html, body { width: 100%; height: 100%; }
     </style>
 </head>
 
@@ -21,7 +21,8 @@
 <script>
     window.TOKEN = '{{ $api_token }}';
     window.BASE_URL = '{{ config('app.url') }}';
-    window.TEMPLATE_ID = {{ $template_id ?? 'null' }};
+    window.EDITOR_MODE = '{{ $editor_mode ?? 'start' }}';
+    window.ENTITY_ID = {{ $entity_id ?? 'null' }};
 </script>
 
 @if(app()->environment('local') && file_exists(public_path('hot-slidemeister-editor')))

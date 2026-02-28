@@ -1,8 +1,11 @@
 import type {
   SlideTemplateResponse,
+  SlideResponse,
   ApiResponse,
+  PaginatedResponse,
   FontResponse,
   SaveTemplateData,
+  SaveSlideData,
 } from '@common/types/api'
 
 function baseUrl(): string {
@@ -57,6 +60,31 @@ export function useApi() {
     await request<void>('DELETE', `/api/slide_templates/${id}`)
   }
 
+  async function listTemplates(params?: string): Promise<PaginatedResponse<SlideTemplateResponse>> {
+    const qs = params ? `?${params}` : ''
+    return request<PaginatedResponse<SlideTemplateResponse>>('GET', `/api/slide_templates${qs}`)
+  }
+
+  async function getSlide(id: number): Promise<SlideResponse> {
+    const res = await request<ApiResponse<SlideResponse>>('GET', `/api/slides/${id}`)
+    return res.data
+  }
+
+  async function listSlides(params?: string): Promise<PaginatedResponse<SlideResponse>> {
+    const qs = params ? `?${params}` : ''
+    return request<PaginatedResponse<SlideResponse>>('GET', `/api/slides${qs}`)
+  }
+
+  async function saveSlide(id: number, data: SaveSlideData): Promise<SlideResponse> {
+    const res = await request<ApiResponse<SlideResponse>>('PUT', `/api/slides/${id}`, data)
+    return res.data
+  }
+
+  async function createSlide(data: SaveSlideData): Promise<SlideResponse> {
+    const res = await request<ApiResponse<SlideResponse>>('POST', '/api/slides', data)
+    return res.data
+  }
+
   async function listFonts(): Promise<FontResponse[]> {
     try {
       const res = await request<ApiResponse<FontResponse[]>>('GET', '/api/slidemeister/fonts')
@@ -72,9 +100,14 @@ export function useApi() {
   return {
     request,
     getTemplate,
+    listTemplates,
     saveTemplate,
     createTemplate,
     deleteTemplate,
+    getSlide,
+    listSlides,
+    saveSlide,
+    createSlide,
     listFonts,
   }
 }
