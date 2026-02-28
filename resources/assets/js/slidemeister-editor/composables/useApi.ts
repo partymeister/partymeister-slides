@@ -59,7 +59,7 @@ export function useApi() {
 
   async function listFonts(): Promise<FontResponse[]> {
     try {
-      const res = await request<ApiResponse<FontResponse[]>>('GET', '/api/fonts')
+      const res = await request<ApiResponse<FontResponse[]>>('GET', '/api/slidemeister/fonts')
       return res.data
     } catch (err) {
       if (err instanceof Error && err.message.includes('404')) {

@@ -14,6 +14,7 @@ export interface ApiResponse<T> {
 
 export interface FontResponse {
   name: string
+  path: string
   family: string
 }
 

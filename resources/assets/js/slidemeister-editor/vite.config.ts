@@ -13,7 +13,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: path.resolve(laravelRoot, 'public/slidemeister-editor'),
+    outDir: path.resolve(laravelRoot, 'public/build/slidemeister-editor'),
     emptyOutDir: true,
     manifest: true,
     rollupOptions: {

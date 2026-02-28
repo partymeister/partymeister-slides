@@ -26,6 +26,7 @@ export interface SlideElementProperties {
   fontWeight: string
   fontStretch: string
   fontStyle: string
+  letterSpacing: string
   calculatedFontSize: string
 
   // Text layout
@@ -102,6 +103,7 @@ export function createDefaultElement(name: string): SlideElement {
       fontWeight: '400',
       fontStretch: '100',
       fontStyle: 'normal',
+      letterSpacing: 'normal',
       calculatedFontSize: '30px',
 
       textAlign: 'left',

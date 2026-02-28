@@ -4,10 +4,10 @@ interface KeyboardOptions {
   undo: () => void
   redo: () => void
   save: () => void
-  deleteElement: () => void
   cloneElement: () => void
   deselect: () => void
-  isTextEditing: () => boolean  // Return true to suppress most shortcuts
+  nudge: (dx: number, dy: number) => void
+  isTextEditing: () => boolean
 }
 
 export function useEditorKeyboard(opts: KeyboardOptions) {
@@ -36,9 +36,12 @@ export function useEditorKeyboard(opts: KeyboardOptions) {
     } else if (mod && e.key === 'd') {
       e.preventDefault()
       opts.cloneElement()
-    } else if (e.key === 'Delete' || e.key === 'Backspace') {
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
       e.preventDefault()
-      opts.deleteElement()
+      const step = e.shiftKey ? 10 : 1
+      const dx = e.key === 'ArrowLeft' ? -step : e.key === 'ArrowRight' ? step : 0
+      const dy = e.key === 'ArrowUp' ? -step : e.key === 'ArrowDown' ? step : 0
+      opts.nudge(dx, dy)
     }
   }
 

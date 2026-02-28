@@ -4,6 +4,7 @@ import type { useEditorStore } from '@/stores/editorStore'
 export function useFileDrop(
   editorStore: ReturnType<typeof useEditorStore>,
   checkpoint: () => void,
+  onElementAdded?: (name: string) => void,
 ) {
   const isDragging = ref(false)
   let dragCounter = 0 // Track nested drag enter/leave
@@ -11,7 +12,7 @@ export function useFileDrop(
   function onDragEnter(e: DragEvent): void {
     e.preventDefault()
     dragCounter++
-    if (e.dataTransfer?.types.includes('Files')) {
+    if (e.dataTransfer?.types.includes('Files') || e.dataTransfer?.types.includes('application/x-slidemeister-media')) {
       isDragging.value = true
     }
   }
@@ -34,6 +35,43 @@ export function useFileDrop(
     isDragging.value = false
     dragCounter = 0
 
+    // Handle media panel drag (URL-based image)
+    const mediaData = e.dataTransfer?.getData('application/x-slidemeister-media')
+    if (mediaData) {
+      try {
+        const parsed = JSON.parse(mediaData)
+        if (parsed.url) {
+          const img = new Image()
+          img.onload = () => {
+            const targetWidth = 200
+            const ratio = img.height / img.width
+            const targetHeight = Math.round(targetWidth * ratio)
+
+            checkpoint()
+            const name = editorStore.addElement()
+            editorStore.updateElementProperty(name, 'properties.image', parsed.url)
+            editorStore.updateElementProperty(name, 'properties.coordinates.width', targetWidth)
+            editorStore.updateElementProperty(name, 'properties.coordinates.height', targetHeight)
+            editorStore.updateElementProperty(name, 'properties.content', '')
+            editorStore.updateElementProperty(name, 'properties.prettyname', parsed.name || 'Image')
+            onElementAdded?.(name)
+          }
+          img.onerror = () => {
+            // Image dimensions couldn't be determined, use defaults
+            checkpoint()
+            const name = editorStore.addElement()
+            editorStore.updateElementProperty(name, 'properties.image', parsed.url)
+            editorStore.updateElementProperty(name, 'properties.content', '')
+            editorStore.updateElementProperty(name, 'properties.prettyname', parsed.name || 'Image')
+            onElementAdded?.(name)
+          }
+          img.src = parsed.url
+          return
+        }
+      } catch { /* fall through to file handling */ }
+    }
+
+    // Handle native file drops
     const files = e.dataTransfer?.files
     if (!files || files.length === 0) return
 
@@ -42,7 +80,6 @@ export function useFileDrop(
       const reader = new FileReader()
       reader.onload = () => {
         const dataUrl = reader.result as string
-        // Create an Image to get dimensions
         const img = new Image()
         img.onload = () => {
           const targetWidth = 200
@@ -54,6 +91,7 @@ export function useFileDrop(
           editorStore.updateElementProperty(name, 'properties.coordinates.width', targetWidth)
           editorStore.updateElementProperty(name, 'properties.coordinates.height', targetHeight)
           editorStore.updateElementProperty(name, 'properties.content', '')
+          onElementAdded?.(name)
         }
         img.src = dataUrl
       }

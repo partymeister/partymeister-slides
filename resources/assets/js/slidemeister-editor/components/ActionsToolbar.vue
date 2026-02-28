@@ -5,13 +5,18 @@ import type { TemplateType } from '@/types/editor'
 const props = defineProps<{
   canUndo: boolean
   canRedo: boolean
+  undoDescription: string
+  redoDescription: string
   checkpoint: () => void
+  showSnapGuides: boolean
 }>()
 
 const emit = defineEmits<{
   undo: []
   redo: []
   save: []
+  preview: []
+  'toggle-snap-guides': []
 }>()
 
 const editorStore = useEditorStore()
@@ -50,6 +55,9 @@ function onClone(): void {
 
 function onDelete(): void {
   if (!editorStore.activeElementName) return
+  const el = editorStore.elements[editorStore.activeElementName]
+  const label = el?.properties.prettyname || editorStore.activeElementName
+  if (!confirm(`Delete "${label}"?`)) return
   props.checkpoint()
   editorStore.deleteElement(editorStore.activeElementName)
 }
@@ -71,13 +79,12 @@ function onDelete(): void {
       </select>
     </div>
 
-    <!-- Separator -->
     <div class="toolbar-separator" />
 
     <!-- Element actions -->
     <div class="toolbar-group">
       <button @click="onAdd" class="toolbar-btn" title="Add Element">+ Add</button>
-      <button @click="onClone" class="toolbar-btn" :disabled="!editorStore.activeElementName" title="Clone Element">Clone</button>
+      <button @click="onClone" class="toolbar-btn" :disabled="!editorStore.activeElementName" title="Clone Element (Ctrl+D)">Clone</button>
       <button @click="onDelete" class="toolbar-btn danger" :disabled="!editorStore.activeElementName" title="Delete Element">Delete</button>
     </div>
 
@@ -85,8 +92,21 @@ function onDelete(): void {
 
     <!-- Undo/Redo -->
     <div class="toolbar-group">
-      <button @click="$emit('undo')" class="toolbar-btn" :disabled="!canUndo" title="Undo (Ctrl+Z)">Undo</button>
-      <button @click="$emit('redo')" class="toolbar-btn" :disabled="!canRedo" title="Redo (Ctrl+Shift+Z)">Redo</button>
+      <button @click="$emit('undo')" class="toolbar-btn" :disabled="!canUndo" :title="canUndo ? `Undo: ${undoDescription} (Ctrl+Z)` : 'Nothing to undo'">Undo</button>
+      <button @click="$emit('redo')" class="toolbar-btn" :disabled="!canRedo" :title="canRedo ? `Redo: ${redoDescription} (Ctrl+Shift+Z)` : 'Nothing to redo'">Redo</button>
+    </div>
+
+    <div class="toolbar-separator" />
+
+    <!-- View -->
+    <div class="toolbar-group">
+      <button
+        @click="$emit('toggle-snap-guides')"
+        class="toolbar-btn"
+        :class="{ toggled: showSnapGuides }"
+        title="Toggle snap guides"
+      >Snap</button>
+      <button @click="$emit('preview')" class="toolbar-btn" title="Open preview in new tab">Preview</button>
     </div>
 
     <div class="toolbar-separator" />
@@ -167,6 +187,12 @@ function onDelete(): void {
 
 .toolbar-btn.danger:hover:not(:disabled) {
   background: #5a1a1a;
+}
+
+.toolbar-btn.toggled {
+  background: #1a3a5a;
+  border-color: #4a9eff;
+  color: #4a9eff;
 }
 
 .dirty-indicator {

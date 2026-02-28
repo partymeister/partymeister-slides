@@ -9,6 +9,7 @@ import type { useEditorStore } from '@/stores/editorStore'
 export function useTextEditor(
   editorStore: ReturnType<typeof useEditorStore>,
   checkpoint: () => void,
+  onContentUpdate?: (elementName: string) => void,
 ) {
   const editingElementName = ref<string | null>(null)
   const editor = ref<Editor | null>(null)
@@ -34,6 +35,18 @@ export function useTextEditor(
         TextStyle,
         Color,
       ],
+      onUpdate: () => {
+        if (editingElementName.value) {
+          // Sync content back to store on every keystroke
+          const html = editor.value?.getHTML() ?? ''
+          editorStore.updateElementProperty(
+            editingElementName.value,
+            'properties.content',
+            html,
+          )
+          onContentUpdate?.(editingElementName.value)
+        }
+      },
     })
   }
 

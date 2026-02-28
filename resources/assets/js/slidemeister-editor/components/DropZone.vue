@@ -1,11 +1,9 @@
 <template>
-  <Teleport to="body">
-    <div v-if="visible" class="dropzone-overlay">
-      <div class="dropzone-content">
-        <span>Drop image here</span>
-      </div>
+  <div v-if="visible" class="dropzone-overlay">
+    <div class="dropzone-content">
+      <span>Drop image here</span>
     </div>
-  </Teleport>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -16,7 +14,7 @@ defineProps<{
 
 <style scoped>
 .dropzone-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 9999;
   display: flex;

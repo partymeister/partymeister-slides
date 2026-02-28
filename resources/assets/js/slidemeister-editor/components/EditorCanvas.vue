@@ -1,6 +1,11 @@
 <template>
-  <div class="editor-canvas" ref="canvasRef">
-    <div class="slide-surface" ref="surfaceRef" @mousedown="onSurfaceClick">
+  <div class="editor-canvas" ref="canvasRef" @mousedown.self="onCanvasClick">
+    <div class="slide-surface" ref="surfaceRef" @mousedown.self="onSurfaceClick">
+      <!-- Snap guide lines (center only — edges are the surface border) -->
+      <template v-if="showSnapGuides">
+        <div class="snap-guide snap-guide-h" style="top: 270px" />
+        <div class="snap-guide snap-guide-v" style="left: 480px" />
+      </template>
       <div
         v-for="entry in editorStore.sortedElements"
         :key="entry.name"
@@ -10,30 +15,58 @@
           active: entry.name === editorStore.activeElementName,
           hover: entry.name === editorStore.hoverElementName,
           locked: entry.properties.locked,
+          editing: entry.name === editingElementName,
         }"
         :style="elementStyle(entry)"
         :data-partymeister-slides-visibility="entry.properties.visibility"
         :data-partymeister-slides-prettyname="entry.properties.prettyname"
-        @mousedown.stop="editorStore.setActiveElement(entry.name)"
+        @mousedown.stop="onElementMousedown(entry.name)"
         @mouseover="editorStore.setHoverElement(entry.name)"
         @mouseout="editorStore.setHoverElement(null)"
       >
-        <div class="element-content medium-editor-element" :style="contentStyle(entry)" v-html="entry.properties.content" />
+        <EditorContent
+          v-if="editor && entry.name === editingElementName"
+          :editor="editor"
+          class="element-content medium-editor-element"
+          :style="contentStyle(entry)"
+        />
+        <div
+          v-else
+          class="element-content medium-editor-element"
+          :style="contentStyle(entry)"
+          v-html="entry.properties.content"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, type CSSProperties } from 'vue'
+import { ref, reactive, type CSSProperties } from 'vue'
+import { EditorContent, type Editor } from '@tiptap/vue-3'
 import { useEditorStore } from '@/stores/editorStore'
 import type { SlideElement } from '@/types/editor'
+
+const props = defineProps<{
+  editor: Editor | null
+  editingElementName: string | null
+  showSnapGuides: boolean
+}>()
+
+const emit = defineEmits<{
+  'element-dblclick': [name: string]
+  'stop-editing': []
+}>()
 
 const editorStore = useEditorStore()
 
 const canvasRef = ref<HTMLElement | null>(null)
 const surfaceRef = ref<HTMLElement | null>(null)
-const elementRefs = new Map<string, HTMLElement>()
+const elementRefs = reactive(new Map<string, HTMLElement>())
+
+// Track clicks for double-click detection (works even when Moveable steals the 2nd click)
+let lastClickName = ''
+let lastClickTime = 0
 
 function setElementRef(name: string, el: HTMLElement | null): void {
   if (el) {
@@ -45,6 +78,24 @@ function setElementRef(name: string, el: HTMLElement | null): void {
 
 function getElementRef(name: string): HTMLElement | undefined {
   return elementRefs.get(name)
+}
+
+function onElementMousedown(name: string): void {
+  // If we're editing a different element, stop editing first
+  if (props.editingElementName && name !== props.editingElementName) {
+    emit('stop-editing')
+  }
+
+  const now = Date.now()
+  if (name === lastClickName && now - lastClickTime < 400) {
+    emit('element-dblclick', name)
+    lastClickName = ''
+    lastClickTime = 0
+  } else {
+    lastClickName = name
+    lastClickTime = now
+  }
+  editorStore.setActiveElement(name)
 }
 
 function elementStyle(el: SlideElement): CSSProperties {
@@ -71,10 +122,18 @@ function elementStyle(el: SlideElement): CSSProperties {
 }
 
 function contentStyle(el: SlideElement): CSSProperties {
+  // Use calculatedFontSize (shrunk-to-fit) if available, otherwise the user-set max
+  const fontSize = el.properties.calculatedFontSize && el.properties.calculatedFontSize !== ''
+    ? (el.properties.calculatedFontSize.toString().endsWith('px')
+      ? el.properties.calculatedFontSize
+      : el.properties.calculatedFontSize + 'px')
+    : el.properties.fontSize + 'px'
+
   return {
     fontFamily: el.properties.fontFamily,
-    fontSize: el.properties.fontSize + 'px',
+    fontSize,
     fontKerning: el.properties.fontKerning as CSSProperties['fontKerning'],
+    letterSpacing: el.properties.letterSpacing,
     fontWeight: el.properties.fontWeight,
     fontStretch: el.properties.fontStretch + '%',
     fontStyle: el.properties.fontStyle,
@@ -87,10 +146,18 @@ function contentStyle(el: SlideElement): CSSProperties {
   }
 }
 
-function onSurfaceClick(event: MouseEvent): void {
-  if (event.target === surfaceRef.value) {
-    editorStore.setActiveElement(null)
+function onSurfaceClick(): void {
+  if (props.editingElementName) {
+    emit('stop-editing')
   }
+  editorStore.setActiveElement(null)
+}
+
+function onCanvasClick(): void {
+  if (props.editingElementName) {
+    emit('stop-editing')
+  }
+  editorStore.setActiveElement(null)
 }
 
 defineExpose({
@@ -116,7 +183,14 @@ defineExpose({
   height: 540px;
   min-width: 960px;
   min-height: 540px;
-  background: #000;
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #e0e0e0 25%, transparent 25%),
+    linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
+    linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
   border: 1px solid #333;
   overflow: hidden;
 }
@@ -131,16 +205,89 @@ defineExpose({
 }
 
 .slide-element.hover:not(.active) {
-  outline: 1px dashed #4a9eff55;
+  outline: 2px dashed #4a9effaa;
 }
 
 .slide-element.locked {
   cursor: default;
 }
 
+.slide-element.editing {
+  outline: 2px solid #ff9900;
+  z-index: 9999 !important;
+}
+
 .element-content {
   box-sizing: border-box;
   word-wrap: break-word;
   overflow: hidden;
+}
+
+/* EditorContent wrapper must not add extra spacing */
+.slide-element.editing > :deep(div) {
+  width: 100%;
+}
+
+/* Override ProseMirror/tiptap defaults and inherit element styling */
+.slide-element.editing :deep(.tiptap),
+.slide-element.editing :deep(.ProseMirror) {
+  outline: none !important;
+  width: 100%;
+  cursor: text;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  white-space: normal;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  line-height: inherit;
+  text-shadow: inherit;
+  text-transform: inherit;
+}
+
+.slide-element.editing :deep(.ProseMirror p) {
+  margin: 0;
+  padding: 0;
+  line-height: inherit;
+  font-size: inherit;
+}
+
+/* Empty paragraphs: ProseMirror adds <br> + <br class="ProseMirror-trailingBreak">
+   inside empty <p> tags, inflating their height. Hide the trailing break so
+   it matches the collapsed height that v-html gives empty <p> tags. */
+.slide-element.editing :deep(.ProseMirror p > br.ProseMirror-trailingBreak) {
+  display: none;
+}
+
+.slide-element.editing :deep(.ProseMirror h1),
+.slide-element.editing :deep(.ProseMirror h2),
+.slide-element.editing :deep(.ProseMirror h3),
+.slide-element.editing :deep(.ProseMirror h4) {
+  margin: 0;
+  padding: 0;
+  line-height: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.snap-guide {
+  position: absolute;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.snap-guide-h {
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed rgba(74, 158, 255, 0.4);
+}
+
+.snap-guide-v {
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed rgba(74, 158, 255, 0.4);
 }
 </style>

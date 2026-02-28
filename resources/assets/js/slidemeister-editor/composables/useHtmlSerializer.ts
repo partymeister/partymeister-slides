@@ -55,6 +55,7 @@ export function useHtmlSerializer(editorStore: ReturnType<typeof useEditorStore>
       `font-weight: ${p.fontWeight}`,
       `font-stretch: ${p.fontStretch}%`,
       `font-style: ${p.fontStyle}`,
+      `letter-spacing: ${p.letterSpacing}`,
       `color: ${p.color}`,
       `text-align: ${p.textAlign}`,
       `line-height: ${p.lineHeight}`,

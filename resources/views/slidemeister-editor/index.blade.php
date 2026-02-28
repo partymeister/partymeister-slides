@@ -29,16 +29,16 @@
     <script type="module" src="http://localhost:5174/main.ts"></script>
 @else
     @php
-        $manifest = json_decode(file_get_contents(public_path('slidemeister-editor/.vite/manifest.json')), true);
-        $entry = $manifest['main.ts'] ?? null;
+        $manifest = json_decode(file_get_contents(public_path('build/slidemeister-editor/.vite/manifest.json')), true);
+        $entry = $manifest['main.ts'] ?? $manifest['resources/assets/js/slidemeister-editor/main.ts'] ?? null;
     @endphp
     @if($entry)
         @if(isset($entry['css']))
             @foreach($entry['css'] as $css)
-                <link rel="stylesheet" href="/slidemeister-editor/{{ $css }}" />
+                <link rel="stylesheet" href="/build/slidemeister-editor/{{ $css }}" />
             @endforeach
         @endif
-        <script type="module" src="/slidemeister-editor/{{ $entry['file'] }}"></script>
+        <script type="module" src="/build/slidemeister-editor/{{ $entry['file'] }}"></script>
     @endif
 @endif
 </body>

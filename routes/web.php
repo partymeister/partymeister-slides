@@ -9,10 +9,10 @@ Route::get('slidemeister-editor/{slide_template?}', function ($slideTemplate = n
     $apiToken = \Motor\Backend\Models\User::first()->api_token;
 
     return view('partymeister-slides::slidemeister-editor.index', [
-        'template_id' => $slideTemplate,
+        'template_id' => $slideTemplate?->id,
         'api_token' => $apiToken,
     ]);
-})->middleware(['web', 'web_auth'])->name('backend.slidemeister-editor.show');
+})->middleware(['bindings'])->name('backend.slidemeister-editor.show');
 
 Route::group([
     'as'         => 'component.',

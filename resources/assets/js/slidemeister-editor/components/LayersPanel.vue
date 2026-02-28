@@ -16,7 +16,14 @@
         @mouseout="editorStore.setHoverElement(null)"
       >
         <span class="layer-name">{{ getLabel(entry.name) }}</span>
-        <span v-if="isLocked(entry.name)" class="lock-icon">L</span>
+        <div class="layer-actions">
+          <span v-if="isLocked(entry.name)" class="lock-icon" title="Locked">&#x1F512;</span>
+          <button
+            class="delete-btn"
+            title="Delete element"
+            @click.stop="$emit('delete-element', entry.name)"
+          >&times;</button>
+        </div>
       </div>
     </div>
   </div>
@@ -31,6 +38,10 @@ import type { ElementOrder } from '@/types/editor'
 
 const props = defineProps<{
   checkpoint: () => void
+}>()
+
+defineEmits<{
+  'delete-element': [name: string]
 }>()
 
 const editorStore = useEditorStore()
@@ -53,6 +64,7 @@ function initSortable() {
   sortableInstance = Sortable.create(listRef.value, {
     animation: 150,
     ghostClass: 'sortable-ghost',
+    handle: '.layer-name',
     onEnd(_evt: SortableEvent) {
       const children = listRef.value?.children
       if (!children) return
@@ -80,13 +92,10 @@ onMounted(() => {
   initSortable()
 })
 
-// Reinitialize sortable when the element order changes (e.g. add/delete element)
-// so that SortableJS stays in sync with the DOM
 watch(
   () => editorStore.elementOrder.length,
   () => {
     destroySortable()
-    // Wait for Vue to re-render the v-for list before re-initializing
     setTimeout(() => initSortable(), 0)
   },
 )
@@ -118,7 +127,7 @@ onBeforeUnmount(() => {
 .layer-item {
   padding: 6px 8px;
   border-radius: 4px;
-  cursor: grab;
+  cursor: pointer;
   font-size: 13px;
   color: #ccc;
   display: flex;
@@ -137,9 +146,39 @@ onBeforeUnmount(() => {
   color: #fff;
 }
 
+.layer-name {
+  cursor: grab;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.layer-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
 .lock-icon {
-  font-size: 11px;
+  font-size: 12px;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
   color: #666;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  border-radius: 2px;
+}
+
+.delete-btn:hover {
+  color: #ff4444;
+  background: rgba(255, 68, 68, 0.1);
 }
 
 .sortable-ghost {
