@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { useApi } from '@/composables/useApi'
+import { useApi } from '@common/composables/useApi'
 
 const SYSTEM_FONTS = ['Arial', 'Verdana']
 

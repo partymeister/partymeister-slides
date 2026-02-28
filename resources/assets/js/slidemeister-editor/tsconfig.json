@@ -5,7 +5,7 @@
     "moduleResolution": "bundler",
     "strict": true,
     "jsx": "preserve",
-    "paths": { "@/*": ["./*"] },
+    "paths": { "@/*": ["./*"], "@common/*": ["../slidemeister-common/*"] },
     "types": ["vite/client"]
   },
   "include": ["**/*.ts", "**/*.vue", "env.d.ts"]

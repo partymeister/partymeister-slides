@@ -45,7 +45,7 @@
 import { ref, reactive, type CSSProperties } from 'vue'
 import { EditorContent, type Editor } from '@tiptap/vue-3'
 import { useEditorStore } from '@/stores/editorStore'
-import type { SlideElement } from '@/types/editor'
+import type { SlideElement } from '@common/types/editor'
 
 const props = defineProps<{
   editor: Editor | null

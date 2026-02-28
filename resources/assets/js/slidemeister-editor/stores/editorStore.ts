@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { SlideElement, SlideDefinitions, TemplateType, ElementOrder } from '@/types/editor'
-import { createDefaultElement } from '@/types/editor'
-import { useApi } from '@/composables/useApi'
+import type { SlideElement, SlideDefinitions, TemplateType, ElementOrder } from '@common/types/editor'
+import { createDefaultElement } from '@common/types/editor'
+import { useApi } from '@common/composables/useApi'
 
 export const useEditorStore = defineStore('editor', () => {
   const api = useApi()

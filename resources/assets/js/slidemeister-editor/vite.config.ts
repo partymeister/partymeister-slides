@@ -10,6 +10,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname),
+      '@common': path.resolve(__dirname, '../slidemeister-common'),
     },
   },
   build: {

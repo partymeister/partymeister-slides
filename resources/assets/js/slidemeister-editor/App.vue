@@ -8,7 +8,7 @@ import { useTextEditor } from '@/composables/useTextEditor'
 import { useFileDrop } from '@/composables/useFileDrop'
 import { useEditorKeyboard } from '@/composables/useEditorKeyboard'
 import { useFonts } from '@/composables/useFonts'
-import { useHtmlSerializer } from '@/composables/useHtmlSerializer'
+import { serializeElements } from '@common/composables/useHtmlSerializer'
 import { useTextResize } from '@/composables/useTextResize'
 import EditorCanvas from '@/components/EditorCanvas.vue'
 import ActionsToolbar from '@/components/ActionsToolbar.vue'
@@ -26,7 +26,6 @@ const textEditor = useTextEditor(editorStore, () => history.checkpoint('Edit tex
 const fileDrop = useFileDrop(editorStore, () => history.checkpoint('Drop image'), () => {
   nextTick(() => moveableRef.value?.updateRect())
 })
-const htmlSerializer = useHtmlSerializer(editorStore)
 const textResize = useTextResize(editorStore)
 const fonts = useFonts()
 
@@ -248,10 +247,10 @@ useEditorKeyboard({
 
 // Save handler
 async function onSave(): Promise<void> {
-  const html = htmlSerializer.serializeAll()
+  const html = serializeElements(editorStore.elements)
   editorStore.isSaving = true
   try {
-    const api = (await import('@/composables/useApi')).useApi()
+    const api = (await import('@common/composables/useApi')).useApi()
     const defs = editorStore.toDefinitions()
     const payload = {
       name: editorStore.templateName,
@@ -279,7 +278,7 @@ async function onSave(): Promise<void> {
 
 // Preview: open serialized HTML in a new tab
 function openPreview(): void {
-  const html = htmlSerializer.serializeAll()
+  const html = serializeElements(editorStore.elements)
 
   // Collect all font stylesheet links from current page
   const fontLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))

@@ -1,5 +1,5 @@
 import type { useEditorStore } from '@/stores/editorStore'
-import type { SlideDefinitions } from '@/types/editor'
+import type { SlideDefinitions } from '@common/types/editor'
 
 export function useFileIO(editorStore: ReturnType<typeof useEditorStore>) {
   function exportJson(): void {

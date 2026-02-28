@@ -3,7 +3,7 @@ import type {
   ApiResponse,
   FontResponse,
   SaveTemplateData,
-} from '@/types/api'
+} from '@common/types/api'
 
 function baseUrl(): string {
   return (window.BASE_URL ?? '').replace(/\/+$/, '')

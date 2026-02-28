@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/stores/editorStore'
-import type { TemplateType } from '@/types/editor'
+import type { TemplateType } from '@common/types/editor'
 
 const props = defineProps<{
   canUndo: boolean

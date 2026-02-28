@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue'
-import type { SlideElement, ElementOrder } from '@/types/editor'
+import type { SlideElement, ElementOrder } from '@common/types/editor'
 import type { useEditorStore } from '@/stores/editorStore'
 
 interface HistoryEntry {

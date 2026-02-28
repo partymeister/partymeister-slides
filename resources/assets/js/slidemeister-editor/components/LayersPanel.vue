@@ -34,7 +34,7 @@ import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import Sortable from 'sortablejs'
 import type { SortableEvent } from 'sortablejs'
 import { useEditorStore } from '@/stores/editorStore'
-import type { ElementOrder } from '@/types/editor'
+import type { ElementOrder } from '@common/types/editor'
 
 const props = defineProps<{
   checkpoint: () => void
