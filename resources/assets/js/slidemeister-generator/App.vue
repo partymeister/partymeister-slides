@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useApi } from '@common/composables/useApi'
-import { generateCompetitionPlaylist } from '@/composables/useSlideReplacer'
+import { generateCompetitionPlaylist, resizeTextAndSerialize } from '@/composables/useSlideReplacer'
 import SlidePreview from '@/components/SlidePreview.vue'
 import type { CompetitionData, GeneratedSlide } from '@/types/generator'
 
@@ -22,7 +22,9 @@ onMounted(async () => {
     )
     competitionData.value = data
     competitionName.value = data.competition.name
-    slides.value = generateCompetitionPlaylist(data)
+    const generated = generateCompetitionPlaylist(data)
+    resizeTextAndSerialize(generated)
+    slides.value = generated
     state.value = 'preview'
   } catch (err) {
     errorMessage.value = err instanceof Error ? err.message : 'Failed to load data'

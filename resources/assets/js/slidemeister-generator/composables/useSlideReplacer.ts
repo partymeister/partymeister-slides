@@ -1,5 +1,5 @@
 import type { SlideElement, SlideDefinitions } from '@common/types/editor'
-import { serializeElements } from '@common/composables/useHtmlSerializer'
+import { serializeElement, serializeElements } from '@common/composables/useHtmlSerializer'
 import type { GeneratedSlide, CompetitionData, EntryData } from '@/types/generator'
 
 function deepClone<T>(obj: T): T {
@@ -89,6 +89,97 @@ function renderCompetitionParticipants(
 function parseTemplateDefinitions(definitionsJson: string): Record<string, SlideElement> {
   const defs: SlideDefinitions = JSON.parse(definitionsJson)
   return defs.elements
+}
+
+const MIN_FONT = 5
+
+/**
+ * Measure text in an offscreen DOM container and shrink font size until it fits.
+ * Mutates element.properties.calculatedFontSize in place.
+ */
+function resizeElementText(element: SlideElement, container: HTMLDivElement): void {
+  const p = element.properties
+
+  // Skip elements with no text content or image-only elements
+  if (!p.content || p.content.trim() === '') return
+
+  // Create a temporary element matching the serialized structure
+  const outer = document.createElement('div')
+  outer.style.cssText = [
+    `width: ${p.coordinates.width}px`,
+    `height: ${p.coordinates.height}px`,
+    'display: flex',
+    `align-items: ${p.verticalAlign}`,
+    'position: absolute',
+    'overflow: hidden',
+  ].join('; ')
+
+  const inner = document.createElement('div')
+  inner.style.cssText = [
+    `font-family: ${p.fontFamily}`,
+    `font-size: ${p.fontSize}px`,
+    `font-kerning: ${p.fontKerning}`,
+    `font-weight: ${p.fontWeight}`,
+    `font-stretch: ${p.fontStretch}%`,
+    `font-style: ${p.fontStyle}`,
+    `letter-spacing: ${p.letterSpacing}`,
+    `line-height: ${p.lineHeight}`,
+    `text-transform: ${p.textTransform}`,
+    'width: 100%',
+  ].join('; ')
+  inner.innerHTML = p.content
+
+  outer.appendChild(inner)
+  container.appendChild(outer)
+
+  // Shrink until text fits
+  let size = p.fontSize
+  while (size > MIN_FONT && inner.scrollHeight > p.coordinates.height) {
+    size--
+    inner.style.fontSize = size + 'px'
+  }
+
+  // Safety margin
+  if (size > MIN_FONT && (p.coordinates.height - inner.scrollHeight) < 2) {
+    size--
+  }
+
+  p.calculatedFontSize = size + 'px'
+
+  container.removeChild(outer)
+}
+
+/**
+ * Resize text in all slides to fit their containers, then serialize HTML.
+ * Creates an offscreen 960x540 measurement container, measures each element,
+ * updates calculatedFontSize, and re-serializes.
+ */
+export function resizeTextAndSerialize(slides: GeneratedSlide[]): void {
+  // Create offscreen measurement container
+  const measureDiv = document.createElement('div')
+  measureDiv.style.cssText = [
+    'position: absolute',
+    'left: -9999px',
+    'top: -9999px',
+    'width: 960px',
+    'height: 540px',
+    'overflow: hidden',
+  ].join('; ')
+  document.body.appendChild(measureDiv)
+
+  for (const slide of slides) {
+    // Skip video slides
+    if (Object.keys(slide.elements).length === 0) continue
+
+    for (const element of Object.values(slide.elements)) {
+      resizeElementText(element, measureDiv)
+    }
+
+    // Re-serialize with updated calculatedFontSize
+    slide.html = serializeElements(slide.elements)
+  }
+
+  document.body.removeChild(measureDiv)
 }
 
 function generateSlide(
