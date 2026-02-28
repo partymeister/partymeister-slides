@@ -9,9 +9,12 @@
   },
   "dependencies": {
     "pinia": "^2.3.1",
-    "vue": "^3.5.13"
+    "sortablejs": "^1.15.7",
+    "vue": "^3.5.13",
+    "vue3-moveable": "^0.28.0"
   },
   "devDependencies": {
+    "@types/sortablejs": "^1.15.9",
     "@vitejs/plugin-vue": "^5.2.3",
     "typescript": "^5.7.3",
     "vite": "^6.1.0",
