@@ -70,6 +70,7 @@ export function useApi() {
   }
 
   return {
+    request,
     getTemplate,
     saveTemplate,
     createTemplate,
