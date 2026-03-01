@@ -12,8 +12,9 @@ import SlidePreview from '@/components/SlidePreview.vue'
 import type { CompetitionData, TimetableData, PrizegivingData, EventData, GeneratedSlide } from '@/types/generator'
 
 const api = useApi()
-const state = ref<'loading' | 'preview' | 'saving' | 'saved' | 'error'>('loading')
+const state = ref<'loading' | 'preview' | 'saving' | 'saved' | 'error' | 'warnings'>('loading')
 const errorMessage = ref('')
+const warnings = ref<string[]>([])
 const title = ref('')
 const slides = ref<GeneratedSlide[]>([])
 const zoom = ref(0.5)
@@ -55,7 +56,9 @@ onMounted(async () => {
         await loadEvent()
         break
     }
-    state.value = 'preview'
+    if (state.value === 'loading') {
+      state.value = 'preview'
+    }
   } catch (err) {
     errorMessage.value = err instanceof Error ? err.message : 'Failed to load data'
     state.value = 'error'
@@ -87,10 +90,17 @@ function navigateTo(url: string) {
 }
 
 async function loadCompetition() {
-  const data = await api.request<CompetitionData>(
+  const data = await api.request<CompetitionData & { warnings?: string[] }>(
     'GET',
     `/api/competitions/${competitionId}/playlist-data`
   )
+
+  if (data.warnings && data.warnings.length > 0) {
+    warnings.value = data.warnings
+    state.value = 'warnings'
+    return
+  }
+
   competitionData = data
   title.value = data.competition.name
   const generated = generateCompetitionPlaylist(data)
@@ -216,7 +226,7 @@ const loadingLabel: Record<string, string> = {
       <div class="toolbar-group">
         <span class="toolbar-title">{{ title || 'Generator' }}</span>
       </div>
-      <template v-if="generatorType !== 'start'">
+      <template v-if="generatorType !== 'start' && state !== 'warnings'">
         <div class="toolbar-separator" />
         <div class="toolbar-group zoom-control">
           <span class="zoom-label">Zoom</span>
@@ -317,6 +327,16 @@ const loadingLabel: Record<string, string> = {
 
         <div v-else-if="state === 'error'" class="status error">
           {{ errorMessage }}
+        </div>
+
+        <div v-else-if="state === 'warnings'" class="status warnings">
+          <div class="warnings-box">
+            <h3>Competition is not ready for playlist generation</h3>
+            <ul>
+              <li v-for="(w, i) in warnings" :key="i">{{ w }}</li>
+            </ul>
+            <p>Please fix these issues before generating the playlist.</p>
+          </div>
         </div>
 
         <div v-else-if="state === 'saved'" class="status success">
@@ -486,6 +506,40 @@ html, body, #app {
 
 .status.success {
   color: #2a7a3a;
+}
+
+.status.warnings {
+  color: #e0a020;
+}
+
+.warnings-box {
+  background: #2a2200;
+  border: 1px solid #554400;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 500px;
+  text-align: left;
+}
+
+.warnings-box h3 {
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #ffcc00;
+}
+
+.warnings-box ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+.warnings-box li {
+  margin-bottom: 4px;
+}
+
+.warnings-box p {
+  color: #aa8800;
+  font-size: 12px;
 }
 
 .status-bar {

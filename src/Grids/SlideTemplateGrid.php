@@ -23,8 +23,8 @@ class SlideTemplateGrid extends Grid
         $this->addColumn('template_for', trans('partymeister-slides::backend/slide_templates.template_for'))
              ->renderer(TranslateRenderer::class, ['file' => 'partymeister-slides::backend/slide_templates.template_for_types']);
         $this->setDefaultSorting('name', 'ASC');
-        $this->addAction(trans('partymeister-slides::backend/slides.create_from_template'), 'backend.slides.create', ['class' => 'btn-primary']);
-        $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.slide_templates.edit');
+        $this->addAction(trans('partymeister-slides::backend/slides.create_from_template'), 'backend.slidemeister-editor.template', ['class' => 'btn-primary', 'target' => '_blank']);
+        $this->addAction(trans('motor-backend::backend/global.edit'), 'backend.slidemeister-editor.template', ['class' => 'btn-warning', 'target' => '_blank']);
         $this->addDuplicateAction(trans('motor-backend::backend/global.duplicate'), 'backend.slide_templates.duplicate')
              ->needsPermissionTo('slide_templates.write');
         $this->addDeleteAction(trans('motor-backend::backend/global.delete'), 'backend.slide_templates.destroy');

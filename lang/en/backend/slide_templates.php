@@ -10,6 +10,7 @@ return [
     'updated'         => 'Slide template updated',
     'deleted'         => 'Slide template deleted',
 
+    'open_in_editor'     => 'Open in Editor',
     'name'               => 'Name',
     'template_for'       => 'Template for',
     'template_for_types' => [

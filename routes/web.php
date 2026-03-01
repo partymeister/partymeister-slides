@@ -4,82 +4,68 @@ Route::get('slidemeister-web/{slide_client}', '\Partymeister\Slides\Http\Control
      ->middleware(['bindings'])
      ->name('backend.slidemeister-web.show');
 
-Route::get('slidemeister-editor', function () {
-    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+Route::group(['middleware' => ['web', 'web_auth', 'bindings']], function () {
+    Route::get('slidemeister-editor', function () {
+        return view('partymeister-slides::slidemeister-editor.index', [
+            'editor_mode' => 'start',
+            'api_token' => auth()->user()->api_token,
+        ]);
+    })->name('backend.slidemeister-editor.start');
 
-    return view('partymeister-slides::slidemeister-editor.index', [
-        'editor_mode' => 'start',
-        'api_token' => $apiToken,
-    ]);
-})->name('backend.slidemeister-editor.start');
+    Route::get('slidemeister-editor/template/{slide_template}', function (\Partymeister\Slides\Models\SlideTemplate $slideTemplate) {
+        return view('partymeister-slides::slidemeister-editor.index', [
+            'editor_mode' => 'template',
+            'entity_id' => $slideTemplate->id,
+            'api_token' => auth()->user()->api_token,
+        ]);
+    })->name('backend.slidemeister-editor.template');
 
-Route::get('slidemeister-editor/template/{slide_template}', function (\Partymeister\Slides\Models\SlideTemplate $slideTemplate) {
-    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+    Route::get('slidemeister-editor/slide/{slide}', function (\Partymeister\Slides\Models\Slide $slide) {
+        return view('partymeister-slides::slidemeister-editor.index', [
+            'editor_mode' => 'slide',
+            'entity_id' => $slide->id,
+            'api_token' => auth()->user()->api_token,
+        ]);
+    })->name('backend.slidemeister-editor.slide');
 
-    return view('partymeister-slides::slidemeister-editor.index', [
-        'editor_mode' => 'template',
-        'entity_id' => $slideTemplate->id,
-        'api_token' => $apiToken,
-    ]);
-})->middleware(['bindings'])->name('backend.slidemeister-editor.template');
+    Route::get('slidemeister-generator', function () {
+        return view('partymeister-slides::slidemeister-generator.index', [
+            'generator_type' => 'start',
+            'api_token' => auth()->user()->api_token,
+        ]);
+    })->name('backend.slidemeister-generator.start');
 
-Route::get('slidemeister-editor/slide/{slide}', function (\Partymeister\Slides\Models\Slide $slide) {
-    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+    Route::get('slidemeister-generator/competition/{competition}', function (\Partymeister\Competitions\Models\Competition $competition) {
+        return view('partymeister-slides::slidemeister-generator.index', [
+            'generator_type' => 'competition',
+            'competition_id' => $competition->id,
+            'api_token' => auth()->user()->api_token,
+        ]);
+    })->name('backend.slidemeister-generator.competition');
 
-    return view('partymeister-slides::slidemeister-editor.index', [
-        'editor_mode' => 'slide',
-        'entity_id' => $slide->id,
-        'api_token' => $apiToken,
-    ]);
-})->middleware(['bindings'])->name('backend.slidemeister-editor.slide');
+    Route::get('slidemeister-generator/schedule/{schedule}', function (\Partymeister\Core\Models\Schedule $schedule) {
+        return view('partymeister-slides::slidemeister-generator.index', [
+            'generator_type' => 'timetable',
+            'schedule_id' => $schedule->id,
+            'api_token' => auth()->user()->api_token,
+        ]);
+    })->name('backend.slidemeister-generator.schedule');
 
-Route::get('slidemeister-generator', function () {
-    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+    Route::get('slidemeister-generator/event/{event}', function (\Partymeister\Core\Models\Event $event) {
+        return view('partymeister-slides::slidemeister-generator.index', [
+            'generator_type' => 'event',
+            'event_id' => $event->id,
+            'api_token' => auth()->user()->api_token,
+        ]);
+    })->name('backend.slidemeister-generator.event');
 
-    return view('partymeister-slides::slidemeister-generator.index', [
-        'generator_type' => 'start',
-        'api_token' => $apiToken,
-    ]);
-})->name('backend.slidemeister-generator.start');
-
-Route::get('slidemeister-generator/competition/{competition}', function (\Partymeister\Competitions\Models\Competition $competition) {
-    $apiToken = \Motor\Backend\Models\User::first()->api_token;
-
-    return view('partymeister-slides::slidemeister-generator.index', [
-        'generator_type' => 'competition',
-        'competition_id' => $competition->id,
-        'api_token' => $apiToken,
-    ]);
-})->middleware(['bindings'])->name('backend.slidemeister-generator.competition');
-
-Route::get('slidemeister-generator/schedule/{schedule}', function (\Partymeister\Core\Models\Schedule $schedule) {
-    $apiToken = \Motor\Backend\Models\User::first()->api_token;
-
-    return view('partymeister-slides::slidemeister-generator.index', [
-        'generator_type' => 'timetable',
-        'schedule_id' => $schedule->id,
-        'api_token' => $apiToken,
-    ]);
-})->middleware(['bindings'])->name('backend.slidemeister-generator.schedule');
-
-Route::get('slidemeister-generator/event/{event}', function (\Partymeister\Core\Models\Event $event) {
-    $apiToken = \Motor\Backend\Models\User::first()->api_token;
-
-    return view('partymeister-slides::slidemeister-generator.index', [
-        'generator_type' => 'event',
-        'event_id' => $event->id,
-        'api_token' => $apiToken,
-    ]);
-})->middleware(['bindings'])->name('backend.slidemeister-generator.event');
-
-Route::get('slidemeister-generator/prizegiving', function () {
-    $apiToken = \Motor\Backend\Models\User::first()->api_token;
-
-    return view('partymeister-slides::slidemeister-generator.index', [
-        'generator_type' => 'prizegiving',
-        'api_token' => $apiToken,
-    ]);
-})->middleware(['bindings'])->name('backend.slidemeister-generator.prizegiving');
+    Route::get('slidemeister-generator/prizegiving', function () {
+        return view('partymeister-slides::slidemeister-generator.index', [
+            'generator_type' => 'prizegiving',
+            'api_token' => auth()->user()->api_token,
+        ]);
+    })->name('backend.slidemeister-generator.prizegiving');
+});
 
 Route::group([
     'as'         => 'component.',

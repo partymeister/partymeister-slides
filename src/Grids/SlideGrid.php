@@ -27,7 +27,7 @@ class SlideGrid extends Grid
              ->renderer(BladeRenderer::class, ['template' => 'partymeister-slides::grid.slide_clients.playnow_slide_controls']);
         $this->setDefaultSorting('id', 'DESC');
 
-        $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.slides.edit');
+        $this->addAction(trans('motor-backend::backend/global.edit'), 'backend.slidemeister-editor.slide', ['class' => 'btn-warning', 'target' => '_blank']);
         $this->addDuplicateAction(trans('motor-backend::backend/global.duplicate'), 'backend.slides.duplicate')
              ->needsPermissionTo('slides.write');
         $this->addDeleteAction(trans('motor-backend::backend/global.delete'), 'backend.slides.destroy');
