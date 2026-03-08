@@ -15,7 +15,7 @@
     "partymeister/core": "^1.4",
 
     "php-webdriver/webdriver": "^1.14",
-    "beyondcode/laravel-websockets": "^1.14"
+    "laravel/reverb": "^1.0"
   },
   "autoload": {
     "psr-4": {
