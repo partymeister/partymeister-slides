@@ -6,6 +6,7 @@ use Partymeister\Slides\Events\PlaylistNextRequest;
 use Partymeister\Slides\Events\PlaylistPreviousRequest;
 use Partymeister\Slides\Events\SiegmeisterRequest;
 use Partymeister\Slides\Http\Controllers\Api\FontsController;
+use Partymeister\Slides\Http\Controllers\Api\ScreenshotCallbackController;
 use Partymeister\Slides\Http\Controllers\Api\SlidesController;
 use Partymeister\Slides\Http\Controllers\Api\SlideTemplatesController;
 use Partymeister\Slides\Http\Controllers\Api\PlaylistsController;
@@ -40,6 +41,7 @@ Route::group([
     'as'         => 'api.',
 ], function () {
     Route::get('slidemeister/fonts', [FontsController::class, 'index']);
+    Route::post('internal/screenshot-complete', [ScreenshotCallbackController::class, 'store']);
 });
 
 // FIXME: put this in a controller so we can use route caching
