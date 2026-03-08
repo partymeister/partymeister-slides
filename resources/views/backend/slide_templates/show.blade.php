@@ -64,7 +64,7 @@
         @endif
     @endif
 </div>
-<script>
+<script type="module">
     window.addEventListener('load', (event) => {
         console.log('page is fully loaded');
     });

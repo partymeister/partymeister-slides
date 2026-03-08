@@ -23,7 +23,7 @@
 
 @include('partymeister-slides::layouts.partials.slide_clients_scripts')
 @section('view_scripts')
-    <script type="text/javascript">
+    <script type="module">
         $('.delete-record').click(function (e) {
             if (!confirm('{{ trans('motor-backend::backend/global.delete_question') }}')) {
                 e.preventDefault();

@@ -1,9 +1,9 @@
 @section('view_scripts')
-    <script type="text/javascript">
+    <script type="module">
         $('.slide-clients-control').on('click', function (e) {
             e.preventDefault();
 
-            data = {
+            let data = {
                 direction: $(this).data('direction'),
                 hard: $(this).data('hard')
             };
@@ -15,8 +15,8 @@
             });
         });
 
-        // Get playlists
-        let updatePlaylists = function () {
+        // Get playlists — exposed on window so other module scripts can call it
+        window.updatePlaylists = function () {
 
             axios.get('{{route('ajax.slide_clients.communication.playlists')}}').then(function (playlistsResponse) {
 
@@ -52,9 +52,9 @@
                         console.log('UpdatePlaylists: Response it not a json object. Aborting');
                         return;
                     } else {
-                        playlists = parsedResponse.playlists;
-                        currentPlaylist = parsedResponse.currentPlaylist;
-                        currentItem = parsedResponse.currentItem;
+                        playlists = parsedResponse.cached_playlists || parsedResponse.playlists || [];
+                        currentPlaylist = parsedResponse.current_playlist_id || parsedResponse.currentPlaylist;
+                        currentItem = parsedResponse.current_item_id || parsedResponse.currentItem;
                     }
                 }
 
@@ -75,15 +75,24 @@
 
                 $('.playlist-' + currentPlaylist + '-playing').removeClass('d-none');
 
+                if (!currentItem) {
+                    return;
+                }
+
                 axios.get('/ajax/playlist_items/' + currentItem).then(function (response) {
                     $('.playlist-preview').addClass('d-none');
+                    let previewUrl = null;
                     if (response.data.data.file_association && response.data.data.file_association.exists) {
-                        $('.playlist-' + currentPlaylist + '-preview').removeClass('d-none');
-                        $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.file_association.file.conversions.preview);
+                        previewUrl = response.data.data.file_association.file.conversions.preview;
                     }
                     if (response.data.data.slide && response.data.data.slide.file_preview) {
-                        $('.playlist-' + currentPlaylist + '-preview').removeClass('d-none');
-                        $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.slide.file_final.conversions.preview);
+                        previewUrl = response.data.data.slide.file_preview.conversions.preview;
+                    }
+                    if (previewUrl) {
+                        let $container = $('.playlist-' + currentPlaylist + '-preview');
+                        $container.removeClass('d-none');
+                        $container.find('img').prop('src', previewUrl);
+                        $container.find('a.playlist-preview-link').attr('href', previewUrl).attr('data-fancybox', 'playlist-preview');
                     }
                 }).catch(function (error) {
                     console.log('UpdatePlaylists: Playlist item not found');
@@ -117,7 +126,7 @@
         $('.slide-clients-play').on('click', function (e) {
             e.preventDefault();
 
-            data = {
+            let data = {
                 playlist_id: $(this).data('playlist'),
                 callbacks: $(this).data('callbacks')
             };
@@ -165,6 +174,8 @@
         $('.slide-clients-playnow').on('click', function (e) {
             e.preventDefault();
 
+            let data = {};
+            let playlistId = '';
             if ($(this).data('slide')) {
                 data = {
                     slide_id: $(this).data('slide')
@@ -174,7 +185,7 @@
                 data = {
                     file_id: $(this).data('file')
                 };
-                playlistId = 'playnow_file_' + data.slide_id;
+                playlistId = 'playnow_file_' + data.file_id;
             }
 
             axios.post('{{route('ajax.slide_clients.communication.playnow')}}', data).then(function (response) {

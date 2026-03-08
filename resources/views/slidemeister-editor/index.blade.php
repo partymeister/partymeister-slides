@@ -18,7 +18,7 @@
 <body>
 <div id="app"></div>
 
-<script>
+<script type="module">
     window.TOKEN = '{{ $api_token }}';
     window.BASE_URL = '{{ config('app.url') }}';
     window.EDITOR_MODE = '{{ $editor_mode ?? 'start' }}';

@@ -43,7 +43,7 @@
 @endsection
 @section('right-sidebar-header')<h5 class="pb-0 mb-0">Slides and Media</h5>@endsection
 @section('view_scripts')
-    <script>
+    <script type="module">
 
         $('.playlist-submit').on('click', function (e) {
             e.preventDefault();

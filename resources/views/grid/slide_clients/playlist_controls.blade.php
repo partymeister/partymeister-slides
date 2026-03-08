@@ -1,5 +1,7 @@
 <div class="d-none float-right playlist-{{$record->id}}-preview playlist-preview">
-    <img class="img-thumbnail" style="max-width: 200px;">
+    <a class="playlist-preview-link" href="">
+        <img class="img-thumbnail" style="max-width: 200px;">
+    </a>
 </div>
 @if (session('screens.active', null) == null)
     {{trans('partymeister-slides::backend/slide_clients.no_active_client')}}

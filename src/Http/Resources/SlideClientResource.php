@@ -121,10 +121,10 @@ class SlideClientResource extends BaseResource
             'configuration' => $configuration,
             'jingles'       => $jingles,
             'websocket'     => [
-                'key'  => config('broadcasting.connections.pusher.key'),
-                'host' => config('partymeister-slides-slidemeister.host'),
-                'port' => config('partymeister-slides-slidemeister.port'),
-                'path' => config('partymeister-slides-slidemeister.path'),
+                'key'  => config('broadcasting.connections.reverb.key'),
+                'host' => env('VITE_REVERB_HOST', 'localhost'),
+                'port' => (int) env('VITE_REVERB_PORT', 80),
+                'path' => env('VITE_REVERB_PATH', '/socket'),
             ],
         ];
     }

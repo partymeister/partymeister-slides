@@ -19,12 +19,12 @@
     <slidemeister-viewer :standalone="false"></slidemeister-viewer>
 </div>
 <script type="text/javascript" src="/cables/js/patch.js" async="true"></script>
-<script>
+<script type="module">
     const TOKEN = '{{$api_token}}';
     const BASE_URL = '{{config('app.url')}}'
 </script>
 <script src="{{mix('js/partymeister-slidemeister-web.js')}}"></script>
-<script>
+<script type="module">
     document.addEventListener('CABLES.jsLoaded', function (event) {
         CABLES.patch = new CABLES.Patch({
             patch: CABLES.exportedPatch,

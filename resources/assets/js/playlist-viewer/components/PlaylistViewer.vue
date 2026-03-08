@@ -1,154 +1,182 @@
 <template>
-    <div>
-        <agile :autoplaySpeed="10000" :autoplay="true" @afterChange="afterChange($event)"
-               @beforeChange="beforeChange($event)">
-            <div v-for="(item, index) in playlist.items" class="slide" :id="'slide-'+index">
-                <img v-if="item.type == 'image'" :src="item.file.file_original">
-                <video muted loop autoplay :id="'video-'+index" v-if="item.type == 'video'">
+    <div class="playlist-viewer">
+        <div class="slides-container">
+            <div
+                v-for="(item, index) in playlist.items"
+                :key="index"
+                :id="'slide-' + index"
+                class="slide"
+                :class="{ 'slide--active': index === current }"
+            >
+                <img v-if="item.type === 'image'" :src="item.file.file_original">
+                <video
+                    v-if="item.type === 'video'"
+                    muted
+                    loop
+                    :id="'video-' + index"
+                >
                     <source :src="item.file.file_original" type="video/mp4">
                 </video>
             </div>
-        </agile>
+        </div>
+
+        <div class="playlist-viewer__actions" v-if="playlist.items.length > 1">
+            <button class="playlist-viewer__nav-button" @click="prev">&lsaquo;</button>
+            <div class="playlist-viewer__dots">
+                <button
+                    v-for="(item, index) in playlist.items"
+                    :key="index"
+                    class="playlist-viewer__dot"
+                    :class="{ 'playlist-viewer__dot--current': index === current }"
+                    @click="goTo(index)"
+                />
+            </div>
+            <button class="playlist-viewer__nav-button" @click="next">&rsaquo;</button>
+        </div>
     </div>
 </template>
-<script>
 
-    import {VueAgile} from 'vue-agile'
+<script setup>
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
-    export default {
-        props: [
-            'playlist'
-        ],
-        data: () => ({
-            slides: [],
-        }),
-        components: {
-            agile: VueAgile
-        },
-        methods: {
-            beforeChange(event) {
-                let currentSlide = this.playlist.items[event.currentSlide];
-                if (currentSlide.type === 'video') {
-                    let element = document.getElementById('video-' + event.currentSlide);
-                    element.pause();
-                    console.log("PAUSE PLAYING");
-                }
-            },
-            afterChange(event) {
-                let currentSlide = this.playlist.items[event.currentSlide];
-                if (currentSlide.type === 'video') {
-                    let element = document.getElementById('video-' + event.currentSlide);
-                    setTimeout(() => {
-                        console.log(element.currentTime);
-                        element.pause();
-                        element.currentTime = 0;
-                        element.play();
-                        console.log("START PLAYING");
-                    }, 500);
-                }
-            }
-        },
-        mounted() {
-        }
+const props = defineProps({
+    playlist: { type: Object, required: true },
+})
+
+const current = ref(0)
+let autoplayTimer = null
+
+function getVideo(index) {
+    return document.getElementById('video-' + index)
+}
+
+function pauseVideo(index) {
+    const el = getVideo(index)
+    if (el) el.pause()
+}
+
+function playVideo(index) {
+    const el = getVideo(index)
+    if (el) {
+        setTimeout(() => {
+            el.pause()
+            el.currentTime = 0
+            el.play()
+        }, 500)
     }
+}
+
+function goTo(index) {
+    const item = props.playlist.items[current.value]
+    if (item?.type === 'video') pauseVideo(current.value)
+
+    current.value = index
+
+    const newItem = props.playlist.items[index]
+    if (newItem?.type === 'video') playVideo(index)
+
+    resetAutoplay()
+}
+
+function next() {
+    goTo((current.value + 1) % props.playlist.items.length)
+}
+
+function prev() {
+    goTo((current.value - 1 + props.playlist.items.length) % props.playlist.items.length)
+}
+
+function resetAutoplay() {
+    clearInterval(autoplayTimer)
+    autoplayTimer = setInterval(next, 10000)
+}
+
+onMounted(() => {
+    const item = props.playlist.items[0]
+    if (item?.type === 'video') {
+        const el = getVideo(0)
+        if (el) el.play()
+    }
+    resetAutoplay()
+})
+
+onUnmounted(() => {
+    clearInterval(autoplayTimer)
+})
 </script>
+
 <style>
-    video {
-        width: 100%;
-    }
+.playlist-viewer {
+    position: relative;
+}
 
-    .thumbnails {
-        margin: 0 -5px;
-        width: calc(100% + 10px);
-    }
-    .agile__actions {
-        margin-top: 20px;
-    }
+.slides-container {
+    position: relative;
+    overflow: hidden;
+}
 
-    .agile__nav-button {
-        background: transparent;
-        border: none;
-        color: #ccc;
-        cursor: pointer;
-        font-size: 24px;
-        -webkit-transition-duration: 0.3s;
-        transition-duration: 0.3s;
-    }
+.slide {
+    display: none;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    justify-content: center;
+}
 
-    .thumbnails .agile__nav-button {
-        position: absolute;
-        top: 50%;
-        -webkit-transform: translateY(-50%);
-        transform: translateY(-50%);
-    }
+.slide--active {
+    display: flex;
+}
 
-    .thumbnails .agile__nav-button--prev {
-        left: -45px;
-    }
+.slide img {
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+}
 
-    .thumbnails .agile__nav-button--next {
-        right: -45px;
-    }
+.slide video {
+    width: 100%;
+}
 
-    .agile__nav-button:hover {
-        color: #888;
-    }
+.playlist-viewer__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
 
-    .agile__dot {
-        margin: 0 10px;
-    }
+.playlist-viewer__nav-button {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 24px;
+    transition-duration: 0.3s;
+}
 
-    .agile__dot button {
-        background-color: #eee;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        display: block;
-        height: 10px;
-        font-size: 0;
-        line-height: 0;
-        margin: 0;
-        padding: 0;
-        -webkit-transition-duration: 0.3s;
-        transition-duration: 0.3s;
-        width: 10px;
-    }
+.playlist-viewer__nav-button:hover {
+    color: #888;
+}
 
-    .agile__dot--current button, .agile__dot:hover button {
-        background-color: #888;
-    }
+.playlist-viewer__dots {
+    display: flex;
+    gap: 10px;
+    margin: 0 10px;
+}
 
-    .slide {
-        -webkit-box-align: center;
-        align-items: center;
-        box-sizing: border-box;
-        color: #fff;
-        display: -webkit-box;
-        display: flex;
-        width: 100%;
-        -webkit-box-pack: center;
-        justify-content: center;
-    }
+.playlist-viewer__dot {
+    background-color: #eee;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: block;
+    height: 10px;
+    width: 10px;
+    padding: 0;
+    transition-duration: 0.3s;
+}
 
-    .slide--thumbniail {
-        cursor: pointer;
-        padding: 0 5px;
-        -webkit-transition: opacity 0.3s;
-        transition: opacity 0.3s;
-    }
-
-    .slide--thumbniail:hover {
-        opacity: 0.75;
-    }
-    .slide--thumbniail img {
-        width: 24%;
-    }
-
-    .slide img {
-        -o-object-fit: cover;
-        object-fit: cover;
-        -o-object-position: center;
-        object-position: center;
-        width: 100%;
-    }
+.playlist-viewer__dot--current,
+.playlist-viewer__dot:hover {
+    background-color: #888;
+}
 </style>

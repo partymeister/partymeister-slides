@@ -42,7 +42,7 @@
 @section('view_scripts')
     <link type="text/css" rel="stylesheet" href="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.css">
     <script type="application/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.js"></script>
-    <script type="text/javascript">
+    <script type="module">
         $(document).ready(function () {
             $('#type').change(function(){
                 let value = $(this).find(":selected").val();

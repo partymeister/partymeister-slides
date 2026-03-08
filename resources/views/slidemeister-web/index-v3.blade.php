@@ -22,7 +22,7 @@
 
 {{-- CABLES.gl WebGL patch - loaded before Vue app --}}
 <script type="text/javascript" src="/cables/js/patch.js" async="true"></script>
-<script>
+<script type="module">
     // Globals consumed by the Vue app
     window.TOKEN = '{{ $api_token }}';
     window.BASE_URL = '{{ config('app.url') }}';

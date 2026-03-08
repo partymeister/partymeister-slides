@@ -66,13 +66,13 @@
 
 
 @section('view_scripts')
-    <script>
+    <script type="module">
         $(document).ready(function () {
             $('.slidemeister-save').on('click', function (e) {
 
                 $('.loader').addClass('is-active');
 
-                Vue.prototype.$eventHub.$on('partymeister-slides:receive-definitions', (data) => {
+                window.eventBus.on('partymeister-slides:receive-definitions', (data) => {
                     if (data.name === 'template-editor') {
                         $('input[name="definitions"]').val(data.definitions_as_form_data);
                         $('input[name="cached_html_preview"]').val($('#slidemeister').html());
@@ -81,7 +81,7 @@
                     }
                 });
 
-                Vue.prototype.$eventHub.$emit('partymeister-slides:request-definitions', 'template-editor');
+                window.eventBus.emit('partymeister-slides:request-definitions', 'template-editor');
                 e.preventDefault();
             });
 
@@ -102,7 +102,7 @@
             data.type = $('#template_for option:selected').val();
 
             if ($('input[name="definitions"]').val() != '') {
-                Vue.prototype.$eventHub.$emit('partymeister-slides:load-definitions', {
+                window.eventBus.emit('partymeister-slides:load-definitions', {
                     name: 'template-editor',
                     elements: data,
                     replacements: {}

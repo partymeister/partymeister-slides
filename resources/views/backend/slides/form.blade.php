@@ -70,13 +70,13 @@
 @section('right-sidebar-header')<h5 class="pb-0 mb-0">Properties and Media</h5>@endsection
 
 @section('view_scripts')
-    <script>
+    <script type="module">
         $(document).ready(function () {
             $('.slidemeister-save').on('click', function (e) {
 
                 $('.loader').addClass('is-active');
 
-                Vue.prototype.$eventHub.$on('partymeister-slides:receive-definitions', (data) => {
+                window.eventBus.on('partymeister-slides:receive-definitions', (data) => {
                     if (data.name === 'slide-editor') {
                         $('input[name="definitions"]').val(data.definitions_as_form_data);
                         $('input[name="cached_html_preview"]').val($('#slidemeister').html());
@@ -85,12 +85,12 @@
                     }
                 });
 
-                Vue.prototype.$eventHub.$emit('partymeister-slides:request-definitions', 'slide-editor');
+                window.eventBus.emit('partymeister-slides:request-definitions', 'slide-editor');
                 e.preventDefault();
             });
 
             if ($('input[name="definitions"]').val() != '') {
-                Vue.prototype.$eventHub.$emit('partymeister-slides:load-definitions', {
+                window.eventBus.emit('partymeister-slides:load-definitions', {
                     name: 'slide-editor',
                     elements: JSON.parse($('input[name="definitions"]').val()),
                     replacements: {},
