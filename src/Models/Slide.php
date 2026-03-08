@@ -112,7 +112,7 @@ class Slide extends Model implements HasMedia
     /**
      * @param  Media|null  $media
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         try {
             $this->addMediaConversion('thumb')

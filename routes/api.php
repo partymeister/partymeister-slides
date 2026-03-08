@@ -6,6 +6,13 @@ use Partymeister\Slides\Events\PlaylistNextRequest;
 use Partymeister\Slides\Events\PlaylistPreviousRequest;
 use Partymeister\Slides\Events\SiegmeisterRequest;
 use Partymeister\Slides\Http\Controllers\Api\FontsController;
+use Partymeister\Slides\Http\Controllers\Api\SlidesController;
+use Partymeister\Slides\Http\Controllers\Api\SlideTemplatesController;
+use Partymeister\Slides\Http\Controllers\Api\PlaylistsController;
+use Partymeister\Slides\Http\Controllers\Api\PlaylistItemsController;
+use Partymeister\Slides\Http\Controllers\Api\TransitionsController;
+use Partymeister\Slides\Http\Controllers\Api\SlideClientsController;
+use Partymeister\Slides\Http\Controllers\Api\SlideClients\CommunicationController;
 use Partymeister\Slides\Services\XMLService;
 
 /**
@@ -13,16 +20,15 @@ use Partymeister\Slides\Services\XMLService;
  */
 Route::group([
     'middleware' => ['auth:api', 'bindings', 'permission'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
     'prefix'     => 'api',
     'as'         => 'api.',
 ], function () {
-    Route::apiResource('slides', 'SlidesController');
-    Route::apiResource('slide_templates', 'SlideTemplatesController');
-    Route::apiResource('playlists', 'PlaylistsController');
-    Route::apiResource('playlist_items', 'PlaylistItemsController');
-    Route::apiResource('transitions', 'TransitionsController');
-    Route::apiResource('slide_clients', 'SlideClientsController');
+    Route::apiResource('slides', SlidesController::class);
+    Route::apiResource('slide_templates', SlideTemplatesController::class);
+    Route::apiResource('playlists', PlaylistsController::class);
+    Route::apiResource('playlist_items', PlaylistItemsController::class);
+    Route::apiResource('transitions', TransitionsController::class);
+    Route::apiResource('slide_clients', SlideClientsController::class);
 });
 
 /**
@@ -30,7 +36,6 @@ Route::group([
  */
 Route::group([
     'middleware' => ['bindings'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
     'prefix'     => 'api',
     'as'         => 'api.',
 ], function () {
@@ -46,35 +51,34 @@ Route::post('ajax/slidemeister-web/{slide_client}/status', function (Request $re
 
 Route::group([
     'middleware' => ['web', 'web_auth', 'bindings', 'permission'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
     'prefix'     => 'ajax',
     'as'         => 'ajax.',
 ], function () {
-    Route::get('transitions', 'TransitionsController@index')
+    Route::get('transitions', [TransitionsController::class, 'index'])
          ->name('transitions.index');
-    Route::get('playlists', 'PlaylistsController@show')
+    Route::get('playlists', [PlaylistsController::class, 'show'])
          ->name('playlists.index');
-    Route::get('playlist_items/{playlist_item}', 'PlaylistItemsController@show')
+    Route::get('playlist_items/{playlist_item}', [PlaylistItemsController::class, 'show'])
          ->name('playlist_items.show');
-    Route::post('slide_templates', 'SlideTemplatesController@preview')
+    Route::post('slide_templates', [SlideTemplatesController::class, 'preview'])
          ->name('slide_templates.preview');
-    Route::get('slides', 'SlidesController@index')
+    Route::get('slides', [SlidesController::class, 'index'])
          ->name('slides.index');
-    Route::post('slide_clients/communication/playlist', 'SlideClients\CommunicationController@playlist')
+    Route::post('slide_clients/communication/playlist', [CommunicationController::class, 'playlist'])
          ->name('slide_clients.communication.playlist');
-    Route::post('slide_clients/communication/playnow', 'SlideClients\CommunicationController@playnow')
+    Route::post('slide_clients/communication/playnow', [CommunicationController::class, 'playnow'])
          ->name('slide_clients.communication.playnow');
-    Route::post('slide_clients/communication/seek', 'SlideClients\CommunicationController@seek')
+    Route::post('slide_clients/communication/seek', [CommunicationController::class, 'seek'])
          ->name('slide_clients.communication.seek');
-    Route::post('slide_clients/communication/seek_continue', 'SlideClients\CommunicationController@seek_continue')
+    Route::post('slide_clients/communication/seek_continue', [CommunicationController::class, 'seek_continue'])
          ->name('slide_clients.communication.seek_continue');
-    Route::post('slide_clients/communication/siegmeister', 'SlideClients\CommunicationController@siegmeister')
+    Route::post('slide_clients/communication/siegmeister', [CommunicationController::class, 'siegmeister'])
          ->name('slide_clients.communication.siegmeister');
-    Route::post('slide_clients/communication/skip', 'SlideClients\CommunicationController@skip')
+    Route::post('slide_clients/communication/skip', [CommunicationController::class, 'skip'])
          ->name('slide_clients.communication.skip');
-    Route::get('slide_clients/communication/system', 'SlideClients\CommunicationController@get_system_info')
+    Route::get('slide_clients/communication/system', [CommunicationController::class, 'get_system_info'])
          ->name('slide_clients.communication.system');
-    Route::get('slide_clients/communication/playlists', 'SlideClients\CommunicationController@get_playlists')
+    Route::get('slide_clients/communication/playlists', [CommunicationController::class, 'get_playlists'])
          ->name('slide_clients.communication.playlists');
 });
 
@@ -89,7 +93,6 @@ Route::group([
 
 Route::group([
     'middleware' => ['bindings'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
     'prefix'     => 'ajax',
     'as'         => 'ajax.',
 ], function () {
@@ -129,7 +132,6 @@ Route::group([
 
 Route::group([
     'middleware' => ['bindings'],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
     'prefix'     => 'ajax',
     'as'         => 'ajax.',
 ], function () {

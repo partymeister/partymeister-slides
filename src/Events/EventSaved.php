@@ -28,10 +28,10 @@ class EventSaved
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return array
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
-        return new PrivateChannel('channel-name');
+        return [new PrivateChannel('channel-name')];
     }
 }

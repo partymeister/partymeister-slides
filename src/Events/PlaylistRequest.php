@@ -38,10 +38,10 @@ class PlaylistRequest implements ShouldBroadcastNow
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return array
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
-        return new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'));
+        return [new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'))];
     }
 }
