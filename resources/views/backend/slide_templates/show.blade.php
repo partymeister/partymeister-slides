@@ -1,11 +1,7 @@
 <html>
 <head>
     @include('partymeister-slides::layouts.partials.slide_fonts')
-    @if (strpos($_SERVER['HTTP_USER_AGENT'], 'AltonaHTTPClient') > 0)
-        <link href="{{config('partymeister-slides.screens_url')}}{{ mix('/css/motor-backend.css') }}" rel="stylesheet" type="text/css"/>
-    @else
-        <link href="{{ mix('/css/motor-backend.css') }}" rel="stylesheet" type="text/css"/>
-    @endif
+    @vite(['resources/assets/sass/project.package-development.scss'])
 
     <style type="text/css">
         body {
