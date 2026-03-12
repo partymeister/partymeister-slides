@@ -1,6 +1,6 @@
 <?php
 
-namespace Motor\Backend\Database\Factories;
+namespace Partymeister\Slides\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Partymeister\Slides\Models\Playlist;

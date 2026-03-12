@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Partymeister\Slides\Integration\Controller\Api;
+
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PartymeisterSlidesApiPlaylistTest extends TestCase

@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Partymeister\Slides\Integration\Controller\Backend;
+
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Partymeister\Slides\Models\SlideClient;
 
