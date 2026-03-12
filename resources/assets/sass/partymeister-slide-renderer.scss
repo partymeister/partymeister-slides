@@ -1,0 +1,26 @@
+// Minimal CSS for the slide HTML preview / screenshot renderer.
+// Recreated from the old partymeister-slidemeister-web.scss that was
+// compiled via Mix. Only includes what the render view actually needs.
+
+// Bootstrap variables + reboot (reset/normalize) only — not the full framework
+$blue: #20a8d8 !default;
+$indigo: #6610f2 !default;
+$purple: #6f42c1 !default;
+$pink: #e83e8c !default;
+$red: #f86c6b !default;
+$orange: #f8cb00 !default;
+$yellow: #ffc107 !default;
+$green: #4dbd74 !default;
+$teal: #20c997 !default;
+$cyan: #17a2b8 !default;
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/reboot";
+
+// animate.css (used by slidemeister-web for slide transitions)
+@import "animate.css";
+
+// Slidemeister core rendering rules
+@import 'partymeister-slides/resources/assets/sass/modules/partymeister-slides';
