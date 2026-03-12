@@ -83,7 +83,7 @@ class PlaylistService extends BaseService
         $count = 0;
         $slideIds = [];
 
-        if (config('partymeister-slides.screenshots')) {
+        if (config('partymeister-slides.generate_screenshots')) {
             $browser = new ScreenshotHelper();
         }
 
@@ -247,7 +247,7 @@ class PlaylistService extends BaseService
         // 3. save slides
         $count = 0;
 
-        if (config('partymeister-slides.screenshots')) {
+        if (config('partymeister-slides.generate_screenshots')) {
             $browser = new ScreenshotHelper();
         }
 
@@ -479,7 +479,7 @@ class PlaylistService extends BaseService
         // 3. save slides
         $count = 0;
 
-        if (config('partymeister-slides.screenshots')) {
+        if (config('partymeister-slides.generate_screenshots')) {
             $browser = new ScreenshotHelper();
         }
 

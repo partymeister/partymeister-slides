@@ -2,10 +2,8 @@
 
 namespace Partymeister\Slides\Providers;
 
-use Partymeister\Slides\Console\Commands\PartymeisterSlidesListenForScreenshotCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Partymeister\Slides\Console\Commands\PartymeisterWebdriverCommand;
 use Partymeister\Slides\Models\Component\ComponentPlaylistViewer;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\PlaylistItem;
@@ -42,12 +40,7 @@ class PartymeisterServiceProvider extends ServiceProvider
 
     public function registerCommands()
     {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                PartymeisterWebdriverCommand::class,
-                PartymeisterSlidesListenForScreenshotCommand::class
-            ]);
-        }
+        //
     }
 
     public function config()

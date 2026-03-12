@@ -42,7 +42,7 @@ class SlideTemplateService extends BaseService
 
     protected function generatePreview()
     {
-        if (config('partymeister-slides.screenshots')) {
+        if (config('partymeister-slides.generate_screenshots')) {
             $browser = new ScreenshotHelper();
         }
         if (isset($browser)) {
