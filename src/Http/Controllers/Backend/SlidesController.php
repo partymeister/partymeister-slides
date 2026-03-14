@@ -119,10 +119,27 @@ class SlidesController extends Controller
 
     /**
      * Render a slide from definitions JSON with text fitting.
-     * Used by the screenshot worker to generate beamslide previews.
      */
     public function render(Slide $record)
     {
+        return view('partymeister-slides::backend.slides.render', compact('record'));
+    }
+
+    /**
+     * Render a slide preview from cached definitions (no DB record needed).
+     */
+    public function renderPreview(string $cacheKey)
+    {
+        $definitions = cache()->get('slide_preview:'.$cacheKey);
+
+        if (!$definitions) {
+            abort(404, 'Preview expired');
+        }
+
+        // Create a virtual record object for the view
+        $record = new Slide();
+        $record->definitions = $definitions;
+
         return view('partymeister-slides::backend.slides.render', compact('record'));
     }
 

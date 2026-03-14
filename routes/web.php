@@ -139,6 +139,8 @@ Route::get('backend/slides/{slide}.html', [SlidesController::class, 'show'])
 Route::get('backend/slides/{slide}/render', [SlidesController::class, 'render'])
      ->middleware(['bindings'])
      ->name('backend.slides.render');
+Route::get('backend/slides/render-preview/{cacheKey}', [SlidesController::class, 'renderPreview'])
+     ->name('backend.slides.render-preview');
 
 // FIXME: put these in controllers so we can use the Route caching
 //Route::get('test-prizegiving', function() {
