@@ -118,6 +118,15 @@ class SlidesController extends Controller
     }
 
     /**
+     * Render a slide from definitions JSON with text fitting.
+     * Used by the screenshot worker to generate beamslide previews.
+     */
+    public function render(Slide $record)
+    {
+        return view('partymeister-slides::backend.slides.render', compact('record'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  Slide  $record
