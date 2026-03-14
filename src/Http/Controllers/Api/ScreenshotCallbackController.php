@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Motor\Backend\Http\Controllers\ApiController;
+use Partymeister\Competitions\Models\Entry;
 use Partymeister\Slides\Events\ScreenshotUpdated;
 use Partymeister\Slides\Models\Slide;
 use Partymeister\Slides\Models\SlideTemplate;
@@ -15,15 +16,16 @@ class ScreenshotCallbackController extends ApiController
     protected array $allowedClasses = [
         Slide::class,
         SlideTemplate::class,
+        Entry::class,
     ];
 
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'slideId'    => 'required|integer',
+            'slideId'    => 'required|numeric',
             'class'      => 'required|string',
             'fileName'   => 'required|string',
-            'collection' => 'required|string|in:preview,final',
+            'collection' => 'required|string|in:preview,final,beamslide',
         ]);
 
         $class = $request->input('class');
