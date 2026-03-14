@@ -7,7 +7,6 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Motor\Media\Http\Resources\FileResource;
 use Motor\Media\Models\File;
 use Partymeister\Slides\Http\Resources\SlideResource;
@@ -64,8 +63,6 @@ class PlayNowRequest implements ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-        Log::info('PlayNowEventSent');
-
         return [new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'))];
     }
 }

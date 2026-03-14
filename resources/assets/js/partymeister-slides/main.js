@@ -19,7 +19,7 @@ Vue.component(
 Vue.prototype.$eventHub = new Vue();
 
 const server = new Echo({
-    broadcaster: 'pusher',
+    broadcaster: 'reverb',
     key: window.websocket.key,
     wsHost: window.websocket.host,
     wsPort: window.websocket.port,

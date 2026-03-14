@@ -48,7 +48,7 @@ export default {
             delete this.server;
 
             this.server = new Echo({
-                broadcaster: 'pusher',
+                broadcaster: 'reverb',
                 key: this.serverConfiguration.key,
                 wsHost: this.serverConfiguration.host,
                 wsPort: this.serverConfiguration.port,

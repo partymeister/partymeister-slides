@@ -53,6 +53,5 @@ class ProcessScreenshotJob implements ShouldQueue
         } catch (\Exception $e) {
             Log::warning("Can't generate screenshot for slide .".$this->slide->id, [$e->getMessage()]);
         }
-        Log::info('Screenshot attached to slide', [$this->slide->id, $this->fileName, $this->collection]);
     }
 }
