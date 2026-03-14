@@ -27,7 +27,7 @@ class ComponentPlaylistViewers
     public function index(Request $request)
     {
         $playlist = Playlist::find($this->component->playlist_id);
-        $this->playlist = (new PlaylistResource($playlist->load('items')))->toArrayRecursive();
+        $this->playlist = (new PlaylistResource($playlist->load(['items.slide', 'items.transition', 'items.transition_slidemeister', 'items.file_association'])))->toArrayRecursive();
 
         return $this->render();
     }
