@@ -17,8 +17,9 @@ Route::get('internal/generate/schedule/{schedule}', function (\Partymeister\Core
     return view('partymeister-slides::slidemeister-generator.index', [
         'generator_type' => 'timetable',
         'schedule_id' => $schedule->id,
-        'api_token' => \Motor\Backend\Models\User::find(1)->api_token,
+        'api_token' => \Motor\Backend\Models\User::find(1)?->api_token ?? abort(500, 'Admin user not found'),
         'headless' => true,
+        'base_url' => config('app.url_internal', config('app.url')),
     ]);
 })->middleware(['web', 'bindings'])->name('internal.generate.schedule');
 

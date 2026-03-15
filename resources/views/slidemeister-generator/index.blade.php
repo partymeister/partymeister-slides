@@ -16,7 +16,7 @@
 
 <script type="module">
     window.TOKEN = '{{ $api_token }}';
-    window.BASE_URL = '{{ config('app.url') }}';
+    window.BASE_URL = '{{ $base_url ?? config('app.url') }}';
     window.GENERATOR_TYPE = '{{ $generator_type }}';
     @if(isset($competition_id))
     window.COMPETITION_ID = {{ $competition_id }};
