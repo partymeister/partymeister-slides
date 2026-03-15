@@ -362,8 +362,8 @@ const loadingLabel: Record<string, string> = {
       </template>
     </div>
 
-    <div v-if="headless && state === 'saved'" class="generation-complete"></div>
-    <div v-if="headless && state === 'error'" class="generation-error" :data-error="errorMessage"></div>
+    <div v-if="headless && state === 'saved'" class="generation-complete" style="display:block">done</div>
+    <div v-if="headless && state === 'error'" class="generation-error" style="display:block" :data-error="errorMessage">error</div>
 
     <div class="status-bar">
       <template v-if="generatorType === 'start'">
