@@ -23,6 +23,7 @@ const generatorType = window.GENERATOR_TYPE || 'competition'
 const competitionId = window.COMPETITION_ID
 const scheduleId = window.SCHEDULE_ID
 const eventId = window.EVENT_ID
+const headless = window.HEADLESS || false
 
 // Start page state
 const competitions = ref<{ id: number; name: string }[]>([])
@@ -57,7 +58,11 @@ onMounted(async () => {
         break
     }
     if (state.value === 'loading') {
-      state.value = 'preview'
+      if (headless) {
+        await savePlaylist()
+      } else {
+        state.value = 'preview'
+      }
     }
   } catch (err) {
     errorMessage.value = err instanceof Error ? err.message : 'Failed to load data'
@@ -356,6 +361,9 @@ const loadingLabel: Record<string, string> = {
         </div>
       </template>
     </div>
+
+    <div v-if="headless && state === 'saved'" class="generation-complete"></div>
+    <div v-if="headless && state === 'error'" class="generation-error" :data-error="errorMessage"></div>
 
     <div class="status-bar">
       <template v-if="generatorType === 'start'">

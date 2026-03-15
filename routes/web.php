@@ -13,6 +13,15 @@ Route::get('slidemeister-web/{slide_client}', [SlidemeisterWebController::class,
      ->middleware(['bindings'])
      ->name('backend.slidemeister-web.show');
 
+Route::get('internal/generate/schedule/{schedule}', function (\Partymeister\Core\Models\Schedule $schedule) {
+    return view('partymeister-slides::slidemeister-generator.index', [
+        'generator_type' => 'timetable',
+        'schedule_id' => $schedule->id,
+        'api_token' => \Motor\Backend\Models\User::find(1)->api_token,
+        'headless' => true,
+    ]);
+})->middleware(['web', 'bindings'])->name('internal.generate.schedule');
+
 Route::group(['middleware' => ['web', 'web_auth', 'bindings']], function () {
     Route::get('slidemeister-editor', function () {
         return view('partymeister-slides::slidemeister-editor.index', [

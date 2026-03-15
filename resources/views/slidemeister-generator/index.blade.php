@@ -27,6 +27,9 @@
     @if(isset($event_id))
     window.EVENT_ID = {{ $event_id }};
     @endif
+    @if(isset($headless) && $headless)
+    window.HEADLESS = true;
+    @endif
 </script>
 
 @if(app()->environment('local') && file_exists(public_path('hot-slidemeister-generator')))

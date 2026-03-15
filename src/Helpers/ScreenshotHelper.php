@@ -16,4 +16,12 @@ class ScreenshotHelper
             'collection' => $collection,
         ]));
     }
+
+    public function generate(string $url): void
+    {
+        Redis::rpush('screenshot:jobs', json_encode([
+            'type' => 'generate',
+            'url'  => $url,
+        ]));
+    }
 }

@@ -7,4 +7,5 @@ interface Window {
   SCHEDULE_ID: number
   EVENT_ID: number
   GENERATOR_TYPE: 'start' | 'competition' | 'timetable' | 'prizegiving' | 'event'
+  HEADLESS?: boolean
 }
