@@ -191,7 +191,7 @@ class Generator
             }
             $previousItem = $playlist_item;
         }
-        if (Arr::get($_GET, 'debug')) {
+        if (Arr::get($_GET, 'debug') && app()->environment('local')) {
             print_r(self::add_encoding($xml->asXML()));
             exit();
         }
