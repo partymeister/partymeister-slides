@@ -46,6 +46,28 @@ class ScreenshotCallbackController extends ApiController
         $fileName = $request->input('fileName');
         $collection = $request->input('collection');
 
+        // Security: restrict to files inside storage_path() to prevent arbitrary file import
+        $realPath = realpath($fileName);
+        if ($realPath === false || ! str_starts_with($realPath, storage_path().'/')) {
+            Log::warning('Screenshot callback: path outside storage directory', ['fileName' => $fileName]);
+
+            return response()->json(['message' => 'Invalid file path'], 403);
+        }
+
+        // Security: only allow PNG files (all screenshots are PNGs)
+        if (strtolower(pathinfo($realPath, PATHINFO_EXTENSION)) !== 'png') {
+            Log::warning('Screenshot callback: non-PNG file rejected', ['fileName' => $fileName]);
+
+            return response()->json(['message' => 'Only PNG files are accepted'], 422);
+        }
+
+        $mimeType = mime_content_type($realPath);
+        if ($mimeType !== 'image/png') {
+            Log::warning('Screenshot callback: invalid MIME type', ['fileName' => $fileName, 'mime' => $mimeType]);
+
+            return response()->json(['message' => 'File is not a valid PNG image'], 422);
+        }
+
         if (! is_file($fileName)) {
             Log::warning('Screenshot callback: file not found', ['fileName' => $fileName]);
 

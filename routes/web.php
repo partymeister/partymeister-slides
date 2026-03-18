@@ -13,7 +13,16 @@ Route::get('slidemeister-web/{slide_client}', [SlidemeisterWebController::class,
      ->middleware(['bindings'])
      ->name('backend.slidemeister-web.show');
 
-Route::get('internal/generate/schedule/{schedule}', function (\Partymeister\Core\Models\Schedule $schedule) {
+// FIXME: This route still embeds the admin user's API token in the page for the Vue app
+// to make authenticated API calls. Ideally, the headless generator should use a short-lived
+// scoped token instead of the admin's permanent token. The shared secret below prevents
+// unauthorized access to the route, but the admin token is still exposed to valid callers.
+Route::get('internal/generate/schedule/{schedule}', function (\Illuminate\Http\Request $request, \Partymeister\Core\Models\Schedule $schedule) {
+    $secret = config('partymeister-slides.screenshot_secret');
+    if (empty($secret) || ! hash_equals($secret, (string) $request->query('secret', ''))) {
+        abort(403, 'Invalid screenshot secret');
+    }
+
     return view('partymeister-slides::slidemeister-generator.index', [
         'generator_type' => 'timetable',
         'schedule_id' => $schedule->id,
