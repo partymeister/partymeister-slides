@@ -25,7 +25,7 @@ class PlaylistService extends BaseService
     /**
      * @var string
      */
-    protected $model = Playlist::class;
+    protected string $model = Playlist::class;
 
     /**
      * @param $data

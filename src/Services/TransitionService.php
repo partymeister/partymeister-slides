@@ -14,7 +14,7 @@ class TransitionService extends BaseService
     /**
      * @var string
      */
-    protected $model = Transition::class;
+    protected string $model = Transition::class;
 
     public function filters()
     {

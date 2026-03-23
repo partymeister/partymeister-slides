@@ -15,7 +15,7 @@ class SlideTemplateService extends BaseService
     /**
      * @var string
      */
-    protected $model = SlideTemplate::class;
+    protected string $model = SlideTemplate::class;
 
     public function filters()
     {

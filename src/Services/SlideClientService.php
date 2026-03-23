@@ -14,7 +14,7 @@ class SlideClientService extends BaseService
     /**
      * @var string
      */
-    protected $model = SlideClient::class;
+    protected string $model = SlideClient::class;
 
     public function afterCreate()
     {

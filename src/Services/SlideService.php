@@ -16,7 +16,7 @@ class SlideService extends BaseService
     /**
      * @var string
      */
-    protected $model = Slide::class;
+    protected string $model = Slide::class;
 
     public function filters()
     {

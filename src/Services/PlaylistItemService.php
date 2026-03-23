@@ -13,5 +13,5 @@ class PlaylistItemService extends BaseService
     /**
      * @var string
      */
-    protected $model = PlaylistItem::class;
+    protected string $model = PlaylistItem::class;
 }
