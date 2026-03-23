@@ -26,7 +26,7 @@ Route::get('internal/generate/schedule/{schedule}', function (\Illuminate\Http\R
     return view('partymeister-slides::slidemeister-generator.index', [
         'generator_type' => 'timetable',
         'schedule_id' => $schedule->id,
-        'api_token' => \Motor\Backend\Models\User::find(1)?->api_token ?? abort(500, 'Admin user not found'),
+        'api_token' => \Motor\Admin\Models\User::find(1)?->api_token ?? abort(500, 'Admin user not found'),
         'headless' => true,
         'base_url' => config('app.url_internal', config('app.url')),
     ]);

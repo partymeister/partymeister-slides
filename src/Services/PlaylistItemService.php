@@ -2,7 +2,7 @@
 
 namespace Partymeister\Slides\Services;
 
-use Motor\Backend\Services\BaseService;
+use Motor\Admin\Services\BaseService;
 use Partymeister\Slides\Models\PlaylistItem;
 
 /**

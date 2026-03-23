@@ -3,10 +3,10 @@
         <div class="container mt-3" style="overflow:scroll; position: absolute; top: 0; bottom: 0;">
             <div class="form-group">
                 <label class="control-label">
-                    {{ t('motor-backend.backend.categories.category') }}
+                    {{ t('motor-admin.backend.categories.category') }}
                 </label>
                 <select class="form-control" name="category_id" v-model="category_id" @change="refreshFiles">
-                    <option value="">{{ t('motor-backend.backend.categories.all_categories') }}</option>
+                    <option value="">{{ t('motor-admin.backend.categories.all_categories') }}</option>
                     <option v-for="(category, index) in categories" :key="category.id" :value="category.id">
                         {{ category.name }}
                     </option>

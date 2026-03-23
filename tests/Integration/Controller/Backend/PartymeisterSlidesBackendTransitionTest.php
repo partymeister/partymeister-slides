@@ -55,7 +55,7 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
     {
         $this->visit('/backend/transitions')
             ->see(trans('partymeister-slides::backend/transitions.transitions'))
-            ->see(trans('motor-backend::backend/global.no_records'));
+            ->see(trans('motor-admin::backend/global.no_records'));
     }
 
     /** @test */
@@ -73,10 +73,10 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
         $record = create_test_transition();
         $this->visit('/backend/transitions')
             ->within('table', function () {
-                $this->click(trans('motor-backend::backend/global.edit'));
+                $this->click(trans('motor-admin::backend/global.edit'));
             })
             ->seePageIs('/backend/transitions/'.$record->id.'/edit')
-            ->click(trans('motor-backend::backend/global.back'))
+            ->click(trans('motor-admin::backend/global.back'))
             ->seePageIs('/backend/transitions');
     }
 
@@ -157,7 +157,7 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
 
         $this->visit('/backend/transitions')
             ->within('table', function () {
-                $this->press(trans('motor-backend::backend/global.delete'));
+                $this->press(trans('motor-admin::backend/global.delete'));
             })
             ->seePageIs('/backend/transitions')
             ->see(trans('partymeister-slides::backend/transitions.deleted'));

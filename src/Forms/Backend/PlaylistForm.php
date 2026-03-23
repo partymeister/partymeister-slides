@@ -14,7 +14,7 @@ class PlaylistForm extends Form
      */
     public function buildForm()
     {
-        $this->add('name', 'text', ['label' => trans('motor-backend::backend/global.name'), 'rules' => 'required'])
+        $this->add('name', 'text', ['label' => trans('motor-admin::backend/global.name'), 'rules' => 'required'])
              ->add('playlist_items', 'hidden', ['attr' => ['id' => 'playlist-items']])
              ->add('type', 'select', [
                  'label'   => trans('partymeister-slides::backend/playlists.type'),

@@ -2,8 +2,8 @@
 
 namespace Partymeister\Slides\Services;
 
-use Motor\Backend\Models\Category;
-use Motor\Backend\Services\BaseService;
+use Motor\Admin\Models\Category;
+use Motor\Admin\Services\BaseService;
 use Motor\Core\Filter\Renderers\SelectRenderer;
 use Partymeister\Slides\Helpers\ScreenshotHelper;
 use Partymeister\Slides\Models\Slide;
@@ -29,7 +29,7 @@ class SlideService extends BaseService
                               ->orderBy('_lft', 'ASC')
                               ->pluck('name', 'id');
         $this->filter->add(new SelectRenderer('category_id'))
-                     ->setEmptyOption('-- '.trans('motor-backend::backend/categories.categories').' --')
+                     ->setEmptyOption('-- '.trans('motor-admin::backend/categories.categories').' --')
                      ->setOptions($categories);
     }
 

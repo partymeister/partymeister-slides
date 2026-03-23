@@ -14,7 +14,7 @@ class SlideTemplateForm extends Form
      */
     public function buildForm()
     {
-        $this->add('name', 'text', ['label' => trans('motor-backend::backend/global.name'), 'rules' => 'required'])
+        $this->add('name', 'text', ['label' => trans('motor-admin::backend/global.name'), 'rules' => 'required'])
              ->add('template_for', 'select', [
                  'label'   => trans('partymeister-slides::backend/slide_templates.template_for'),
                  'choices' => (trans('partymeister-slides::backend/slide_templates.template_for_types')),

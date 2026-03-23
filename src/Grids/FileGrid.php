@@ -2,10 +2,10 @@
 
 namespace Partymeister\Slides\Grids;
 
-use Motor\Backend\Grid\Grid;
-use Motor\Backend\Grid\Renderers\BladeRenderer;
-use Motor\Backend\Grid\Renderers\CollectionRenderer;
-use Motor\Backend\Grid\Renderers\FileRenderer;
+use Motor\Admin\Grid\Grid;
+use Motor\Admin\Grid\Renderers\BladeRenderer;
+use Motor\Admin\Grid\Renderers\CollectionRenderer;
+use Motor\Admin\Grid\Renderers\FileRenderer;
 
 /**
  * Class FileGrid
@@ -20,11 +20,11 @@ class FileGrid extends Grid
              ->renderer(FileRenderer::class, ['file' => 'file', 'name_only' => true]);
         $this->addColumn('description', trans('motor-media::backend/files.description'));
         $this->addColumn('author', trans('motor-media::backend/files.author'));
-        $this->addColumn('categories', trans('motor-backend::backend/categories.categories'))
+        $this->addColumn('categories', trans('motor-admin::backend/categories.categories'))
              ->renderer(CollectionRenderer::class, ['column' => 'name']);
         $this->addColumn('controls', trans('partymeister-slides::backend/slide_clients.controls'))
              ->renderer(BladeRenderer::class, ['template' => 'partymeister-slides::grid.slide_clients.playnow_file_controls']);
-        $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.files.edit');
-        $this->addDeleteAction(trans('motor-backend::backend/global.delete'), 'backend.files.destroy');
+        $this->addEditAction(trans('motor-admin::backend/global.edit'), 'backend.files.edit');
+        $this->addDeleteAction(trans('motor-admin::backend/global.delete'), 'backend.files.destroy');
     }
 }

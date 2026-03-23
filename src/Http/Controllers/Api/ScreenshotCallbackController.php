@@ -5,7 +5,7 @@ namespace Partymeister\Slides\Http\Controllers\Api;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Motor\Backend\Http\Controllers\ApiController;
+use Motor\Admin\Http\Controllers\ApiController;
 use Partymeister\Slides\Events\ScreenshotUpdated;
 use Partymeister\Slides\Models\Slide;
 use Partymeister\Slides\Models\SlideTemplate;

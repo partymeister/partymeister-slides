@@ -254,9 +254,9 @@ class Generator
         $item = $data->addChild('item');
         $item->addAttribute('name', $parameters['playlist_id'].'_'.$parameters['slide_id']);
 
-        if (in_array($attachment->mime_type, config('motor-backend-mimetypes.video'))) {
+        if (in_array($attachment->mime_type, config('motor-admin-mimetypes.video'))) {
             $item->addAttribute('type', 'video');
-        } elseif (in_array($attachment->mime_type, config('motor-backend-mimetypes.image'))) {
+        } elseif (in_array($attachment->mime_type, config('motor-admin-mimetypes.image'))) {
             $item->addAttribute('type', 'image');
         }
 

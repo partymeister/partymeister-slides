@@ -3,7 +3,7 @@
 namespace Partymeister\Slides\Forms\Backend;
 
 use Kris\LaravelFormBuilder\Form;
-use Motor\Backend\Models\Category;
+use Motor\Admin\Models\Category;
 
 /**
  * Class SlideForm
@@ -32,8 +32,8 @@ class SlideForm extends Form
             $categoryChoices[$category->id] = $indent.$category->name;
         }
 
-        $this->add('name', 'text', ['label' => trans('motor-backend::backend/global.name'), 'rules' => 'required'])
-             ->add('category_id', 'select', ['label'   => trans('motor-backend::backend/categories.category'),
+        $this->add('name', 'text', ['label' => trans('motor-admin::backend/global.name'), 'rules' => 'required'])
+             ->add('category_id', 'select', ['label'   => trans('motor-admin::backend/categories.category'),
                  'choices' => $categoryChoices,
              ])
              ->add('slide_type', 'select', [

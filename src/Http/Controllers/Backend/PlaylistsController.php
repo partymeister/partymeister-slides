@@ -5,7 +5,7 @@ namespace Partymeister\Slides\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use League\Fractal\Manager;
-use Motor\Backend\Http\Controllers\Controller;
+use Motor\Admin\Http\Controllers\Controller;
 use Partymeister\Slides\Forms\Backend\PlaylistForm;
 use Partymeister\Slides\Grids\PlaylistGrid;
 use Partymeister\Slides\Http\Requests\Backend\PlaylistRequest;

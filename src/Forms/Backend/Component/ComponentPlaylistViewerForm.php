@@ -11,7 +11,7 @@ class ComponentPlaylistViewerForm extends Form
     {
         $this->add('playlist_id', 'select', [
             'label'       => trans('partymeister-slides::backend/playlists.playlist'),
-            'empty_value' => trans('motor-backend::backend/global.please_choose'),
+            'empty_value' => trans('motor-admin::backend/global.please_choose'),
             'choices'     => Playlist::pluck('name', 'id')
                                      ->toArray(),
         ]);

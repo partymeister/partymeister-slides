@@ -2,8 +2,8 @@
 
 namespace Partymeister\Slides\Grids;
 
-use Motor\Backend\Grid\Grid;
-use Motor\Backend\Grid\Renderers\TranslateRenderer;
+use Motor\Admin\Grid\Grid;
+use Motor\Admin\Grid\Renderers\TranslateRenderer;
 
 /**
  * Class SlideClientGrid
@@ -23,9 +23,9 @@ class SlideClientGrid extends Grid
         $this->addAction(trans('partymeister-slides::backend/slide_clients.open_client'), 'backend.slidemeister-web.show', ['class' => 'btn-primary'])
              ->onCondition('type', 'slidemeister-web', '=');
 
-        $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.navigations.edit')
+        $this->addEditAction(trans('motor-admin::backend/global.edit'), 'backend.navigations.edit')
              ->onCondition('parent_id', null, '!=');
-        $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.slide_clients.edit');
-        $this->addDeleteAction(trans('motor-backend::backend/global.delete'), 'backend.slide_clients.destroy');
+        $this->addEditAction(trans('motor-admin::backend/global.edit'), 'backend.slide_clients.edit');
+        $this->addDeleteAction(trans('motor-admin::backend/global.delete'), 'backend.slide_clients.destroy');
     }
 }

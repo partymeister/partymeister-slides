@@ -55,7 +55,7 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
     {
         $this->visit('/backend/playlists')
             ->see(trans('partymeister-slides::backend/playlists.playlists'))
-            ->see(trans('motor-backend::backend/global.no_records'));
+            ->see(trans('motor-admin::backend/global.no_records'));
     }
 
     /** @test */
@@ -73,10 +73,10 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
         $record = create_test_playlist();
         $this->visit('/backend/playlists')
             ->within('table', function () {
-                $this->click(trans('motor-backend::backend/global.edit'));
+                $this->click(trans('motor-admin::backend/global.edit'));
             })
             ->seePageIs('/backend/playlists/'.$record->id.'/edit')
-            ->click(trans('motor-backend::backend/global.back'))
+            ->click(trans('motor-admin::backend/global.back'))
             ->seePageIs('/backend/playlists');
     }
 
@@ -157,7 +157,7 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
 
         $this->visit('/backend/playlists')
             ->within('table', function () {
-                $this->press(trans('motor-backend::backend/global.delete'));
+                $this->press(trans('motor-admin::backend/global.delete'));
             })
             ->seePageIs('/backend/playlists')
             ->see(trans('partymeister-slides::backend/playlists.deleted'));

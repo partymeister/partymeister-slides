@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
-use Motor\Backend\Http\Controllers\Controller;
+use Motor\Admin\Http\Controllers\Controller;
 use Partymeister\Slides\Forms\Backend\SlideClientForm;
 use Partymeister\Slides\Grids\SlideClientGrid;
 use Partymeister\Slides\Http\Requests\Backend\SlideClientRequest;

@@ -4,7 +4,7 @@ namespace Partymeister\Slides\Http\Controllers\Backend;
 
 use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
-use Motor\Backend\Http\Controllers\Controller;
+use Motor\Admin\Http\Controllers\Controller;
 use Partymeister\Slides\Forms\Backend\TransitionForm;
 use Partymeister\Slides\Grids\TransitionGrid;
 use Partymeister\Slides\Http\Requests\Backend\TransitionRequest;

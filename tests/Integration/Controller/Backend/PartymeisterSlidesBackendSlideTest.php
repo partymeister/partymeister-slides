@@ -55,7 +55,7 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
     {
         $this->visit('/backend/slides')
             ->see(trans('partymeister-slides::backend/slides.slides'))
-            ->see(trans('motor-backend::backend/global.no_records'));
+            ->see(trans('motor-admin::backend/global.no_records'));
     }
 
     /** @test */
@@ -73,10 +73,10 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
         $record = create_test_slide();
         $this->visit('/backend/slides')
             ->within('table', function () {
-                $this->click(trans('motor-backend::backend/global.edit'));
+                $this->click(trans('motor-admin::backend/global.edit'));
             })
             ->seePageIs('/backend/slides/'.$record->id.'/edit')
-            ->click(trans('motor-backend::backend/global.back'))
+            ->click(trans('motor-admin::backend/global.back'))
             ->seePageIs('/backend/slides');
     }
 
@@ -157,7 +157,7 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
 
         $this->visit('/backend/slides')
             ->within('table', function () {
-                $this->press(trans('motor-backend::backend/global.delete'));
+                $this->press(trans('motor-admin::backend/global.delete'));
             })
             ->seePageIs('/backend/slides')
             ->see(trans('partymeister-slides::backend/slides.deleted'));

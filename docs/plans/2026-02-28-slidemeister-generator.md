@@ -881,7 +881,7 @@ Add to `routes/web.php` after the existing slidemeister-editor route:
 
 ```php
 Route::get('slidemeister-generator/competition/{competition}', function (\Partymeister\Competitions\Models\Competition $competition) {
-    $apiToken = \Motor\Backend\Models\User::first()->api_token;
+    $apiToken = \Motor\Admin\Models\User::first()->api_token;
 
     return view('partymeister-slides::slidemeister-generator.index', [
         'competition_id' => $competition->id,
@@ -919,8 +919,8 @@ namespace Partymeister\Competitions\Http\Controllers\Api;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Motor\Backend\Helpers\MediaHelper;
-use Motor\Backend\Http\Controllers\Controller;
+use Motor\Admin\Helpers\MediaHelper;
+use Motor\Admin\Http\Controllers\Controller;
 use Partymeister\Competitions\Http\Resources\EntryResource;
 use Partymeister\Competitions\Models\Competition;
 use Partymeister\Slides\Models\SlideTemplate;

@@ -2,9 +2,9 @@
 
 namespace Partymeister\Slides\Grids;
 
-use Motor\Backend\Grid\Grid;
-use Motor\Backend\Grid\Renderers\BladeRenderer;
-use Motor\Backend\Grid\Renderers\TranslateRenderer;
+use Motor\Admin\Grid\Grid;
+use Motor\Admin\Grid\Renderers\BladeRenderer;
+use Motor\Admin\Grid\Renderers\TranslateRenderer;
 
 /**
  * Class PlaylistGrid
@@ -13,7 +13,7 @@ class PlaylistGrid extends Grid
 {
     protected function setup()
     {
-        $this->addColumn('name', trans('motor-backend::backend/global.name'), true);
+        $this->addColumn('name', trans('motor-admin::backend/global.name'), true);
         $this->addColumn('type', trans('partymeister-slides::backend/playlists.type'), true)
              ->renderer(TranslateRenderer::class, ['file' => 'partymeister-slides::backend/playlists.types']);
         $this->addColumn('item_count', trans('partymeister-slides::backend/playlists.items'));
@@ -21,7 +21,7 @@ class PlaylistGrid extends Grid
              ->renderer(BladeRenderer::class, ['template' => 'partymeister-slides::grid.slide_clients.playlist_controls']);
         $this->setDefaultSorting('name', 'ASC');
 
-        $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.playlists.edit');
-        $this->addDeleteAction(trans('motor-backend::backend/global.delete'), 'backend.playlists.destroy');
+        $this->addEditAction(trans('motor-admin::backend/global.edit'), 'backend.playlists.edit');
+        $this->addDeleteAction(trans('motor-admin::backend/global.delete'), 'backend.playlists.destroy');
     }
 }
