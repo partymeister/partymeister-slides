@@ -11,7 +11,6 @@ use Partymeister\Slides\Http\Requests\Api\V2\PlaylistPostRequest;
 use Partymeister\Slides\Http\Resources\V2\PlaylistCollection;
 use Partymeister\Slides\Http\Resources\V2\PlaylistResource;
 use Partymeister\Slides\Models\Playlist;
-use Partymeister\Slides\Services\PlaylistService;
 
 class PlaylistsController extends ApiController
 {
@@ -21,7 +20,7 @@ class PlaylistsController extends ApiController
 
     public function index(PlaylistGetRequest $request): PlaylistCollection
     {
-        $paginator = PlaylistService::collection()->getPaginator();
+        $paginator = Playlist::paginate();
 
         return (new PlaylistCollection($paginator))
             ->additional(['meta' => ['message' => 'Playlists retrieved']]);
@@ -29,7 +28,7 @@ class PlaylistsController extends ApiController
 
     public function store(PlaylistPostRequest $request): JsonResponse
     {
-        $result = PlaylistService::create($request)->getResult();
+        $result = Playlist::create($request->validated());
 
         return (new PlaylistResource($result))
             ->additional(['meta' => ['message' => 'Playlist created']])
@@ -38,24 +37,23 @@ class PlaylistsController extends ApiController
 
     public function show(Playlist $playlist): PlaylistResource
     {
-        $result = PlaylistService::show($playlist)->getResult();
+        $playlist->load(['items.slide.media', 'items.transition', 'items.transition_slidemeister', 'items.file_association.file']);
 
-        return (new PlaylistResource($result))
+        return (new PlaylistResource($playlist))
             ->additional(['meta' => ['message' => 'Playlist retrieved']]);
     }
 
     public function update(PlaylistPatchRequest $request, Playlist $playlist): PlaylistResource
     {
-        $result = PlaylistService::update($playlist, $request)->getResult();
+        $playlist->update($request->validated());
 
-        return (new PlaylistResource($result))
+        return (new PlaylistResource($playlist))
             ->additional(['meta' => ['message' => 'Playlist updated']]);
     }
 
     public function destroy(Playlist $playlist): Response
     {
-        $result = PlaylistService::delete($playlist)->getResult();
-        if ($result) {
+        if ($playlist->delete()) {
             return $this->noContentResponse();
         }
         abort(404, 'Problem deleting playlist');

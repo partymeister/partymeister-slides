@@ -37,12 +37,11 @@ beforeEach(function () {
         'ip_address' => '10.10.10.1', 'port' => '80', 'sort_position' => 1,
         'configuration' => [], 'playlist_id' => $playlist->id,
     ]);
-
-    Event::fake();
 });
 
 describe('V2 RPC Slide Client Communication', function () {
     it('can send playlist to client', function () {
+        Event::fake();
         $client = SlideClient::first();
         $playlist = Playlist::first();
 
@@ -57,12 +56,14 @@ describe('V2 RPC Slide Client Communication', function () {
     });
 
     it('validates slide_client_id is required for playlist', function () {
+        Event::fake();
         $response = $this->asAdmin()->postJson('/api/v2/rpc/slide-clients/playlist', []);
         $response->assertStatus(422)
             ->assertJsonPath('meta.api_version', 'v2');
     });
 
     it('can play a slide now', function () {
+        Event::fake();
         $client = SlideClient::first();
         $slide = Slide::first();
 
@@ -78,6 +79,7 @@ describe('V2 RPC Slide Client Communication', function () {
     });
 
     it('can seek to beginning', function () {
+        Event::fake();
         $client = SlideClient::first();
         $playlist = Playlist::first();
 
@@ -92,6 +94,7 @@ describe('V2 RPC Slide Client Communication', function () {
     });
 
     it('can seek with continue flag', function () {
+        Event::fake();
         $client = SlideClient::first();
         $playlist = Playlist::first();
 
@@ -107,6 +110,7 @@ describe('V2 RPC Slide Client Communication', function () {
     });
 
     it('can skip to next', function () {
+        Event::fake();
         $client = SlideClient::first();
 
         $response = $this->asAdmin()->postJson('/api/v2/rpc/slide-clients/skip', [
@@ -120,6 +124,7 @@ describe('V2 RPC Slide Client Communication', function () {
     });
 
     it('can skip to previous', function () {
+        Event::fake();
         $client = SlideClient::first();
 
         $response = $this->asAdmin()->postJson('/api/v2/rpc/slide-clients/skip', [
@@ -133,6 +138,7 @@ describe('V2 RPC Slide Client Communication', function () {
     });
 
     it('can trigger siegmeister', function () {
+        Event::fake();
         $client = SlideClient::first();
 
         $response = $this->asAdmin()->postJson('/api/v2/rpc/slide-clients/siegmeister', [
