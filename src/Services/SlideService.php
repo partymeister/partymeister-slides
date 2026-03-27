@@ -15,7 +15,9 @@ class SlideService extends BaseService
 {
     protected string $model = Slide::class;
 
-    public function filters()
+    protected array $loadColumns = ['template', 'media'];
+
+    public function filters(): void
     {
         $this->filter->add(new SelectRenderer('slide_type'))
             ->setEmptyOption('-- '.trans('partymeister-slides::backend/slides.slide_type').' --')
@@ -30,7 +32,7 @@ class SlideService extends BaseService
             ->setOptions($categories);
     }
 
-    public function beforeUpdate()
+    public function beforeUpdate(): void
     {
         if ($this->request->get('slide_template_id') == '') {
             $this->data['slide_template_id'] = null;
@@ -38,7 +40,7 @@ class SlideService extends BaseService
         $this->beforeCreate();
     }
 
-    public function beforeCreate()
+    public function beforeCreate(): void
     {
         $this->data['definitions'] = stripslashes($this->request->get('definitions'));
         if ($this->request->get('slide_template_id') == '') {
@@ -46,7 +48,7 @@ class SlideService extends BaseService
         }
     }
 
-    public function afterCreate()
+    public function afterCreate(): void
     {
         $this->generatePreview();
     }
@@ -71,7 +73,7 @@ class SlideService extends BaseService
         // }
     }
 
-    public function afterUpdate()
+    public function afterUpdate(): void
     {
         $this->generatePreview();
     }

@@ -98,6 +98,11 @@ class Slide extends Model implements HasMedia
         'cached_html_final',
     ];
 
+    protected $attributes = [
+        'cached_html_preview' => '',
+        'cached_html_final' => '',
+    ];
+
     // /**
     // * The attributes that should be cast to native types.
     // *

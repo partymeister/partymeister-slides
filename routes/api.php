@@ -25,6 +25,7 @@ Route::prefix('api/v2')
     ->group(function () {
         Route::apiResource('transitions', V2\TransitionsController::class);
         Route::apiResource('slide-templates', V2\SlideTemplatesController::class);
+        Route::apiResource('slides', V2\SlidesController::class);
     });
 
 /**
