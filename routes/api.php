@@ -24,6 +24,7 @@ Route::prefix('api/v2')
     ->middleware([V2ErrorHandler::class, 'auth:sanctum', 'bindings'])
     ->group(function () {
         Route::apiResource('transitions', V2\TransitionsController::class);
+        Route::apiResource('slide-templates', V2\SlideTemplatesController::class);
     });
 
 /**

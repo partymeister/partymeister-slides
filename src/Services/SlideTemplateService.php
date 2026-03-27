@@ -14,7 +14,7 @@ class SlideTemplateService extends BaseService
 {
     protected string $model = SlideTemplate::class;
 
-    public function filters()
+    public function filters(): void
     {
         $this->filter->add(new SelectRenderer('template_for'))
             ->setOptionPrefix(trans('partymeister-slides::backend/slide_templates.template_for'))
@@ -22,17 +22,17 @@ class SlideTemplateService extends BaseService
             ->setOptions(trans('partymeister-slides::backend/slide_templates.template_for_types'));
     }
 
-    public function beforeUpdate()
+    public function beforeUpdate(): void
     {
         $this->beforeCreate();
     }
 
-    public function beforeCreate()
+    public function beforeCreate(): void
     {
         $this->data['definitions'] = stripslashes($this->request->get('definitions'));
     }
 
-    public function afterCreate()
+    public function afterCreate(): void
     {
         $this->generatePreview();
     }
@@ -64,7 +64,7 @@ class SlideTemplateService extends BaseService
         // }
     }
 
-    public function afterUpdate()
+    public function afterUpdate(): void
     {
         $this->generatePreview();
     }

@@ -68,6 +68,16 @@ class SlideTemplate extends Model implements HasMedia
     use Searchable;
 
     /**
+     * Default attribute values.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'cached_html_preview' => '',
+        'cached_html_final' => '',
+    ];
+
+    /**
      * Searchable columns for the searchable trait
      *
      * @var array
