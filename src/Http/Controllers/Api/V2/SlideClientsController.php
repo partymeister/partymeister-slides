@@ -13,12 +13,18 @@ use Partymeister\Slides\Http\Resources\V2\SlideClientResource;
 use Partymeister\Slides\Models\SlideClient;
 use Partymeister\Slides\Services\SlideClientService;
 
+/**
+ * @tags Slide Clients
+ */
 class SlideClientsController extends ApiController
 {
     protected string $model = SlideClient::class;
 
     protected string $modelResource = 'slide_client';
 
+    /**
+     * @response Illuminate\Http\Resources\Json\AnonymousResourceCollection<Illuminate\Pagination\LengthAwarePaginator<SlideClientResource>>
+     */
     public function index(SlideClientGetRequest $request): SlideClientCollection
     {
         $paginator = SlideClientService::collection()->getPaginator();
@@ -27,6 +33,7 @@ class SlideClientsController extends ApiController
             ->additional(['meta' => ['message' => 'Slide clients retrieved']]);
     }
 
+    /** @response 201 SlideClientResource */
     public function store(SlideClientPostRequest $request): JsonResponse
     {
         $result = SlideClientService::create($request)->getResult();
@@ -36,6 +43,7 @@ class SlideClientsController extends ApiController
             ->response()->setStatusCode(201);
     }
 
+    /** @response SlideClientResource */
     public function show(SlideClient $slideClient): SlideClientResource
     {
         $result = SlideClientService::show($slideClient)->getResult();
@@ -44,6 +52,7 @@ class SlideClientsController extends ApiController
             ->additional(['meta' => ['message' => 'Slide client retrieved']]);
     }
 
+    /** @response SlideClientResource */
     public function update(SlideClientPatchRequest $request, SlideClient $slideClient): SlideClientResource
     {
         $result = SlideClientService::update($slideClient, $request)->getResult();
@@ -52,6 +61,7 @@ class SlideClientsController extends ApiController
             ->additional(['meta' => ['message' => 'Slide client updated']]);
     }
 
+    /** @response 204 */
     public function destroy(SlideClient $slideClient): Response
     {
         $result = SlideClientService::delete($slideClient)->getResult();

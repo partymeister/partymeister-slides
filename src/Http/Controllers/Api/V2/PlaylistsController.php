@@ -18,6 +18,8 @@ use Partymeister\Slides\Models\Playlist;
  * Playlist items are managed separately: read via GET /playlists/{id}/items,
  * written via PlaylistService::savePlaylistItems() (called by backend forms
  * and competition playlist generators, not by this controller).
+ *
+ * @tags Playlists
  */
 class PlaylistsController extends ApiController
 {
@@ -25,6 +27,9 @@ class PlaylistsController extends ApiController
 
     protected string $modelResource = 'playlist';
 
+    /**
+     * @response Illuminate\Http\Resources\Json\AnonymousResourceCollection<Illuminate\Pagination\LengthAwarePaginator<PlaylistResource>>
+     */
     public function index(PlaylistGetRequest $request): PlaylistCollection
     {
         $paginator = Playlist::paginate();
@@ -33,6 +38,7 @@ class PlaylistsController extends ApiController
             ->additional(['meta' => ['message' => 'Playlists retrieved']]);
     }
 
+    /** @response 201 PlaylistResource */
     public function store(PlaylistPostRequest $request): JsonResponse
     {
         $result = Playlist::create($request->validated());
@@ -42,6 +48,7 @@ class PlaylistsController extends ApiController
             ->response()->setStatusCode(201);
     }
 
+    /** @response PlaylistResource */
     public function show(Playlist $playlist): PlaylistResource
     {
         $playlist->load(['items.slide.media', 'items.transition', 'items.transition_slidemeister', 'items.file_association.file']);
@@ -50,6 +57,7 @@ class PlaylistsController extends ApiController
             ->additional(['meta' => ['message' => 'Playlist retrieved']]);
     }
 
+    /** @response PlaylistResource */
     public function update(PlaylistPatchRequest $request, Playlist $playlist): PlaylistResource
     {
         $playlist->update($request->validated());
@@ -58,6 +66,7 @@ class PlaylistsController extends ApiController
             ->additional(['meta' => ['message' => 'Playlist updated']]);
     }
 
+    /** @response 204 */
     public function destroy(Playlist $playlist): Response
     {
         if ($playlist->delete()) {

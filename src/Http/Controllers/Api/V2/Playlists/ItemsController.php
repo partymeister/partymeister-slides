@@ -6,8 +6,14 @@ use Illuminate\Routing\Controller;
 use Partymeister\Slides\Http\Resources\V2\PlaylistItemCollection;
 use Partymeister\Slides\Models\Playlist;
 
+/**
+ * @tags Playlists
+ */
 class ItemsController extends Controller
 {
+    /**
+     * @response Illuminate\Http\Resources\Json\AnonymousResourceCollection<Illuminate\Pagination\LengthAwarePaginator<\Partymeister\Slides\Http\Resources\V2\PlaylistItemResource>>
+     */
     public function index(Playlist $playlist): PlaylistItemCollection
     {
         $items = $playlist->items()

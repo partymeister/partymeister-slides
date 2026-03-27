@@ -9,8 +9,14 @@ use Partymeister\Slides\Events\PlaylistNextRequest;
 use Partymeister\Slides\Events\PlaylistPreviousRequest;
 use Partymeister\Slides\Models\SlideClient;
 
+/**
+ * @tags Slide Client Communication
+ */
 class SkipController extends Controller
 {
+    /**
+     * @response array{data: array{message: string}, meta: array{api_version: string, message: string}}
+     */
     public function __invoke(Request $request): JsonResponse
     {
         $request->validate([

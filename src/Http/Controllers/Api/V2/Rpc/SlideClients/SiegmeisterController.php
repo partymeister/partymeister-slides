@@ -8,8 +8,14 @@ use Illuminate\Routing\Controller;
 use Partymeister\Slides\Events\SiegmeisterRequest;
 use Partymeister\Slides\Models\SlideClient;
 
+/**
+ * @tags Slide Client Communication
+ */
 class SiegmeisterController extends Controller
 {
+    /**
+     * @response array{data: array{message: string}, meta: array{api_version: string, message: string}}
+     */
     public function __invoke(Request $request): JsonResponse
     {
         $request->validate([

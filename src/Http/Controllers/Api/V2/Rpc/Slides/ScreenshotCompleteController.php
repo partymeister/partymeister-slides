@@ -10,6 +10,9 @@ use Partymeister\Slides\Events\ScreenshotUpdated;
 use Partymeister\Slides\Models\Slide;
 use Partymeister\Slides\Models\SlideTemplate;
 
+/**
+ * @tags Screenshots
+ */
 class ScreenshotCompleteController extends Controller
 {
     private array $allowedClasses = [
@@ -17,6 +20,9 @@ class ScreenshotCompleteController extends Controller
         SlideTemplate::class,
     ];
 
+    /**
+     * @response array{data: array{message: string}, meta: array{api_version: string, message: string}}
+     */
     public function __invoke(Request $request): JsonResponse
     {
         $request->validate([
