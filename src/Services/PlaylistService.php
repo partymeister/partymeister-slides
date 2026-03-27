@@ -26,6 +26,8 @@ class PlaylistService extends BaseService
 {
     protected string $model = Playlist::class;
 
+    protected array $loadColumns = ['items.slide.media', 'items.transition', 'items.transition_slidemeister', 'items.file_association.file'];
+
     /**
      * @throws DiskDoesNotExist
      * @throws FileDoesNotExist
@@ -591,7 +593,7 @@ class PlaylistService extends BaseService
         }
     }
 
-    public function filters()
+    public function filters(): void
     {
         $this->filter->add(new SelectRenderer('type'))
             ->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))
@@ -599,14 +601,18 @@ class PlaylistService extends BaseService
             ->setOptions(trans('partymeister-slides::backend/playlists.types'));
     }
 
-    public function afterCreate()
+    public function afterCreate(): void
     {
         $this->savePlaylistItems();
     }
 
-    protected function savePlaylistItems()
+    protected function savePlaylistItems(): void
     {
         $items = json_decode($this->request->get('playlist_items'));
+
+        if (empty($items)) {
+            return;
+        }
 
         // Delete all playlist items for this playlist
         foreach ($this->record->items()
@@ -724,12 +730,12 @@ class PlaylistService extends BaseService
         return '';
     }
 
-    public function beforeUpdate()
+    public function beforeUpdate(): void
     {
         $this->record->updated_at = date('Y-m-d H:i:s');
     }
 
-    public function afterUpdate()
+    public function afterUpdate(): void
     {
         $this->savePlaylistItems();
     }

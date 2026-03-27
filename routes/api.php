@@ -26,6 +26,9 @@ Route::prefix('api/v2')
         Route::apiResource('transitions', V2\TransitionsController::class);
         Route::apiResource('slide-templates', V2\SlideTemplatesController::class);
         Route::apiResource('slides', V2\SlidesController::class);
+        Route::apiResource('playlists', V2\PlaylistsController::class);
+        Route::get('playlists/{playlist}/items', [V2\Playlists\ItemsController::class, 'index'])
+            ->name('playlists.items.index');
     });
 
 /**
