@@ -5,6 +5,7 @@ namespace Partymeister\Slides\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 use Kra8\Snowflake\HasShortflakePrimary;
@@ -93,6 +94,16 @@ class SlideClient extends Model
     protected $casts = [
         'configuration' => 'array',
     ];
+
+    public function playlist(): BelongsTo
+    {
+        return $this->belongsTo(Playlist::class);
+    }
+
+    public function playlistItem(): BelongsTo
+    {
+        return $this->belongsTo(PlaylistItem::class);
+    }
 
     /**
      * @return MorphMany

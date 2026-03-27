@@ -13,12 +13,14 @@ class SlideClientService extends BaseService
 {
     protected string $model = SlideClient::class;
 
-    public function afterCreate()
+    protected array $loadColumns = ['playlist', 'playlistItem.slide', 'file_associations.file.media'];
+
+    public function afterCreate(): void
     {
         $this->assignJingles();
     }
 
-    public function afterUpdate()
+    public function afterUpdate(): void
     {
         $this->assignJingles();
     }

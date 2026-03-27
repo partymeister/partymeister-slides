@@ -18,6 +18,14 @@ use Partymeister\Slides\Http\Controllers\Api\TransitionsController;
 use Partymeister\Slides\Http\Controllers\Api\V2;
 use Partymeister\Slides\Services\XMLService;
 
+// V2 public API routes (no auth)
+Route::prefix('api/v2')
+    ->name('v2.public.')
+    ->middleware([V2ErrorHandler::class, 'bindings'])
+    ->group(function () {
+        Route::get('fonts', [V2\FontsController::class, 'index'])->name('fonts.index');
+    });
+
 // V2 API routes
 Route::prefix('api/v2')
     ->name('v2.')
@@ -29,6 +37,7 @@ Route::prefix('api/v2')
         Route::apiResource('playlists', V2\PlaylistsController::class);
         Route::get('playlists/{playlist}/items', [V2\Playlists\ItemsController::class, 'index'])
             ->name('playlists.items.index');
+        Route::apiResource('slide-clients', V2\SlideClientsController::class);
     });
 
 /**
