@@ -11,11 +11,15 @@ beforeEach(function () {
     $user = User::factory()->create(['email' => 'admin@motor-cms.com', 'name' => 'Admin']);
     $user->assignRole($role);
 
-    Transition::create(['name' => 'Fade', 'client_type' => 'slidemeister-web', 'identifier' => 'fade', 'default_duration' => 500]);
-    Transition::create(['name' => 'Cut', 'client_type' => 'slidemeister-web', 'identifier' => 'cut', 'default_duration' => 0]);
+    Transition::factory()->create(['name' => 'Fade', 'client_type' => 'slidemeister-web', 'identifier' => 'fade', 'default_duration' => 500]);
+    Transition::factory()->create(['name' => 'Cut', 'client_type' => 'slidemeister-web', 'identifier' => 'cut', 'default_duration' => 0]);
 });
 
 describe('V2 Transitions API', function () {
+    it('requires authentication', function () {
+        assertV2RequiresAuth('/api/v2/transitions');
+    });
+
     it('includes api_version v2 in response meta', function () {
         $response = $this->asAdmin()->getJson('/api/v2/transitions');
         $response->assertStatus(200)->assertJsonPath('meta.api_version', 'v2');

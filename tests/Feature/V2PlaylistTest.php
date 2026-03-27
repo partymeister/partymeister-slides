@@ -14,31 +14,25 @@ beforeEach(function () {
     $user = User::factory()->create(['email' => 'admin@motor-cms.com', 'name' => 'Admin']);
     $user->assignRole($role);
 
-    $transition = Transition::create(['name' => 'Fade', 'client_type' => 'slidemeister-web', 'identifier' => 'fade', 'default_duration' => 500]);
-    $slide = Slide::create(['name' => 'Welcome', 'slide_type' => 'default', 'definitions' => '{}']);
+    $transition = Transition::factory()->create(['name' => 'Fade', 'identifier' => 'fade', 'default_duration' => 500]);
+    $slide = Slide::factory()->create(['name' => 'Welcome']);
 
-    $playlist = Playlist::create(['name' => 'Main Show', 'type' => 'video', 'is_competition' => false]);
-    PlaylistItem::create([
+    $playlist = Playlist::factory()->create(['name' => 'Main Show']);
+    PlaylistItem::factory()->create([
         'playlist_id' => $playlist->id,
-        'type' => 'image',
-        'slide_type' => 'default',
         'slide_id' => $slide->id,
-        'duration' => 5,
         'transition_id' => $transition->id,
-        'transition_duration' => 500,
-        'is_advanced_manually' => false,
-        'is_muted' => false,
-        'midi_note' => 0,
-        'metadata' => '{}',
-        'callback_hash' => '',
-        'callback_delay' => 0,
         'sort_position' => 1,
     ]);
 
-    Playlist::create(['name' => 'Compo Playlist', 'type' => 'video', 'is_competition' => true]);
+    Playlist::factory()->create(['name' => 'Compo Playlist', 'is_competition' => true]);
 });
 
 describe('V2 Playlists API', function () {
+    it('requires authentication', function () {
+        assertV2RequiresAuth('/api/v2/playlists');
+    });
+
     it('includes api_version v2 in response meta', function () {
         $response = $this->asAdmin()->getJson('/api/v2/playlists');
         $response->assertStatus(200)->assertJsonPath('meta.api_version', 'v2');

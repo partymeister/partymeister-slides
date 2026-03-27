@@ -7,22 +7,16 @@ use Partymeister\Slides\Models\SlideTemplate;
 
 class SlideTemplateFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = SlideTemplate::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->unique()->word(),
+            'template_for' => $this->faker->randomElement(['competition', 'event', 'prizegiving']),
+            'definitions' => '{}',
+            'cached_html_preview' => '',
+            'cached_html_final' => '',
         ];
     }
 }

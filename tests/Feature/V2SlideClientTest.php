@@ -12,28 +12,26 @@ beforeEach(function () {
     $user = User::factory()->create(['email' => 'admin@motor-cms.com', 'name' => 'Admin']);
     $user->assignRole($role);
 
-    $playlist = Playlist::create(['name' => 'Main Show', 'type' => 'video', 'is_competition' => false]);
+    $playlist = Playlist::factory()->create(['name' => 'Main Show']);
 
-    SlideClient::create([
+    SlideClient::factory()->create([
         'name' => 'Main Screen',
-        'type' => 'slidemeister-web',
         'ip_address' => '10.10.10.1',
-        'port' => '80',
         'sort_position' => 1,
-        'configuration' => [],
         'playlist_id' => $playlist->id,
     ]);
-    SlideClient::create([
+    SlideClient::factory()->create([
         'name' => 'Side Screen',
-        'type' => 'slidemeister-web',
         'ip_address' => '10.10.10.2',
-        'port' => '80',
         'sort_position' => 2,
-        'configuration' => [],
     ]);
 });
 
 describe('V2 SlideClients API', function () {
+    it('requires authentication', function () {
+        assertV2RequiresAuth('/api/v2/slide-clients');
+    });
+
     it('includes api_version v2 in response meta', function () {
         $response = $this->asAdmin()->getJson('/api/v2/slide-clients');
         $response->assertStatus(200)->assertJsonPath('meta.api_version', 'v2');

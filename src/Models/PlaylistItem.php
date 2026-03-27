@@ -4,6 +4,7 @@ namespace Partymeister\Slides\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -14,6 +15,7 @@ use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
 use Motor\Core\Traits\Searchable;
 use Motor\Media\Models\FileAssociation;
+use Partymeister\Slides\Database\Factories\PlaylistItemFactory;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 
 /**
@@ -79,8 +81,14 @@ class PlaylistItem extends Model
 {
     use BlameableTrait;
     use Filterable;
+    use HasFactory;
     use HasShortflakePrimary;
     use Searchable;
+
+    protected static function newFactory()
+    {
+        return PlaylistItemFactory::new();
+    }
 
     /**
      * Searchable columns for the searchable trait

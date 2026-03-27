@@ -7,22 +7,14 @@ use Partymeister\Slides\Models\Playlist;
 
 class PlaylistFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Playlist::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->unique()->words(2, true),
+            'type' => 'video',
+            'is_competition' => false,
         ];
     }
 }

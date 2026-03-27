@@ -7,22 +7,15 @@ use Partymeister\Slides\Models\Transition;
 
 class TransitionFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Transition::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->unique()->word(),
+            'client_type' => 'slidemeister-web',
+            'identifier' => $this->faker->unique()->slug(1),
+            'default_duration' => $this->faker->numberBetween(0, 1000),
         ];
     }
 }

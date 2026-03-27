@@ -12,12 +12,16 @@ beforeEach(function () {
     $user = User::factory()->create(['email' => 'admin@motor-cms.com', 'name' => 'Admin']);
     $user->assignRole($role);
 
-    $template = SlideTemplate::create(['name' => 'Compo', 'template_for' => 'competition', 'definitions' => '{}']);
-    Slide::create(['name' => 'Welcome', 'slide_type' => 'default', 'slide_template_id' => $template->id, 'definitions' => '{}']);
-    Slide::create(['name' => 'Goodbye', 'slide_type' => 'default', 'definitions' => '{}']);
+    $template = SlideTemplate::factory()->create(['name' => 'Compo', 'template_for' => 'competition']);
+    Slide::factory()->create(['name' => 'Welcome', 'slide_template_id' => $template->id]);
+    Slide::factory()->create(['name' => 'Goodbye']);
 });
 
 describe('V2 Slides API', function () {
+    it('requires authentication', function () {
+        assertV2RequiresAuth('/api/v2/slides');
+    });
+
     it('includes api_version v2 in response meta', function () {
         $response = $this->asAdmin()->getJson('/api/v2/slides');
         $response->assertStatus(200)->assertJsonPath('meta.api_version', 'v2');

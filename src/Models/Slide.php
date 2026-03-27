@@ -5,6 +5,7 @@ namespace Partymeister\Slides\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -15,6 +16,7 @@ use Motor\Admin\Models\User;
 use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
 use Motor\Core\Traits\Searchable;
+use Partymeister\Slides\Database\Factories\SlideFactory;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia;
@@ -70,9 +72,15 @@ class Slide extends Model implements HasMedia
 {
     use BlameableTrait;
     use Filterable;
+    use HasFactory;
     use HasShortflakePrimary;
     use InteractsWithMedia;
     use Searchable;
+
+    protected static function newFactory()
+    {
+        return SlideFactory::new();
+    }
 
     /**
      * Searchable columns for the searchable trait
