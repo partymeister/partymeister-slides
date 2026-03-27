@@ -23,15 +23,18 @@ class PlaylistSeekRequest implements ShouldBroadcastNow
 
     public $index;
 
+    public ?int $clientId = null;
+
     /**
      * Create a new event instance.
      *
      * PlaylistSeekRequest constructor.
      */
-    public function __construct(Playlist $playlist, $index = false)
+    public function __construct(Playlist $playlist, $index = false, ?int $clientId = null)
     {
         $this->playlist_id = $playlist->id;
         $this->index = $index;
+        $this->clientId = $clientId;
     }
 
     /**
@@ -39,6 +42,8 @@ class PlaylistSeekRequest implements ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-        return [new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'))];
+        $activeClient = $this->clientId ?? session('screens.active');
+
+        return [new Channel(config('cache.prefix').'.slidemeister-web.'.$activeClient)];
     }
 }

@@ -40,6 +40,23 @@ Route::prefix('api/v2')
         Route::apiResource('slide-clients', V2\SlideClientsController::class);
     });
 
+// V2 RPC routes
+Route::prefix('api/v2/rpc')
+    ->name('v2.rpc.')
+    ->middleware([V2ErrorHandler::class, 'auth:sanctum', 'bindings'])
+    ->group(function () {
+        Route::post('slide-clients/playlist', V2\Rpc\SlideClients\PlaylistController::class)
+            ->name('slide-clients.playlist');
+        Route::post('slide-clients/playnow', V2\Rpc\SlideClients\PlayNowController::class)
+            ->name('slide-clients.playnow');
+        Route::post('slide-clients/seek', V2\Rpc\SlideClients\SeekController::class)
+            ->name('slide-clients.seek');
+        Route::post('slide-clients/skip', V2\Rpc\SlideClients\SkipController::class)
+            ->name('slide-clients.skip');
+        Route::post('slide-clients/siegmeister', V2\Rpc\SlideClients\SiegmeisterController::class)
+            ->name('slide-clients.siegmeister');
+    });
+
 /**
  * Groups with token necessary
  */

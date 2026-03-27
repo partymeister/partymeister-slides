@@ -20,6 +20,8 @@ class PlaylistNextRequest implements ShouldBroadcastNow
      */
     public $hard = false;
 
+    public ?int $clientId = null;
+
     /**
      * Create a new event instance.
      *
@@ -27,9 +29,10 @@ class PlaylistNextRequest implements ShouldBroadcastNow
      *
      * @param  bool  $hard
      */
-    public function __construct($hard = false)
+    public function __construct($hard = false, ?int $clientId = null)
     {
         $this->hard = $hard;
+        $this->clientId = $clientId;
     }
 
     /**
@@ -37,6 +40,8 @@ class PlaylistNextRequest implements ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-        return [new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'))];
+        $activeClient = $this->clientId ?? session('screens.active');
+
+        return [new Channel(config('cache.prefix').'.slidemeister-web.'.$activeClient)];
     }
 }
