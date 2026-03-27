@@ -12,6 +12,13 @@ use Partymeister\Slides\Http\Resources\V2\PlaylistCollection;
 use Partymeister\Slides\Http\Resources\V2\PlaylistResource;
 use Partymeister\Slides\Models\Playlist;
 
+/**
+ * Uses Playlist model directly instead of PlaylistService for CRUD operations.
+ *
+ * Playlist items are managed separately: read via GET /playlists/{id}/items,
+ * written via PlaylistService::savePlaylistItems() (called by backend forms
+ * and competition playlist generators, not by this controller).
+ */
 class PlaylistsController extends ApiController
 {
     protected string $model = Playlist::class;

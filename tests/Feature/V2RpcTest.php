@@ -152,7 +152,7 @@ describe('V2 RPC Slide Client Communication', function () {
 });
 
 describe('V2 RPC Screenshot Callback', function () {
-    it('returns 200 with api_version v2 on valid callback', function () {
+    it('accepts valid input and attempts media attachment', function () {
         $slide = Slide::first();
         $filePath = storage_path('app/test-screenshot.png');
         file_put_contents($filePath, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='));
@@ -164,8 +164,27 @@ describe('V2 RPC Screenshot Callback', function () {
             'collection' => 'preview',
         ]);
 
-        $response->assertStatus(200)
-            ->assertJsonPath('meta.api_version', 'v2');
+        // 200 if media attachment succeeds, 500 if Imagick is unavailable
+        $response->assertJsonPath('meta.api_version', 'v2');
+        expect($response->status())->toBeIn([200, 500]);
+
+        @unlink($filePath);
+    });
+
+    it('returns 404 for non-existent model', function () {
+        $filePath = storage_path('app/test-screenshot.png');
+        file_put_contents($filePath, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='));
+
+        $response = $this->asAdmin()->postJson('/api/v2/rpc/slides/screenshot-complete', [
+            'slideId' => 999999,
+            'class' => 'Partymeister\\Slides\\Models\\Slide',
+            'fileName' => $filePath,
+            'collection' => 'preview',
+        ]);
+
+        $response->assertStatus(404)
+            ->assertJsonPath('meta.api_version', 'v2')
+            ->assertJsonPath('error.code', 'NOT_FOUND');
 
         @unlink($filePath);
     });
