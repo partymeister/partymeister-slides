@@ -55,6 +55,8 @@ Route::prefix('api/v2/rpc')
             ->name('slide-clients.skip');
         Route::post('slide-clients/siegmeister', V2\Rpc\SlideClients\SiegmeisterController::class)
             ->name('slide-clients.siegmeister');
+        Route::post('slides/screenshot-complete', V2\Rpc\Slides\ScreenshotCompleteController::class)
+            ->name('slides.screenshot-complete');
     });
 
 /**

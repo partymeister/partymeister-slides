@@ -144,3 +144,41 @@ describe('V2 RPC Slide Client Communication', function () {
         Event::assertDispatched(SiegmeisterRequest::class);
     });
 });
+
+describe('V2 RPC Screenshot Callback', function () {
+    it('returns 200 with api_version v2 on valid callback', function () {
+        $slide = Slide::first();
+        $filePath = storage_path('app/test-screenshot.png');
+        file_put_contents($filePath, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='));
+
+        $response = $this->asAdmin()->postJson('/api/v2/rpc/slides/screenshot-complete', [
+            'slideId' => $slide->id,
+            'class' => 'Partymeister\\Slides\\Models\\Slide',
+            'fileName' => $filePath,
+            'collection' => 'preview',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('meta.api_version', 'v2');
+
+        @unlink($filePath);
+    });
+
+    it('validates required fields', function () {
+        $response = $this->asAdmin()->postJson('/api/v2/rpc/slides/screenshot-complete', []);
+        $response->assertStatus(422)
+            ->assertJsonPath('meta.api_version', 'v2');
+    });
+
+    it('rejects path traversal attempts', function () {
+        $slide = Slide::first();
+        $response = $this->asAdmin()->postJson('/api/v2/rpc/slides/screenshot-complete', [
+            'slideId' => $slide->id,
+            'class' => 'Partymeister\\Slides\\Models\\Slide',
+            'fileName' => '/etc/passwd',
+            'collection' => 'preview',
+        ]);
+
+        $response->assertStatus(422);
+    });
+});
