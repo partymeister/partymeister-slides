@@ -19,18 +19,12 @@ class PlayNowRequest implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var
-     */
     public $item;
 
     /**
      * Create a new event instance.
      *
      * PlayNowRequest constructor.
-     *
-     * @param $type
-     * @param $item
      */
     public function __construct($type, $item)
     {
@@ -58,8 +52,6 @@ class PlayNowRequest implements ShouldBroadcastNow
 
     /**
      * Get the channels the event should broadcast on.
-     *
-     * @return array
      */
     public function broadcastOn(): array
     {

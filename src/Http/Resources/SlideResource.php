@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
+use Illuminate\Http\Request;
 use Motor\Admin\Http\Resources\BaseResource;
 use Motor\Admin\Http\Resources\CategoryResource;
 use Motor\Admin\Http\Resources\MediaResource;
@@ -9,6 +10,7 @@ use Motor\Admin\Http\Resources\MediaResource;
 /**
  * @OA\Schema(
  *   schema="SlideResource",
+ *
  *   @OA\Property(
  *     property="id",
  *     type="integer",
@@ -64,22 +66,22 @@ class SlideResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'id'                  => (int) $this->id,
-            'name'                => $this->name,
-            'slide_template'      => new SlideTemplateResource($this->slide_template),
-            'slide_type'          => $this->slide_type,
-            'category'            => new CategoryResource($this->category),
-            'definitions'         => $this->definitions,
+            'id' => (int) $this->id,
+            'name' => $this->name,
+            'slide_template' => new SlideTemplateResource($this->slide_template),
+            'slide_type' => $this->slide_type,
+            'category' => new CategoryResource($this->category),
+            'definitions' => $this->definitions,
             'cached_html_preview' => $this->cached_html_preview,
-            'cached_html_final'   => $this->cached_html_final,
-            'file_final'          => new MediaResource($this->getFirstMedia('final')),
-            'file_preview'        => new MediaResource($this->getFirstMedia('preview')),
+            'cached_html_final' => $this->cached_html_final,
+            'file_final' => new MediaResource($this->getFirstMedia('final')),
+            'file_preview' => new MediaResource($this->getFirstMedia('preview')),
         ];
     }
 }

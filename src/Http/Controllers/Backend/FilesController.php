@@ -2,6 +2,8 @@
 
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Motor\Media\Models\File;
 use Motor\Media\Services\FileService;
@@ -17,7 +19,7 @@ class FilesController extends \Motor\Media\Http\Controllers\Backend\FilesControl
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      *
      * @throws \ReflectionException
      */

@@ -11,9 +11,6 @@ use Partymeister\Slides\Models\SlideClient;
  */
 class SlideClientService extends BaseService
 {
-    /**
-     * @var string
-     */
     protected string $model = SlideClient::class;
 
     public function afterCreate()
@@ -29,16 +26,13 @@ class SlideClientService extends BaseService
     protected function assignJingles()
     {
         $this->record->file_associations()
-                     ->delete();
+            ->delete();
         $this->addFileAssociation('jingle_1');
         $this->addFileAssociation('jingle_2');
         $this->addFileAssociation('jingle_3');
         $this->addFileAssociation('jingle_4');
     }
 
-    /**
-     * @param $field
-     */
     protected function addFileAssociation($field)
     {
         if ($this->request->get($field) == '' || $this->request->get($field) == 'deleted') {
@@ -48,7 +42,7 @@ class SlideClientService extends BaseService
         $file = json_decode($this->request->get($field));
 
         // Create file association
-        $fa = new FileAssociation();
+        $fa = new FileAssociation;
         $fa->file_id = $file->id;
         $fa->model_type = get_class($this->record);
         $fa->model_id = $this->record->id;

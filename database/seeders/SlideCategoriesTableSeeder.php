@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Motor\Admin\Models\Category;
 
 /**
  * Class AccountsTableSeeder
@@ -16,40 +17,40 @@ class SlideCategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        \Motor\Admin\Models\Category::create([
-            'name'       => 'Slides',
-            'scope'      => 'slides',
+        Category::create([
+            'name' => 'Slides',
+            'scope' => 'slides',
             'created_by' => 1,
             'updated_by' => 1,
 
             'children' => [
                 [
-                    'name'       => 'Announcements',
-                    'scope'      => 'slides',
+                    'name' => 'Announcements',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],
                 [
-                    'name'       => 'Timetable',
-                    'scope'      => 'slides',
+                    'name' => 'Timetable',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],
                 [
-                    'name'       => 'Sponsors',
-                    'scope'      => 'slides',
+                    'name' => 'Sponsors',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],
                 [
-                    'name'       => 'Party & Demoscene promotions',
-                    'scope'      => 'slides',
+                    'name' => 'Party & Demoscene promotions',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],
                 [
-                    'name'       => 'Competitions',
-                    'scope'      => 'slides',
+                    'name' => 'Competitions',
+                    'scope' => 'slides',
                     'created_by' => 1,
                     'updated_by' => 1,
                 ],

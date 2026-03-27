@@ -11,16 +11,13 @@ use Partymeister\Slides\Models\Transition;
  */
 class TransitionService extends BaseService
 {
-    /**
-     * @var string
-     */
     protected string $model = Transition::class;
 
-    public function filters()
+    public function filters(): void
     {
         $this->filter->add(new SelectRenderer('client_type'))
-                     ->setOptionPrefix(trans('partymeister-slides::backend/slide_clients.type'))
-                     ->setEmptyOption('-- '.trans('partymeister-slides::backend/slide_clients.type').' --')
-                     ->setOptions(trans('partymeister-slides::backend/slide_clients.types'));
+            ->setOptionPrefix(trans('partymeister-slides::backend/slide_clients.type'))
+            ->setEmptyOption('-- '.trans('partymeister-slides::backend/slide_clients.type').' --')
+            ->setOptions(trans('partymeister-slides::backend/slide_clients.types'));
     }
 }

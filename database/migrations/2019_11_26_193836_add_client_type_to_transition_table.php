@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Partymeister\Slides\Models\Transition;
 
 class AddClientTypeToTransitionTable extends Migration
 {
@@ -17,7 +18,7 @@ class AddClientTypeToTransitionTable extends Migration
             $table->string('client_type')->after('name');
             $table->string('identifier')->change();
         });
-        foreach (\Partymeister\Slides\Models\Transition::get() as $transition) {
+        foreach (Transition::get() as $transition) {
             $transition->client_type = 'screens';
             $transition->save();
         }

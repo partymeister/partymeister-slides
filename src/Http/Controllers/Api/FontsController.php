@@ -15,15 +15,20 @@ class FontsController extends ApiController
      *   tags={"FontsController"},
      *   path="/api/fonts",
      *   summary="Get font collection",
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="array",
+     *
      *         @OA\Items(ref="#/components/schemas/FontResource")
      *       ),
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",

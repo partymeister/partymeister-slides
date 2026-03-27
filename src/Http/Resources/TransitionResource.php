@@ -2,11 +2,13 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
+use Illuminate\Http\Request;
 use Motor\Admin\Http\Resources\BaseResource;
 
 /**
  * @OA\Schema(
  *   schema="TransitionResource",
+ *
  *   @OA\Property(
  *     property="id",
  *     type="integer",
@@ -34,16 +36,16 @@ class TransitionResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'id'          => (int) $this->id,
-            'name'        => $this->name,
+            'id' => (int) $this->id,
+            'name' => $this->name,
             'client_type' => $this->client_type,
-            'identifier'  => $this->identifier,
+            'identifier' => $this->identifier,
         ];
     }
 }

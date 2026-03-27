@@ -12,6 +12,7 @@ class SlideClientRequest extends Request
     /**
      * @OA\Schema(
      *   schema="SlideClientRequest",
+     *
      *   @OA\Property(
      *     property="name",
      *     type="string",
@@ -74,13 +75,13 @@ class SlideClientRequest extends Request
     public function rules()
     {
         return [
-            'name'             => 'required',
-            'type'             => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slide_clients.types'))),
-            'ip_address'       => 'nullable',
-            'port'             => 'nullable',
-            'sort_position'    => 'nullable|integer',
-            'configuration'    => 'nullable|array',
-            'playlist_id'      => 'nullable|integer',
+            'name' => 'required',
+            'type' => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slide_clients.types'))),
+            'ip_address' => 'nullable',
+            'port' => 'nullable',
+            'sort_position' => 'nullable|integer',
+            'configuration' => 'nullable|array',
+            'playlist_id' => 'nullable|integer',
             'playlist_item_id' => 'nullable|integer',
         ];
     }

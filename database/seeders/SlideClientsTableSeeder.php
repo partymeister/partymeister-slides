@@ -19,12 +19,12 @@ class SlideClientsTableSeeder extends Seeder
     public function run()
     {
         DB::table('slide_clients')->insert([
-            'name'          => 'Main Screen',
-            'type'          => 'slidemeister-web',
+            'name' => 'Main Screen',
+            'type' => 'slidemeister-web',
             'sort_position' => 1,
             'configuration' => json_encode(['prizegiving_bar_color' => '#000000', 'prizegiving_bar_blink_color' => '#FF0000']),
-            'created_by'    => User::get()->first()->id,
-            'updated_by'    => User::get()->first()->id,
+            'created_by' => User::get()->first()->id,
+            'updated_by' => User::get()->first()->id,
         ]);
     }
 }

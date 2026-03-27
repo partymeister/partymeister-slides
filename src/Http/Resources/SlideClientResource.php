@@ -2,12 +2,14 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
+use Illuminate\Http\Request;
 use Motor\Admin\Http\Resources\BaseResource;
 use Motor\Admin\Http\Resources\MediaResource;
 
 /**
  * @OA\Schema(
  *   schema="SlideClientResource",
+ *
  *   @OA\Property(
  *     property="id",
  *     type="integer",
@@ -56,14 +58,18 @@ use Motor\Admin\Http\Resources\MediaResource;
  *   @OA\Property(
  *     property="jingles",
  *     type="array",
+ *
  *     @OA\Items(
  *       ref="#/components/schemas/MediaResource"
  *     ),
  *   ),
+ *
  *   @OA\Property(
  *     property="websocket",
  *     type="array",
+ *
  *     @OA\Items(
+ *
  *       @OA\Property(
  *         property="key",
  *         type="string",
@@ -93,7 +99,7 @@ class SlideClientResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
@@ -110,18 +116,18 @@ class SlideClientResource extends BaseResource
         $configuration['client'] = $this->id;
 
         return [
-            'id'            => (int) $this->id,
-            'name'          => $this->name,
-            'type'          => $this->type,
-            'ip_address'    => $this->ip_address,
-            'port'          => $this->port,
+            'id' => (int) $this->id,
+            'name' => $this->name,
+            'type' => $this->type,
+            'ip_address' => $this->ip_address,
+            'port' => $this->port,
             'sort_position' => (int) $this->sort_position,
-            'playlist'      => new PlaylistResource($this->playlist),
-            'slide'         => new SlideResource($this->slide),
+            'playlist' => new PlaylistResource($this->playlist),
+            'slide' => new SlideResource($this->slide),
             'configuration' => $configuration,
-            'jingles'       => $jingles,
-            'websocket'     => [
-                'key'  => config('broadcasting.connections.reverb.key'),
+            'jingles' => $jingles,
+            'websocket' => [
+                'key' => config('broadcasting.connections.reverb.key'),
                 'host' => env('VITE_REVERB_HOST', 'localhost'),
                 'port' => (int) env('VITE_REVERB_PORT', 80),
                 'path' => env('VITE_REVERB_PATH', '/socket'),

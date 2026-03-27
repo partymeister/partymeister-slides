@@ -36,7 +36,7 @@ class ComponentPlaylistViewers
     {
         return view(config('motor-cms-page-components.components.'.$this->pageVersionComponent->component_name.'.view'), [
             'component' => $this->component,
-            'playlist'  => $this->playlist,
+            'playlist' => $this->playlist,
         ]);
     }
 }

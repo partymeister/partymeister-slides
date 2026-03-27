@@ -24,9 +24,6 @@ class PlaylistRequest implements ShouldBroadcastNow
 
     /**
      * Create a new event instance.
-     *
-     * @param  Playlist  $playlist
-     * @param    $callbacks
      */
     public function __construct(Playlist $playlist, $callbacks)
     {
@@ -37,8 +34,6 @@ class PlaylistRequest implements ShouldBroadcastNow
 
     /**
      * Get the channels the event should broadcast on.
-     *
-     * @return array
      */
     public function broadcastOn(): array
     {

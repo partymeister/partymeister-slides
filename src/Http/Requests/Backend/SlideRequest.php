@@ -12,6 +12,7 @@ class SlideRequest extends Request
     /**
      * @OA\Schema(
      *   schema="SlideRequest",
+     *
      *   @OA\Property(
      *     property="name",
      *     type="string",
@@ -68,13 +69,13 @@ class SlideRequest extends Request
     {
         if ($this->method() === 'POST') {
             return [
-                'name'                => 'required',
-                'slide_template_id'   => 'nullable|integer',
-                'slide_type'          => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slides.slide_types'))),
-                'category_id'         => 'required|integer',
-                'definitions'         => 'nullable|string',
+                'name' => 'required',
+                'slide_template_id' => 'nullable|integer',
+                'slide_type' => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slides.slide_types'))),
+                'category_id' => 'required|integer',
+                'definitions' => 'nullable|string',
                 'cached_html_preview' => 'nullable',
-                'cached_html_final'   => 'nullable',
+                'cached_html_final' => 'nullable',
             ];
         }
 

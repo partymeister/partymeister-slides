@@ -12,6 +12,7 @@ class TransitionRequest extends Request
     /**
      * @OA\Schema(
      *   schema="TransitionRequest",
+     *
      *   @OA\Property(
      *     property="name",
      *     type="string",
@@ -49,9 +50,9 @@ class TransitionRequest extends Request
     public function rules()
     {
         return [
-            'name'             => 'required',
-            'client_type'      => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slide_clients.types'))),
-            'identifier'       => 'required',
+            'name' => 'required',
+            'client_type' => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slide_clients.types'))),
+            'identifier' => 'required',
             'default_duration' => 'nullable|integer',
         ];
     }

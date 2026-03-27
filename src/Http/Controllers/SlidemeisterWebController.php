@@ -3,6 +3,8 @@
 namespace Partymeister\Slides\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 use Motor\Admin\Models\User;
 use Partymeister\Slides\Models\SlideClient;
 
@@ -14,7 +16,7 @@ class SlidemeisterWebController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      *
      * @throws \ReflectionException
      */
@@ -26,6 +28,6 @@ class SlidemeisterWebController extends Controller
 
         $template = config('partymeister-slides.slidemeister_web_template', 'index');
 
-        return view('partymeister-slides::slidemeister-web/' . $template, ['api_token' => $apiToken]);
+        return view('partymeister-slides::slidemeister-web/'.$template, ['api_token' => $apiToken]);
     }
 }

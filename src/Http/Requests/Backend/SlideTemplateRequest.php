@@ -12,6 +12,7 @@ class SlideTemplateRequest extends Request
     /**
      * @OA\Schema(
      *   schema="SlideTemplateRequest",
+     *
      *   @OA\Property(
      *     property="name",
      *     type="string",
@@ -57,11 +58,11 @@ class SlideTemplateRequest extends Request
     public function rules()
     {
         return [
-            'name'                => 'required',
-            'template_for'        => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slide_templates.template_for_types'))),
-            'definitions'         => 'nullable|string',
+            'name' => 'required',
+            'template_for' => 'required|in:'.implode(',', array_flip(trans('partymeister-slides::backend/slide_templates.template_for_types'))),
+            'definitions' => 'nullable|string',
             'cached_html_preview' => 'nullable',
-            'cached_html_final'   => 'nullable',
+            'cached_html_final' => 'nullable',
         ];
     }
 }

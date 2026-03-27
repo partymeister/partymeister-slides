@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
+use Illuminate\Http\Request;
 use Motor\Admin\Http\Resources\BaseCollection;
 
 class SlideTemplateCollection extends BaseCollection
@@ -9,7 +10,7 @@ class SlideTemplateCollection extends BaseCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)

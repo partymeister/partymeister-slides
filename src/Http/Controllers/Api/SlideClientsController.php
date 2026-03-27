@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Motor\Admin\Http\Controllers\ApiController;
 use Partymeister\Slides\Http\Requests\Backend\SlideClientRequest;
 use Partymeister\Slides\Http\Resources\SlideClientCollection;
@@ -23,7 +24,9 @@ class SlideClientsController extends ApiController
      *   tags={"SlideClientsController"},
      *   path="/api/slide_clients",
      *   summary="Get slide_client collection",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -31,15 +34,20 @@ class SlideClientsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="array",
+     *
      *         @OA\Items(ref="#/components/schemas/SlideClientResource")
      *       ),
+     *
      *       @OA\Property(
      *         property="meta",
      *         ref="#/components/schemas/PaginationMeta"
@@ -55,9 +63,11 @@ class SlideClientsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   )
      * )
@@ -69,7 +79,7 @@ class SlideClientsController extends ApiController
     public function index()
     {
         $paginator = SlideClientService::collection()
-                                       ->getPaginator();
+            ->getPaginator();
 
         return (new SlideClientCollection($paginator))->additional(['message' => 'SlideClient collection read']);
     }
@@ -79,10 +89,14 @@ class SlideClientsController extends ApiController
      *   tags={"SlideClientsController"},
      *   path="/api/slide_clients",
      *   summary="Create new slide_client",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/SlideClientRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -90,10 +104,13 @@ class SlideClientsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -106,31 +123,34 @@ class SlideClientsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Store a newly created resource in storage.
      *
-     * @param  SlideClientRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(SlideClientRequest $request)
     {
         $result = SlideClientService::create($request)
-                                    ->getResult();
+            ->getResult();
 
         return (new SlideClientResource($result))->additional(['message' => 'SlideClient created'])
-                                                 ->response()
-                                                 ->setStatusCode(201);
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -138,7 +158,9 @@ class SlideClientsController extends ApiController
      *   tags={"SlideClientsController"},
      *   path="/api/slide_clients/{slide_client}",
      *   summary="Get single slide_client",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -146,17 +168,22 @@ class SlideClientsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="slide_client",
      *     parameter="slide_client",
      *     description="SlideClient id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -169,27 +196,30 @@ class SlideClientsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Display the specified resource.
      *
-     * @param  SlideClient  $record
      * @return SlideClientResource
      */
     public function show(SlideClient $record)
     {
         $result = SlideClientService::show($record)
-                                    ->getResult();
+            ->getResult();
 
         return (new SlideClientResource($result))->additional(['message' => 'SlideClient read']);
     }
@@ -199,10 +229,14 @@ class SlideClientsController extends ApiController
      *   tags={"SlideClientsController"},
      *   path="/api/slide_clients/{slide_client}",
      *   summary="Update an existing slide_client",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/SlideClientRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -210,17 +244,22 @@ class SlideClientsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="slide_client",
      *     parameter="slide_client",
      *     description="SlideClient id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -233,28 +272,30 @@ class SlideClientsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Update the specified resource in storage.
      *
-     * @param  SlideClientRequest  $request
-     * @param  SlideClient  $record
      * @return SlideClientResource
      */
     public function update(SlideClientRequest $request, SlideClient $record)
     {
         $result = SlideClientService::update($record, $request)
-                                    ->getResult();
+            ->getResult();
 
         return (new SlideClientResource($result))->additional(['message' => 'SlideClient updated']);
     }
@@ -264,7 +305,9 @@ class SlideClientsController extends ApiController
      *   tags={"SlideClientsController"},
      *   path="/api/slide_clients/{slide_client}",
      *   summary="Delete a slide_client",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -272,17 +315,22 @@ class SlideClientsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="slide_client",
      *     parameter="slide_client",
      *     description="SlideClient id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -290,20 +338,27 @@ class SlideClientsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   ),
+     *
      *   @OA\Response(
      *     response="400",
      *     description="Bad request",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -315,13 +370,12 @@ class SlideClientsController extends ApiController
      *
      * Remove the specified resource from storage.
      *
-     * @param  SlideClient  $record
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(SlideClient $record)
     {
         $result = SlideClientService::delete($record)
-                                    ->getResult();
+            ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'SlideClient deleted']);

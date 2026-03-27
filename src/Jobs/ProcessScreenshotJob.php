@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Partymeister\Slides\Models\Slide;
 
 /**
  * Class GenerateSlide
@@ -17,22 +18,14 @@ class ProcessScreenshotJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * @var Model
-     */
     public Model $slide;
 
-    /**
-     * @var
-     */
     public string $fileName;
 
     public string $collection;
 
     /**
-     * @param \Partymeister\Slides\Models\Slide $slide
-     * @param string $fileName
-     * @param string $collection
+     * @param  Slide  $slide
      */
     public function __construct(Model $slide, string $fileName, string $collection)
     {
@@ -49,7 +42,7 @@ class ProcessScreenshotJob implements ShouldQueue
         $this->slide->clearMediaCollection($this->collection);
         try {
             $this->slide->addMedia($this->fileName)
-                  ->toMediaCollection($this->collection, 'media');
+                ->toMediaCollection($this->collection, 'media');
         } catch (\Exception $e) {
             Log::warning("Can't generate screenshot for slide .".$this->slide->id, [$e->getMessage()]);
         }

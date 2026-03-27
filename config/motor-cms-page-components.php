@@ -1,25 +1,25 @@
 <?php
 
 return [
-    'groups'     => [
+    'groups' => [
         'partymeister-slides' => [
             'name' => 'Partymeister slides',
         ],
     ],
     'components' => [
         'playlist-viewers' => [
-            'name'            => 'PlaylistViewer',
-            'description'     => 'Show PlaylistViewer component',
-            'view'            => 'partymeister-slides::frontend.components.playlist-viewers',
-            'route'           => 'component.playlist-viewers',
+            'name' => 'PlaylistViewer',
+            'description' => 'Show PlaylistViewer component',
+            'view' => 'partymeister-slides::frontend.components.playlist-viewers',
+            'route' => 'component.playlist-viewers',
             'component_class' => 'Partymeister\Slides\Components\ComponentPlaylistViewers',
-            'compatibility'   => [
+            'compatibility' => [
 
             ],
-            'permissions'     => [
+            'permissions' => [
 
             ],
-            'group'           => 'partymeister-slides',
+            'group' => 'partymeister-slides',
         ],
     ],
 ];

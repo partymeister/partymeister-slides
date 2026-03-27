@@ -121,9 +121,9 @@ class PartymeisterServiceProvider extends ServiceProvider
     {
         $assets = [
             __DIR__.'/../../resources/assets/images' => resource_path('assets/images'),
-            __DIR__.'/../../resources/assets/sass'   => resource_path('assets/sass'),
-            __DIR__.'/../../resources/assets/npm'    => resource_path('assets/npm'),
-            __DIR__.'/../../resources/assets/js'     => resource_path('assets/js'),
+            __DIR__.'/../../resources/assets/sass' => resource_path('assets/sass'),
+            __DIR__.'/../../resources/assets/npm' => resource_path('assets/npm'),
+            __DIR__.'/../../resources/assets/js' => resource_path('assets/js'),
         ];
 
         $this->publishes($assets, 'partymeister-slides-install-resources');

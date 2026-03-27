@@ -10,8 +10,5 @@ use Partymeister\Slides\Models\PlaylistItem;
  */
 class PlaylistItemService extends BaseService
 {
-    /**
-     * @var string
-     */
     protected string $model = PlaylistItem::class;
 }

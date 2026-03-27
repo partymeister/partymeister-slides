@@ -12,7 +12,6 @@ use Partymeister\Slides\Services\XMLService\Generator;
 class XMLService
 {
     /**
-     * @param    $method
      * @param  array  $parameters
      * @param  bool  $send
      * @param  bool  $debug
@@ -32,7 +31,6 @@ class XMLService
     }
 
     /**
-     * @param    $xml
      * @param  null  $screen
      * @return bool|string
      */

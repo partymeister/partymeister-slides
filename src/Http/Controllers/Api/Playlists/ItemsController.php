@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Http\Controllers\Api\Playlists;
 
+use Illuminate\Http\JsonResponse;
 use Motor\Admin\Http\Controllers\Controller;
 use Partymeister\Slides\Http\Resources\PlaylistItemResource;
 use Partymeister\Slides\Models\PlaylistItem;
@@ -14,8 +15,7 @@ class ItemsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  PlaylistItem  $record
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(PlaylistItem $record)
     {

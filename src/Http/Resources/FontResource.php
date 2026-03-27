@@ -2,12 +2,14 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Motor\Admin\Http\Resources\BaseResource;
 
 /**
  * @OA\Schema(
  *   schema="FontResource",
+ *
  *   @OA\Property(
  *     property="name",
  *     type="string",
@@ -30,14 +32,14 @@ class FontResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'name'   => Arr::get($this, 'name'),
-            'path'   => Arr::get($this, 'path'),
+            'name' => Arr::get($this, 'name'),
+            'path' => Arr::get($this, 'path'),
             'family' => Arr::get($this, 'family'),
         ];
     }

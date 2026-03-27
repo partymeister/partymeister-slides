@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Motor\Admin\Http\Controllers\ApiController;
 use Partymeister\Slides\Http\Requests\Backend\PlaylistItemRequest;
 use Partymeister\Slides\Http\Resources\PlaylistItemCollection;
@@ -23,7 +24,9 @@ class PlaylistItemsController extends ApiController
      *   tags={"PlaylistItemsController"},
      *   path="/api/playlist_items",
      *   summary="Get playlist_item collection",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -31,15 +34,20 @@ class PlaylistItemsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="array",
+     *
      *         @OA\Items(ref="#/components/schemas/PlaylistItemResource")
      *       ),
+     *
      *       @OA\Property(
      *         property="meta",
      *         ref="#/components/schemas/PaginationMeta"
@@ -55,9 +63,11 @@ class PlaylistItemsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   )
      * )
@@ -69,7 +79,7 @@ class PlaylistItemsController extends ApiController
     public function index()
     {
         $paginator = PlaylistItemService::collection()
-                                        ->getPaginator();
+            ->getPaginator();
 
         return (new PlaylistItemCollection($paginator))->additional(['message' => 'PlaylistItem collection read']);
     }
@@ -79,10 +89,14 @@ class PlaylistItemsController extends ApiController
      *   tags={"PlaylistItemsController"},
      *   path="/api/playlist_items",
      *   summary="Create new playlist_item",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/PlaylistItemRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -90,10 +104,13 @@ class PlaylistItemsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -106,31 +123,34 @@ class PlaylistItemsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Store a newly created resource in storage.
      *
-     * @param  PlaylistItemRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(PlaylistItemRequest $request)
     {
         $result = PlaylistItemService::create($request)
-                                     ->getResult();
+            ->getResult();
 
         return (new PlaylistItemResource($result))->additional(['message' => 'PlaylistItem created'])
-                                                  ->response()
-                                                  ->setStatusCode(201);
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -138,7 +158,9 @@ class PlaylistItemsController extends ApiController
      *   tags={"PlaylistItemsController"},
      *   path="/api/playlist_items/{playlist_item}",
      *   summary="Get single playlist_item",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -146,17 +168,22 @@ class PlaylistItemsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="playlist_item",
      *     parameter="playlist_item",
      *     description="PlaylistItem id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -169,27 +196,30 @@ class PlaylistItemsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Display the specified resource.
      *
-     * @param  PlaylistItem  $record
      * @return PlaylistItemResource
      */
     public function show(PlaylistItem $record)
     {
         $result = PlaylistItemService::show($record)
-                                     ->getResult();
+            ->getResult();
 
         return (new PlaylistItemResource($result))->additional(['message' => 'PlaylistItem read']);
     }
@@ -199,10 +229,14 @@ class PlaylistItemsController extends ApiController
      *   tags={"PlaylistItemsController"},
      *   path="/api/playlist_items/{playlist_item}",
      *   summary="Update an existing playlist_item",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/PlaylistItemRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -210,17 +244,22 @@ class PlaylistItemsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="playlist_item",
      *     parameter="playlist_item",
      *     description="PlaylistItem id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -233,28 +272,30 @@ class PlaylistItemsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Update the specified resource in storage.
      *
-     * @param  PlaylistItemRequest  $request
-     * @param  PlaylistItem  $record
      * @return PlaylistItemResource
      */
     public function update(PlaylistItemRequest $request, PlaylistItem $record)
     {
         $result = PlaylistItemService::update($record, $request)
-                                     ->getResult();
+            ->getResult();
 
         return (new PlaylistItemResource($result))->additional(['message' => 'PlaylistItem updated']);
     }
@@ -264,7 +305,9 @@ class PlaylistItemsController extends ApiController
      *   tags={"PlaylistItemsController"},
      *   path="/api/playlist_items/{playlist_item}",
      *   summary="Delete a playlist_item",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -272,17 +315,22 @@ class PlaylistItemsController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="playlist_item",
      *     parameter="playlist_item",
      *     description="PlaylistItem id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -290,20 +338,27 @@ class PlaylistItemsController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   ),
+     *
      *   @OA\Response(
      *     response="400",
      *     description="Bad request",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -315,13 +370,12 @@ class PlaylistItemsController extends ApiController
      *
      * Remove the specified resource from storage.
      *
-     * @param  PlaylistItem  $record
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(PlaylistItem $record)
     {
         $result = PlaylistItemService::delete($record)
-                                     ->getResult();
+            ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'PlaylistItem deleted']);

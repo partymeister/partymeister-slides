@@ -20,9 +20,9 @@ class ScreenshotCallbackController extends ApiController
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'slideId'    => 'required|integer',
-            'class'      => 'required|string',
-            'fileName'   => 'required|string',
+            'slideId' => 'required|integer',
+            'class' => 'required|string',
+            'fileName' => 'required|string',
             'collection' => 'required|string|in:preview,final',
         ]);
 
@@ -36,7 +36,7 @@ class ScreenshotCallbackController extends ApiController
 
         if (! $model) {
             Log::warning('Screenshot callback: model not found', [
-                'class'   => $class,
+                'class' => $class,
                 'slideId' => $request->input('slideId'),
             ]);
 
@@ -78,11 +78,11 @@ class ScreenshotCallbackController extends ApiController
 
         try {
             $model->addMedia($fileName)
-                  ->toMediaCollection($collection, 'media');
+                ->toMediaCollection($collection, 'media');
         } catch (\Exception $e) {
             Log::error('Screenshot callback: failed to attach media', [
                 'slideId' => $model->id,
-                'error'   => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
 
             return response()->json(['message' => 'Failed to attach media'], 500);

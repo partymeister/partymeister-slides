@@ -24,7 +24,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 class CommunicationController extends Controller
 {
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     public function playlist(Request $request)
@@ -57,7 +56,6 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     public function playnow(Request $request)
@@ -94,7 +92,6 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     public function seek(Request $request)
@@ -127,7 +124,6 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     public function seek_continue(Request $request)
@@ -160,11 +156,9 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     public function skip(Request $request)
@@ -183,7 +177,7 @@ class CommunicationController extends Controller
                 } else {
                     return response()->json(['result' => $result]);
                 }
-            // no break
+                // no break
             case 'slidemeister-web':
                 switch ($request->get('direction')) {
                     case 'previous':
@@ -200,11 +194,9 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     public function siegmeister(Request $request)
@@ -220,7 +212,7 @@ class CommunicationController extends Controller
                 // NO SUPPORT
                 break;
             case 'slidemeister-web':
-                event(new SiegmeisterRequest());
+                event(new SiegmeisterRequest);
 
                 return response()->json(['result' => 'Siegmeister event sent']);
                 break;
@@ -228,11 +220,9 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     /**
-     * @param  Request  $request
      * @return JsonResponse
      */
     public function get_system_info(Request $request)
@@ -246,13 +236,11 @@ class CommunicationController extends Controller
     }
 
     /**
-     * @param  Request  $request
      * @return JsonResponse
      *
      * @throws InvalidArgumentException
      */
     /**
-     * @param  Request  $request
      * @return JsonResponse
      *
      * @throws InvalidArgumentException
@@ -276,7 +264,7 @@ class CommunicationController extends Controller
                 break;
             case 'slidemeister-web':
                 $result = Cache::store('redis')
-                               ->get(config('cache.prefix').':slidemeister-web.'.session('screens.active'));
+                    ->get(config('cache.prefix').':slidemeister-web.'.session('screens.active'));
                 if (! $result) {
                     return response()->json(['result' => $result], 400);
                 } else {

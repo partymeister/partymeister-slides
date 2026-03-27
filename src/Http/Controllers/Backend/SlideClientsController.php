@@ -2,10 +2,12 @@
 
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Motor\Admin\Http\Controllers\Controller;
 use Partymeister\Slides\Forms\Backend\SlideClientForm;
@@ -22,7 +24,6 @@ class SlideClientsController extends Controller
     use FormBuilderTrait;
 
     /**
-     * @param  SlideClient  $record
      * @return RedirectResponse|Redirector
      */
     public function activate(Request $request, SlideClient $record)
@@ -35,7 +36,7 @@ class SlideClientsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      *
      * @throws \ReflectionException
      */
@@ -58,8 +59,8 @@ class SlideClientsController extends Controller
     public function create()
     {
         $form = $this->form(SlideClientForm::class, [
-            'method'  => 'POST',
-            'route'   => 'backend.slide_clients.store',
+            'method' => 'POST',
+            'route' => 'backend.slide_clients.store',
             'enctype' => 'multipart/form-data',
         ]);
 
@@ -71,7 +72,6 @@ class SlideClientsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  SlideClientRequest  $request
      * @return RedirectResponse|Redirector
      */
     public function store(SlideClientRequest $request)
@@ -95,8 +95,6 @@ class SlideClientsController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param $id
      */
     public function show($id)
     {
@@ -106,16 +104,15 @@ class SlideClientsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  SlideClient  $record
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function edit(SlideClient $record)
     {
         $form = $this->form(SlideClientForm::class, [
-            'method'  => 'PATCH',
-            'url'     => route('backend.slide_clients.update', [$record->id]),
+            'method' => 'PATCH',
+            'url' => route('backend.slide_clients.update', [$record->id]),
             'enctype' => 'multipart/form-data',
-            'model'   => $record,
+            'model' => $record,
         ]);
 
         $motorShowRightSidebar = true;
@@ -126,8 +123,6 @@ class SlideClientsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  SlideClientRequest  $request
-     * @param  SlideClient  $record
      * @return RedirectResponse|Redirector
      */
     public function update(SlideClientRequest $request, SlideClient $record)
@@ -152,7 +147,6 @@ class SlideClientsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  SlideClient  $record
      * @return RedirectResponse|Redirector
      */
     public function destroy(SlideClient $record)

@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Motor\Admin\Http\Controllers\ApiController;
 use Partymeister\Slides\Http\Requests\Backend\SlideRequest;
 use Partymeister\Slides\Http\Resources\SlideCollection;
@@ -23,7 +24,9 @@ class SlidesController extends ApiController
      *   tags={"SlidesController"},
      *   path="/api/slides",
      *   summary="Get slide collection",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -31,15 +34,20 @@ class SlidesController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="array",
+     *
      *         @OA\Items(ref="#/components/schemas/SlideResource")
      *       ),
+     *
      *       @OA\Property(
      *         property="meta",
      *         ref="#/components/schemas/PaginationMeta"
@@ -55,9 +63,11 @@ class SlidesController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   )
      * )
@@ -69,7 +79,7 @@ class SlidesController extends ApiController
     public function index()
     {
         $paginator = SlideService::collection()
-                                 ->getPaginator();
+            ->getPaginator();
 
         return (new SlideCollection($paginator))->additional(['message' => 'Slide collection read']);
     }
@@ -79,10 +89,14 @@ class SlidesController extends ApiController
      *   tags={"SlidesController"},
      *   path="/api/slides",
      *   summary="Create new slide",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/SlideRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -90,10 +104,13 @@ class SlidesController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -106,31 +123,34 @@ class SlidesController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Store a newly created resource in storage.
      *
-     * @param  SlideRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(SlideRequest $request)
     {
         $result = SlideService::create($request)
-                              ->getResult();
+            ->getResult();
 
         return (new SlideResource($result))->additional(['message' => 'Slide created'])
-                                           ->response()
-                                           ->setStatusCode(201);
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -138,7 +158,9 @@ class SlidesController extends ApiController
      *   tags={"SlidesController"},
      *   path="/api/slides/{slide}",
      *   summary="Get single slide",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -146,17 +168,22 @@ class SlidesController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="slide",
      *     parameter="slide",
      *     description="Slide id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -169,27 +196,30 @@ class SlidesController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Display the specified resource.
      *
-     * @param  Slide  $record
      * @return SlideResource
      */
     public function show(Slide $record)
     {
         $result = SlideService::show($record)
-                              ->getResult();
+            ->getResult();
 
         return (new SlideResource($result))->additional(['message' => 'Slide read']);
     }
@@ -199,10 +229,14 @@ class SlidesController extends ApiController
      *   tags={"SlidesController"},
      *   path="/api/slides/{slide}",
      *   summary="Update an existing slide",
+     *
      *   @OA\RequestBody(
+     *
      *     @OA\JsonContent(ref="#/components/schemas/SlideRequest")
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -210,17 +244,22 @@ class SlidesController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="slide",
      *     parameter="slide",
      *     description="Slide id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="data",
      *         type="object",
@@ -233,28 +272,30 @@ class SlidesController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   )
      * )
      *
      * Update the specified resource in storage.
      *
-     * @param  SlideRequest  $request
-     * @param  Slide  $record
      * @return SlideResource
      */
     public function update(SlideRequest $request, Slide $record)
     {
         $result = SlideService::update($record, $request)
-                              ->getResult();
+            ->getResult();
 
         return (new SlideResource($result))->additional(['message' => 'Slide updated']);
     }
@@ -264,7 +305,9 @@ class SlidesController extends ApiController
      *   tags={"SlidesController"},
      *   path="/api/slides/{slide}",
      *   summary="Delete a slide",
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="string"),
      *     in="query",
      *     allowReserved=true,
@@ -272,17 +315,22 @@ class SlidesController extends ApiController
      *     parameter="api_token",
      *     description="Personal api_token of the user"
      *   ),
+     *
      *   @OA\Parameter(
+     *
      *     @OA\Schema(type="integer"),
      *     in="path",
      *     name="slide",
      *     parameter="slide",
      *     description="Slide id"
      *   ),
+     *
      *   @OA\Response(
      *     response=200,
      *     description="Success",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -290,20 +338,27 @@ class SlidesController extends ApiController
      *       )
      *     )
      *   ),
+     *
      *   @OA\Response(
      *     response="403",
      *     description="Access denied",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/AccessDenied"),
      *   ),
+     *
      *   @OA\Response(
      *     response="404",
      *     description="Not found",
+     *
      *     @OA\JsonContent(ref="#/components/schemas/NotFound"),
      *   ),
+     *
      *   @OA\Response(
      *     response="400",
      *     description="Bad request",
+     *
      *     @OA\JsonContent(
+     *
      *       @OA\Property(
      *         property="message",
      *         type="string",
@@ -315,13 +370,12 @@ class SlidesController extends ApiController
      *
      * Remove the specified resource from storage.
      *
-     * @param  Slide  $record
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(Slide $record)
     {
         $result = SlideService::delete($record)
-                              ->getResult();
+            ->getResult();
 
         if ($result) {
             return response()->json(['message' => 'Slide deleted']);

@@ -2,11 +2,13 @@
 
 namespace Partymeister\Slides\Http\Resources;
 
+use Illuminate\Http\Request;
 use Motor\Admin\Http\Resources\BaseResource;
 
 /**
  * @OA\Schema(
  *   schema="PlaylistResource",
+ *
  *   @OA\Property(
  *     property="id",
  *     type="integer",
@@ -34,18 +36,18 @@ class PlaylistResource extends BaseResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'id'             => (int) $this->id,
-            'name'           => $this->name,
-            'type'           => $this->type,
+            'id' => (int) $this->id,
+            'name' => $this->name,
+            'type' => $this->type,
             'is_competition' => (bool) $this->is_competition,
-            'items'          => PlaylistItemResource::collection($this->items),
-            'updated_at'     => $this->updated_at,
+            'items' => PlaylistItemResource::collection($this->items),
+            'updated_at' => $this->updated_at,
         ];
     }
 }
