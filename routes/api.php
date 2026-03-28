@@ -59,9 +59,8 @@ Route::prefix('api/v2/rpc')
             ->name('slides.screenshot-complete');
     });
 
-/**
- * Groups with token necessary
- */
+// V1 routes commented out — V2 API is the active API
+/*
 Route::group([
     'middleware' => ['auth:api', 'bindings', 'permission'],
     'prefix' => 'api',
@@ -75,9 +74,6 @@ Route::group([
     Route::apiResource('slide_clients', SlideClientsController::class);
 });
 
-/**
- * Groups without token necessary
- */
 Route::group([
     'middleware' => ['bindings'],
     'prefix' => 'api',
@@ -130,6 +126,7 @@ Route::group([
     Route::get('slide_clients/communication/playlists', [CommunicationController::class, 'get_playlists'])
         ->name('slide_clients.communication.playlists');
 });
+*/
 
 // Route::group([
 //    'middleware' => ['bindings'],
