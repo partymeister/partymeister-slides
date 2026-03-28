@@ -33,7 +33,6 @@ class SlideTemplatesController extends ApiController
             ->additional(['meta' => ['message' => 'SlideTemplates retrieved']]);
     }
 
-    /** @response 201 SlideTemplateResource */
     public function store(SlideTemplatePostRequest $request): JsonResponse
     {
         $result = SlideTemplateService::create($request)->getResult();
@@ -43,7 +42,6 @@ class SlideTemplatesController extends ApiController
             ->response()->setStatusCode(201);
     }
 
-    /** @response SlideTemplateResource */
     public function show(SlideTemplate $slideTemplate): SlideTemplateResource
     {
         $result = SlideTemplateService::show($slideTemplate)->getResult();
@@ -52,7 +50,6 @@ class SlideTemplatesController extends ApiController
             ->additional(['meta' => ['message' => 'SlideTemplate retrieved']]);
     }
 
-    /** @response SlideTemplateResource */
     public function update(SlideTemplatePatchRequest $request, SlideTemplate $slideTemplate): SlideTemplateResource
     {
         $result = SlideTemplateService::update($slideTemplate, $request)->getResult();
@@ -61,7 +58,6 @@ class SlideTemplatesController extends ApiController
             ->additional(['meta' => ['message' => 'SlideTemplate updated']]);
     }
 
-    /** @response 204 */
     public function destroy(SlideTemplate $slideTemplate): Response
     {
         $result = SlideTemplateService::delete($slideTemplate)->getResult();

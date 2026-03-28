@@ -38,7 +38,6 @@ class PlaylistsController extends ApiController
             ->additional(['meta' => ['message' => 'Playlists retrieved']]);
     }
 
-    /** @response 201 PlaylistResource */
     public function store(PlaylistPostRequest $request): JsonResponse
     {
         $result = Playlist::create($request->validated());
@@ -48,7 +47,6 @@ class PlaylistsController extends ApiController
             ->response()->setStatusCode(201);
     }
 
-    /** @response PlaylistResource */
     public function show(Playlist $playlist): PlaylistResource
     {
         $playlist->load(['items.slide.media', 'items.transition', 'items.transition_slidemeister', 'items.file_association.file']);
@@ -57,7 +55,6 @@ class PlaylistsController extends ApiController
             ->additional(['meta' => ['message' => 'Playlist retrieved']]);
     }
 
-    /** @response PlaylistResource */
     public function update(PlaylistPatchRequest $request, Playlist $playlist): PlaylistResource
     {
         $playlist->update($request->validated());
@@ -66,7 +63,6 @@ class PlaylistsController extends ApiController
             ->additional(['meta' => ['message' => 'Playlist updated']]);
     }
 
-    /** @response 204 */
     public function destroy(Playlist $playlist): Response
     {
         if ($playlist->delete()) {

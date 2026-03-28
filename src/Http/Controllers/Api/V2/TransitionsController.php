@@ -33,7 +33,6 @@ class TransitionsController extends ApiController
             ->additional(['meta' => ['message' => 'Transitions retrieved']]);
     }
 
-    /** @response 201 TransitionResource */
     public function store(TransitionPostRequest $request): JsonResponse
     {
         $result = TransitionService::create($request)->getResult();
@@ -43,7 +42,6 @@ class TransitionsController extends ApiController
             ->response()->setStatusCode(201);
     }
 
-    /** @response TransitionResource */
     public function show(Transition $transition): TransitionResource
     {
         $result = TransitionService::show($transition)->getResult();
@@ -52,7 +50,6 @@ class TransitionsController extends ApiController
             ->additional(['meta' => ['message' => 'Transition retrieved']]);
     }
 
-    /** @response TransitionResource */
     public function update(TransitionPatchRequest $request, Transition $transition): TransitionResource
     {
         $result = TransitionService::update($transition, $request)->getResult();
@@ -61,7 +58,6 @@ class TransitionsController extends ApiController
             ->additional(['meta' => ['message' => 'Transition updated']]);
     }
 
-    /** @response 204 */
     public function destroy(Transition $transition): Response
     {
         $result = TransitionService::delete($transition)->getResult();

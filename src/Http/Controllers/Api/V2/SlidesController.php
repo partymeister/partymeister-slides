@@ -33,7 +33,6 @@ class SlidesController extends ApiController
             ->additional(['meta' => ['message' => 'Slides retrieved']]);
     }
 
-    /** @response 201 SlideResource */
     public function store(SlidePostRequest $request): JsonResponse
     {
         $result = SlideService::create($request)->getResult();
@@ -43,7 +42,6 @@ class SlidesController extends ApiController
             ->response()->setStatusCode(201);
     }
 
-    /** @response SlideResource */
     public function show(Slide $slide): SlideResource
     {
         $result = SlideService::show($slide)->getResult();
@@ -52,7 +50,6 @@ class SlidesController extends ApiController
             ->additional(['meta' => ['message' => 'Slide retrieved']]);
     }
 
-    /** @response SlideResource */
     public function update(SlidePatchRequest $request, Slide $slide): SlideResource
     {
         $result = SlideService::update($slide, $request)->getResult();
@@ -61,7 +58,6 @@ class SlidesController extends ApiController
             ->additional(['meta' => ['message' => 'Slide updated']]);
     }
 
-    /** @response 204 */
     public function destroy(Slide $slide): Response
     {
         $result = SlideService::delete($slide)->getResult();
