@@ -1,5 +1,6 @@
 <?php
-
+// Legacy backend web routes commented out — backend uses V2 API
+/*
 use Illuminate\Http\Request;
 use Motor\Admin\Models\User;
 use Partymeister\Competitions\Models\Competition;
@@ -199,3 +200,4 @@ Route::get('backend/slides/render-preview/{cacheKey}', [SlidesController::class,
 //    return response($xml, 200)
 //        ->header('Content-Type', 'text/xml');    //echo $xml;
 // });
+*/
