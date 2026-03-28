@@ -14,7 +14,7 @@ use Partymeister\Slides\Models\Transition;
 use Partymeister\Slides\Services\TransitionService;
 
 /**
- * @tags Transitions
+ * @tags Slides: Transitions
  */
 class TransitionsController extends ApiController
 {

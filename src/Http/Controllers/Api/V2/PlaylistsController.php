@@ -19,7 +19,7 @@ use Partymeister\Slides\Models\Playlist;
  * written via PlaylistService::savePlaylistItems() (called by backend forms
  * and competition playlist generators, not by this controller).
  *
- * @tags Playlists
+ * @tags Slides: Playlists
  */
 class PlaylistsController extends ApiController
 {

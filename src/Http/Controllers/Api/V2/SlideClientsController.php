@@ -14,7 +14,7 @@ use Partymeister\Slides\Models\SlideClient;
 use Partymeister\Slides\Services\SlideClientService;
 
 /**
- * @tags Slide Clients
+ * @tags Slides: Slide Clients
  */
 class SlideClientsController extends ApiController
 {

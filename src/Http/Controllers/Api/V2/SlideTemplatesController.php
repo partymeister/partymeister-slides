@@ -14,7 +14,7 @@ use Partymeister\Slides\Models\SlideTemplate;
 use Partymeister\Slides\Services\SlideTemplateService;
 
 /**
- * @tags Slide Templates
+ * @tags Slides: Slide Templates
  */
 class SlideTemplatesController extends ApiController
 {

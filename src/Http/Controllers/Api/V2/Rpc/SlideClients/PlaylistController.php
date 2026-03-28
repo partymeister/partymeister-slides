@@ -10,7 +10,7 @@ use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\SlideClient;
 
 /**
- * @tags Slide Client Communication
+ * @tags Slides: Slide Client Communication
  */
 class PlaylistController extends Controller
 {

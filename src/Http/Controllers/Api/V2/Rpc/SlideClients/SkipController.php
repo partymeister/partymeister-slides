@@ -10,7 +10,7 @@ use Partymeister\Slides\Events\PlaylistPreviousRequest;
 use Partymeister\Slides\Models\SlideClient;
 
 /**
- * @tags Slide Client Communication
+ * @tags Slides: Slide Client Communication
  */
 class SkipController extends Controller
 {

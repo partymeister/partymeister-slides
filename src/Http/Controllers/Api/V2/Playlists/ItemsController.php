@@ -7,7 +7,7 @@ use Partymeister\Slides\Http\Resources\V2\PlaylistItemCollection;
 use Partymeister\Slides\Models\Playlist;
 
 /**
- * @tags Playlists
+ * @tags Slides: Playlists
  */
 class ItemsController extends Controller
 {

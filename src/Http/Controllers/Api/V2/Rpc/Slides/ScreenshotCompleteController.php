@@ -11,7 +11,7 @@ use Partymeister\Slides\Models\Slide;
 use Partymeister\Slides\Models\SlideTemplate;
 
 /**
- * @tags Screenshots
+ * @tags Slides: Screenshots
  */
 class ScreenshotCompleteController extends Controller
 {

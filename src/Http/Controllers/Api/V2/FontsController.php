@@ -6,7 +6,7 @@ use Illuminate\Routing\Controller;
 use Partymeister\Slides\Http\Resources\V2\FontCollection;
 
 /**
- * @tags Fonts
+ * @tags Slides: Fonts
  */
 class FontsController extends Controller
 {
