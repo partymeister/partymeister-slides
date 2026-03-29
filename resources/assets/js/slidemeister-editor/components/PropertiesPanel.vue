@@ -321,13 +321,14 @@ function setMode(mode: 'resize' | 'warp'): void {
 
 <style scoped>
 .properties-panel {
-  width: 300px;
+  width: 100%;
   background: #1e1e1e;
   color: #ddd;
   font-size: 12px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-y: auto;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   border-left: 1px solid #333;
   user-select: none;
 }

@@ -1,6 +1,7 @@
+import { ref } from 'vue'
 import { setActivePinia, createPinia } from 'pinia'
 import { usePlaylistStore } from '@/stores/playlistStore'
-import { usePlaylistEngine, type StatusCallback } from '@/composables/usePlaylistEngine'
+import { usePlaylistEngine } from '@/composables/usePlaylistEngine'
 import { createPlaylist, resetPlaylistIdCounter } from '../../fixtures/playlists'
 import { createPlaylistItem, resetItemIdCounter } from '../../fixtures/items'
 import type { PlaylistItem } from '@/types/playlist'
@@ -41,13 +42,20 @@ function createMockCables() {
   }
 }
 
+function createMockSlideLayerRef() {
+  return ref({
+    transition: vi.fn(),
+    setDisplayed: vi.fn(),
+  })
+}
+
 // ── Helpers ─────────────────────────────────────────────────────────
 
 function setupEngine(opts: {
   itemCount?: number
   itemOverrides?: Partial<PlaylistItem>
   playlistOverrides?: Record<string, any>
-  statusCallback?: StatusCallback
+  statusCallback?: () => void
 } = {}) {
   const { itemCount = 3, itemOverrides = {}, playlistOverrides = {}, statusCallback } = opts
 
@@ -55,6 +63,7 @@ function setupEngine(opts: {
   const storage = createMockStorage()
   const midi = createMockMidi()
   const cables = createMockCables()
+  const slideLayerRef = createMockSlideLayerRef()
 
   const items: PlaylistItem[] = []
   for (let i = 0; i < itemCount; i++) {
@@ -71,10 +80,11 @@ function setupEngine(opts: {
     storage as any,
     midi as any,
     cables as any,
+    slideLayerRef as any,
     statusCallback,
   )
 
-  return { store, storage, midi, cables, engine, playlist, items }
+  return { store, storage, midi, cables, slideLayerRef, engine, playlist, items }
 }
 
 // ── Tests ───────────────────────────────────────────────────────────
@@ -202,65 +212,12 @@ describe('usePlaylistEngine', () => {
       expect(store.currentItemIndex).toBe(1)
     })
 
-    it('should always use hard transition', () => {
-      const { store, storage, cables, engine } = setupEngine()
+    it('should update cables for the target item', () => {
+      const { cables, engine } = setupEngine()
 
       engine.seekToIndex(2)
 
-      // Hard transition: cables.updateForSlideType is called
       expect(cables.updateForSlideType).toHaveBeenCalled()
-      // And afterSeek is called immediately (storage.save proves it)
-      expect(storage.save).toHaveBeenCalledWith('currentItem', 2)
-    })
-  })
-
-  // ── Transitions ─────────────────────────────────────────────────
-
-  describe('prepareTransition', () => {
-    it('should call afterSeek immediately for hard transitions', () => {
-      const { store, storage, engine } = setupEngine()
-      store.currentItemIndex = 1
-
-      engine.prepareTransition(true)
-
-      // afterSeek persists to storage
-      expect(storage.save).toHaveBeenCalledWith('currentItem', 1)
-    })
-
-    it('should delay 250ms then set transition ready for soft transitions', () => {
-      const { engine, storage } = setupEngine()
-
-      engine.prepareTransition(false)
-
-      // Not yet - 250ms has not elapsed
-      expect(engine.isTransitioning.value).toBe(true)
-      expect(storage.save).not.toHaveBeenCalled()
-
-      vi.advanceTimersByTime(250)
-
-      // After 250ms the animation should be ready, but afterSeek is NOT called
-      // until onTransitionComplete is called by the component
-      expect(storage.save).not.toHaveBeenCalled()
-    })
-
-    it('should set isTransitioning to true during soft transition', () => {
-      const { engine } = setupEngine()
-
-      engine.prepareTransition(false)
-
-      expect(engine.isTransitioning.value).toBe(true)
-    })
-
-    it('should set isTransitioning to false after transition completes', () => {
-      const { engine } = setupEngine()
-
-      engine.prepareTransition(false)
-      expect(engine.isTransitioning.value).toBe(true)
-
-      vi.advanceTimersByTime(250)
-      engine.onTransitionComplete()
-
-      expect(engine.isTransitioning.value).toBe(false)
     })
   })
 
@@ -333,7 +290,7 @@ describe('usePlaylistEngine', () => {
       const fetchSpy = vi.fn().mockResolvedValue(new Response())
       vi.stubGlobal('fetch', fetchSpy)
 
-      const { store, engine, playlist } = setupEngine({
+      const { store, engine } = setupEngine({
         itemOverrides: { callback_hash: 'abc123', callback_delay: 2 },
         playlistOverrides: { callbacks: true, callback_url: 'http://localhost/cb/' },
       })
@@ -347,7 +304,7 @@ describe('usePlaylistEngine', () => {
       // Allow microtask queue to flush
       await vi.advanceTimersByTimeAsync(0)
 
-      expect(fetchSpy).toHaveBeenCalledWith('http://localhost/cb/abc123')
+      expect(fetchSpy).toHaveBeenCalledWith('http://localhost/cb/abc123', expect.anything())
 
       vi.unstubAllGlobals()
     })
@@ -483,7 +440,7 @@ describe('usePlaylistEngine', () => {
       vi.advanceTimersByTime(3000)
       await vi.advanceTimersByTimeAsync(0)
 
-      expect(fetchSpy).toHaveBeenCalledWith('http://localhost/cb/xyz')
+      expect(fetchSpy).toHaveBeenCalledWith('http://localhost/cb/xyz', expect.anything())
 
       vi.unstubAllGlobals()
     })
@@ -493,7 +450,7 @@ describe('usePlaylistEngine', () => {
 
   describe('seekToPlayNow', () => {
     it('should enter playNow mode and transition to playNow item', () => {
-      const { store, cables, engine } = setupEngine()
+      const { store, cables, slideLayerRef, engine } = setupEngine()
 
       const playNowItem = createPlaylistItem({ id: 99 })
       engine.seekToPlayNow(playNowItem)
@@ -501,14 +458,13 @@ describe('usePlaylistEngine', () => {
       expect(store.playNow).toBe(true)
       expect(store.playNowItems).toHaveLength(1)
       expect(store.playNowItems[0].id).toBe(99)
-      // A soft transition was initiated
       expect(cables.updateForSlideType).toHaveBeenCalled()
-      expect(engine.isTransitioning.value).toBe(true)
+      expect(slideLayerRef.value.transition).toHaveBeenCalled()
     })
   })
 
   describe('clearPlayNowAfter', () => {
-    it('should exit playNow after next transition completes', () => {
+    it('should exit playNow after onTransitionComplete is called', () => {
       const { store, engine } = setupEngine()
 
       const playNowItem = createPlaylistItem({ id: 99 })
@@ -517,9 +473,7 @@ describe('usePlaylistEngine', () => {
       engine.setClearPlayNowAfter()
       expect(engine.clearPlayNowAfter.value).toBe(true)
 
-      // Simulate a soft transition followed by completion
-      engine.prepareTransition(false)
-      vi.advanceTimersByTime(250)
+      // Simulate transition completion
       engine.onTransitionComplete()
 
       expect(store.playNow).toBe(false)

@@ -87,13 +87,15 @@ describe('useKeyboard', () => {
     expect(deps.triggerSiegmeister).not.toHaveBeenCalled()
   })
 
-  it('should cycle debugTier on d key: 0 -> 1 -> 2 -> 0', () => {
+  it('should toggle debugTier 1 on d key and tier 2 on D key', () => {
     expect(keyboard.debugTier.value).toBe(0)
     pressKey('d')
     expect(keyboard.debugTier.value).toBe(1)
     pressKey('d')
+    expect(keyboard.debugTier.value).toBe(0)
+    pressKey('D')
     expect(keyboard.debugTier.value).toBe(2)
-    pressKey('d')
+    pressKey('D')
     expect(keyboard.debugTier.value).toBe(0)
   })
 

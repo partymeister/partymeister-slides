@@ -201,7 +201,7 @@ defineExpose({
 }
 
 .slide-element.active {
-  outline: 2px solid #4a9eff;
+  /* Moveable provides the selection UI; no extra outline needed */
 }
 
 .slide-element.hover:not(.active) {

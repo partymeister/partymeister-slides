@@ -15,7 +15,6 @@ const emit = defineEmits<{
   undo: []
   redo: []
   save: []
-  preview: []
   'toggle-snap-guides': []
 }>()
 
@@ -119,7 +118,6 @@ function onDelete(): void {
         :class="{ toggled: showSnapGuides }"
         title="Toggle snap guides"
       >Snap</button>
-      <button @click="$emit('preview')" class="toolbar-btn" title="Open preview in new tab">Preview</button>
     </div>
 
     <div class="toolbar-separator" />

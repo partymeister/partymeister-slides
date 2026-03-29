@@ -21,6 +21,7 @@ function createMocks() {
     cachedPlaylists: [],
     currentPlaylist: null as any,
     currentItemIndex: null as number | null,
+    getSavedPosition: vi.fn(() => undefined),
   }
   const connectionStore = {
     setConnected: vi.fn(),
@@ -63,34 +64,46 @@ function getChannel(mockEcho: MockEcho): MockEchoChannel {
 describe('useEcho', () => {
   beforeEach(() => {
     vi.useFakeTimers()
+    // Mock fetch for PlaylistRequest handler
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        data: { id: 1, name: 'Test', items: [] },
+      }),
+    }))
+    ;(globalThis as any).BASE_URL = 'http://localhost'
+    ;(globalThis as any).TOKEN = 'test-token'
   })
 
   afterEach(() => {
     vi.useRealTimers()
+    vi.unstubAllGlobals()
+    delete (globalThis as any).BASE_URL
+    delete (globalThis as any).TOKEN
   })
 
   describe('connect', () => {
-    it('should create echo instance and set connected state', () => {
+    it('should create echo instance and set connected state', async () => {
       const m = createMocks()
       const { connect, listening } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
 
       expect(m.connectionStore.setConnected).toHaveBeenCalledWith(CHANNEL)
       expect(listening.value).toBe(true)
     })
 
-    it('should set channel name based on config.client', () => {
+    it('should set channel name based on config.client', async () => {
       const m = createMocks()
       const { connect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
 
       expect(m.connectionStore.setConnected).toHaveBeenCalledWith(
         'partymeister.slidemeister-web.client-42',
@@ -99,27 +112,27 @@ describe('useEcho', () => {
   })
 
   describe('disconnect', () => {
-    it('should disconnect and set disconnected state', () => {
+    it('should disconnect and set disconnected state', async () => {
       const m = createMocks()
       const { connect, disconnect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       disconnect()
 
       expect(m.connectionStore.setDisconnected).toHaveBeenCalled()
     })
 
-    it('should set listening to false', () => {
+    it('should set listening to false', async () => {
       const m = createMocks()
       const { connect, disconnect, listening } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       expect(listening.value).toBe(true)
 
       disconnect()
@@ -128,34 +141,56 @@ describe('useEcho', () => {
   })
 
   describe('PlaylistRequest', () => {
-    it('should call playlistStore.cachePlaylist with the playlist', () => {
+    it('should fetch playlist from API and cache it', async () => {
+      // Use real timers for this test since fetch + fake timers interact poorly
+      vi.useRealTimers()
+
+      const playlist = { id: 7, name: 'Fetched', items: [] }
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ data: playlist }),
+      }))
+
       const m = createMocks()
       const { connect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
-      const playlist = { id: 1, name: 'Test', items: [], callbacks: false, callback_url: '', updated_at: { date: '2025-01-01' } }
-      channel.emit('.Partymeister\\Slides\\Events\\PlaylistRequest', { playlist })
+      channel.emit('.Partymeister\\Slides\\Events\\PlaylistRequest', {
+        playlist_id: 7,
+        callbacks: false,
+        callback_url: '',
+      })
 
-      expect(m.playlistStore.cachePlaylist).toHaveBeenCalledWith(playlist)
+      // Flush all microtasks
+      await new Promise(r => setTimeout(r, 10))
+
+      expect(m.playlistStore.cachePlaylist).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 7, name: 'Fetched' }),
+      )
+
+      vi.useFakeTimers()
     })
 
-    it('should record event on connectionStore', () => {
+    it('should record event on connectionStore', async () => {
       const m = createMocks()
       const { connect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
-      const playlist = { id: 1, name: 'Test', items: [], callbacks: false, callback_url: '', updated_at: { date: '2025-01-01' } }
-      channel.emit('.Partymeister\\Slides\\Events\\PlaylistRequest', { playlist })
+      channel.emit('.Partymeister\\Slides\\Events\\PlaylistRequest', {
+        playlist_id: 1,
+        callbacks: false,
+        callback_url: '',
+      })
 
       expect(m.connectionStore.recordEvent).toHaveBeenCalled()
     })
@@ -169,7 +204,7 @@ describe('useEcho', () => {
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       channel.emit('.Partymeister\\Slides\\Events\\PlaylistSeekRequest', {
@@ -193,7 +228,7 @@ describe('useEcho', () => {
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       channel.emit('.Partymeister\\Slides\\Events\\PlaylistSeekRequest', {
@@ -216,7 +251,7 @@ describe('useEcho', () => {
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       channel.emit('.Partymeister\\Slides\\Events\\PlaylistSeekRequest', {
@@ -231,14 +266,14 @@ describe('useEcho', () => {
   })
 
   describe('PlaylistNextRequest', () => {
-    it('should call engine.seekToNext with hard flag', () => {
+    it('should call engine.seekToNext with hard flag', async () => {
       const m = createMocks()
       const { connect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       channel.emit('.Partymeister\\Slides\\Events\\PlaylistNextRequest', { hard: true })
@@ -246,7 +281,7 @@ describe('useEcho', () => {
       expect(m.engine.seekToNext).toHaveBeenCalledWith(true)
     })
 
-    it('should exit playNow if active', () => {
+    it('should exit playNow if active', async () => {
       const m = createMocks()
       m.playlistStore.playNow = true
 
@@ -255,7 +290,7 @@ describe('useEcho', () => {
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       channel.emit('.Partymeister\\Slides\\Events\\PlaylistNextRequest', { hard: false })
@@ -266,14 +301,14 @@ describe('useEcho', () => {
   })
 
   describe('PlaylistPreviousRequest', () => {
-    it('should call engine.seekToPrevious with hard flag', () => {
+    it('should call engine.seekToPrevious with hard flag', async () => {
       const m = createMocks()
       const { connect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       channel.emit('.Partymeister\\Slides\\Events\\PlaylistPreviousRequest', { hard: true })
@@ -283,14 +318,14 @@ describe('useEcho', () => {
   })
 
   describe('PlayNowRequest', () => {
-    it('should build item from slide payload and call engine.seekToPlayNow', () => {
+    it('should build item from slide payload and call engine.seekToPlayNow', async () => {
       const m = createMocks()
       const { connect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       channel.emit('.Partymeister\\Slides\\Events\\PlayNowRequest', {
@@ -317,14 +352,14 @@ describe('useEcho', () => {
       )
     })
 
-    it('should build item from image payload with file_association', () => {
+    it('should build item from image payload with file_association', async () => {
       const m = createMocks()
       const { connect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       const file = { url: 'https://example.com/image.png' }
@@ -347,14 +382,14 @@ describe('useEcho', () => {
   })
 
   describe('SiegmeisterRequest', () => {
-    it('should call siegmeisterTrigger', () => {
+    it('should call siegmeisterTrigger', async () => {
       const m = createMocks()
       const { connect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       channel.emit('.Partymeister\\Slides\\Events\\SiegmeisterRequest', {})
@@ -362,14 +397,14 @@ describe('useEcho', () => {
       expect(m.siegmeisterTrigger).toHaveBeenCalled()
     })
 
-    it('should debounce with 2000ms cooldown', () => {
+    it('should debounce with 2000ms cooldown', async () => {
       const m = createMocks()
       const { connect } = useEcho(
         m.playlistStore, m.connectionStore, m.engine,
         m.siegmeisterTrigger, m.storage, m.echoFactory,
       )
 
-      connect(serverConfig)
+      await connect(serverConfig)
       const channel = getChannel(m.getMockEcho())
 
       // First call goes through

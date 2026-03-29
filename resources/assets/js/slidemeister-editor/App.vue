@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import Moveable from 'vue3-moveable'
 import { useEditorStore } from '@/stores/editorStore'
 import { useHistory } from '@/composables/useHistory'
@@ -153,6 +153,19 @@ function onResizeLive(e: Parameters<typeof moveable.onResize>[0]): void {
   }
 }
 
+// Keep Moveable in sync whenever the active element's geometry changes (e.g. undo/redo)
+watch(
+  () => {
+    const el = editorStore.activeElement
+    if (!el) return null
+    const c = el.properties.coordinates
+    return `${c.transform}|${c.width}|${c.height}`
+  },
+  () => {
+    nextTick(() => moveableRef.value?.updateRect())
+  },
+)
+
 // When a property changes in PropertiesPanel, recalculate text if it affects sizing
 const TEXT_AFFECTING_PROPS = [
   'properties.fontSize', 'properties.fontFamily', 'properties.fontWeight',
@@ -229,8 +242,8 @@ function onNudge(dx: number, dy: number): void {
 
 // Keyboard shortcuts
 useEditorKeyboard({
-  undo: () => history.undo(),
-  redo: () => history.redo(),
+  undo: () => { history.undo(); nextTick(() => moveableRef.value?.updateRect()) },
+  redo: () => { history.redo(); nextTick(() => moveableRef.value?.updateRect()) },
   save: () => onSave(),
   cloneElement: () => {
     if (editorStore.activeElementName) {
@@ -298,58 +311,6 @@ async function onSave(): Promise<void> {
   }
 }
 
-// Preview: open serialized HTML in a new tab
-function openPreview(): void {
-  const html = serializeElements(editorStore.elements)
-
-  // Collect all font stylesheet links from current page
-  const fontLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
-    .map(l => l.outerHTML)
-    .join('\n')
-
-  // Collect any @font-face rules from existing stylesheets
-  const fontFaceRules: string[] = []
-  try {
-    for (const sheet of document.styleSheets) {
-      try {
-        for (const rule of sheet.cssRules) {
-          if (rule instanceof CSSFontFaceRule) {
-            fontFaceRules.push(rule.cssText)
-          }
-        }
-      } catch { /* cross-origin stylesheet, skip */ }
-    }
-  } catch { /* no access */ }
-
-  const fullHtml = `<!doctype html>
-<html><head>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
-.slide { position: relative; width: 960px; height: 540px; transform-origin: top left; overflow: hidden; }
-${fontFaceRules.join('\n')}
-</style>
-${fontLinks}
-</head><body>
-<div class="slide">${html}</div>
-<script>
-var s = document.querySelector('.slide');
-function fit() {
-  var sx = window.innerWidth / 960, sy = window.innerHeight / 540;
-  var scale = Math.min(sx, sy);
-  s.style.transform = 'scale(' + scale + ')';
-  s.style.position = 'absolute';
-  s.style.left = ((window.innerWidth - 960 * scale) / 2) + 'px';
-  s.style.top = ((window.innerHeight - 540 * scale) / 2) + 'px';
-}
-fit();
-window.addEventListener('resize', fit);
-<\/script>
-</body></html>`
-  const blob = new Blob([fullHtml], { type: 'text/html' })
-  const url = URL.createObjectURL(blob)
-  window.open(url, '_blank')
-}
 
 // Apply image from media panel to active element (or create new element)
 function onApplyImage(url: string): void {
@@ -376,8 +337,14 @@ function onDeleteElement(name: string): void {
   editorStore.deleteElement(name)
 }
 
+// Update Moveable overlay when window resizes
+function onWindowResize(): void {
+  moveableRef.value?.updateRect()
+}
+
 // Load entity on mount based on EDITOR_MODE
 onMounted(async () => {
+  window.addEventListener('resize', onWindowResize)
   if (editorMode === 'start') return
   fonts.fetchFonts()
   if (editorMode === 'template' && entityId) {
@@ -395,6 +362,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  window.removeEventListener('resize', onWindowResize)
   textEditor.destroy()
 })
 </script>
@@ -416,10 +384,10 @@ onUnmounted(() => {
       :redo-description="history.redoDescription.value"
       :checkpoint="() => history.checkpoint('Toolbar action')"
       :show-snap-guides="showSnapGuides"
-      @undo="history.undo"
-      @redo="history.redo"
+      @undo="() => { history.undo(); nextTick(() => moveableRef.value?.updateRect()) }"
+      @redo="() => { history.redo(); nextTick(() => moveableRef.value?.updateRect()) }"
       @save="onSave"
-      @preview="openPreview"
+
       @toggle-snap-guides="showSnapGuides = !showSnapGuides"
     />
 
@@ -495,6 +463,25 @@ onUnmounted(() => {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #555 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
 }
 
 html, body, #app {
@@ -570,7 +557,7 @@ html, body, #app {
 
 .sidebar-content {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   min-height: 0;

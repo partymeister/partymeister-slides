@@ -108,20 +108,32 @@ onBeforeUnmount(() => {
 <style scoped>
 .layers-panel {
   border-top: 1px solid #333;
-  padding: 8px;
+  /* Show ~5 layer items max before scrolling */
+  max-height: 190px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .panel-title {
   font-size: 12px;
   text-transform: uppercase;
   color: #888;
-  margin: 0 0 8px;
+  margin: 0;
+  padding: 8px 8px 8px;
+  position: sticky;
+  top: 0;
+  background: #1e1e1e;
+  z-index: 1;
 }
 
 .layer-list {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  padding: 0 8px 8px;
 }
 
 .layer-item {
