@@ -9,7 +9,6 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Motor\Media\Http\Resources\FileResource;
 use Motor\Media\Models\File;
-use Partymeister\Slides\Http\Resources\SlideResource;
 use Partymeister\Slides\Models\Slide;
 
 /**
@@ -47,11 +46,13 @@ class PlayNowRequest implements ShouldBroadcastNow
                 $this->item = $data;
                 break;
             case 'slide':
-                $file = Slide::find($item);
-                $data = (new SlideResource($file))->toArrayRecursive();
-                $data['type'] = 'image';
-                $data['playnow_type'] = 'slide';
-                $this->item = $data;
+                $slide = Slide::find($item);
+                $this->item = [
+                    'type' => 'image',
+                    'playnow_type' => 'slide',
+                    'slide_type' => $slide->slide_type,
+                    'cached_html_final' => $slide->cached_html_final,
+                ];
                 break;
         }
     }
