@@ -27,6 +27,7 @@ export interface PlaylistPreviousRequestEvent {
 export interface PlayNowItemPayload {
   playnow_type: 'slide' | 'image'
   type: 'image' | 'video'
+  slide_id?: number
   cached_html_final?: string
   file?: import('./playlist').SlideFile
   slide_type?: import('./playlist').SlideType

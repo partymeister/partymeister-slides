@@ -198,11 +198,30 @@ export function useEcho(
     })
 
     // PlayNowRequest - payload wraps item in e.item
-    channel.listen('.Partymeister\\Slides\\Events\\PlayNowRequest', (e: PlayNowRequestEvent) => {
+    channel.listen('.Partymeister\\Slides\\Events\\PlayNowRequest', async (e: PlayNowRequestEvent) => {
       try {
         console.log('[Echo] PlayNowRequest', e)
         connectionStore.recordEvent()
         logEvent?.('socket', `PlayNow (${e.item.playnow_type})`)
+
+        // For slides, fetch full data from API (payload only contains slide_id to stay under WS size limit)
+        if (e.item.playnow_type === 'slide' && e.item.slide_id) {
+          const baseUrl = (globalThis as any).BASE_URL
+          const token = (globalThis as any).TOKEN
+          const response = await fetch(`${baseUrl}/api/slides/${e.item.slide_id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          if (!response.ok) {
+            console.error('[Echo] Failed to fetch slide for PlayNow', e.item.slide_id, response.status)
+            logEvent?.('error', `PlayNow slide fetch failed: ${response.status}`)
+            return
+          }
+          const json = await response.json()
+          const slide = json.data
+          e.item.slide_type = slide.slide_type ?? ''
+          e.item.cached_html_final = slide.cached_html_final ?? ''
+        }
+
         const item = buildPlayNowItem(e.item)
         engine.seekToPlayNow(item)
       } catch (err) {

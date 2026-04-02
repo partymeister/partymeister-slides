@@ -9,7 +9,6 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Motor\Media\Http\Resources\FileResource;
 use Motor\Media\Models\File;
-use Partymeister\Slides\Models\Slide;
 
 /**
  * Class PlayNowRequest
@@ -46,12 +45,10 @@ class PlayNowRequest implements ShouldBroadcastNow
                 $this->item = $data;
                 break;
             case 'slide':
-                $slide = Slide::find($item);
                 $this->item = [
                     'type' => 'image',
                     'playnow_type' => 'slide',
-                    'slide_type' => $slide->slide_type,
-                    'cached_html_final' => $slide->cached_html_final,
+                    'slide_id' => $item,
                 ];
                 break;
         }
