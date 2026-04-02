@@ -208,18 +208,31 @@ export function useEcho(
         if (e.item.playnow_type === 'slide' && e.item.slide_id) {
           const baseUrl = (globalThis as any).BASE_URL
           const token = (globalThis as any).TOKEN
-          const response = await fetch(`${baseUrl}/api/slides/${e.item.slide_id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          if (!response.ok) {
-            console.error('[Echo] Failed to fetch slide for PlayNow', e.item.slide_id, response.status)
-            logEvent?.('error', `PlayNow slide fetch failed: ${response.status}`)
+          const controller = new AbortController()
+          const timeoutId = setTimeout(() => controller.abort(), 10000)
+
+          try {
+            const response = await fetch(`${baseUrl}/api/slides/${e.item.slide_id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+              signal: controller.signal,
+            })
+            clearTimeout(timeoutId)
+
+            if (!response.ok) {
+              console.error('[Echo] Failed to fetch slide for PlayNow', e.item.slide_id, response.status)
+              logEvent?.('error', `PlayNow slide fetch failed: ${response.status}`)
+              return
+            }
+            const json = await response.json()
+            const slide = json.data
+            e.item.slide_type = slide.slide_type ?? ''
+            e.item.cached_html_final = slide.cached_html_final ?? ''
+          } catch (fetchErr) {
+            clearTimeout(timeoutId)
+            console.error('[Echo] PlayNow slide fetch error:', fetchErr)
+            logEvent?.('error', `PlayNow slide fetch error: ${fetchErr}`)
             return
           }
-          const json = await response.json()
-          const slide = json.data
-          e.item.slide_type = slide.slide_type ?? ''
-          e.item.cached_html_final = slide.cached_html_final ?? ''
         }
 
         const item = buildPlayNowItem(e.item)
