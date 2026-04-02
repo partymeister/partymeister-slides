@@ -70,7 +70,7 @@ export interface Playlist {
   name: string
   callbacks: boolean
   callback_url: string
-  updated_at: PlaylistTimestamp
+  updated_at: PlaylistTimestamp | string
   items: PlaylistItem[]
 }
 

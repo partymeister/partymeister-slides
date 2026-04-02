@@ -10,7 +10,7 @@ export function createPlaylist(overrides: Partial<Playlist> = {}): Playlist {
     name: `Test Playlist ${id}`,
     callbacks: true,
     callback_url: 'http://localhost/callback/',
-    updated_at: { date: '2025-01-01 00:00:00' },
+    updated_at: '2025-01-01T00:00:00.000000Z',
     items: [createPlaylistItem(), createPlaylistItem(), createPlaylistItem()],
     ...overrides,
   }

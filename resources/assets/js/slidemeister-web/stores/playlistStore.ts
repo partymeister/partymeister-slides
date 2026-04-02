@@ -73,29 +73,20 @@ export const usePlaylistStore = defineStore('playlist', () => {
     const existingIndex = cachedPlaylists.value.findIndex((p) => p.id === playlist.id)
 
     if (existingIndex >= 0) {
+      // Preserve callback metadata if not present in new data (comes from WebSocket event, not API)
       const existing = cachedPlaylists.value[existingIndex]
+      if (playlist.callbacks === undefined) playlist.callbacks = existing.callbacks
+      if (playlist.callback_url === undefined) playlist.callback_url = existing.callback_url
 
-      // Always update callback metadata (comes from WebSocket event, not API)
-      if (playlist.callbacks !== undefined) {
-        existing.callbacks = playlist.callbacks
-        if (currentPlaylist.value?.id === playlist.id) currentPlaylist.value.callbacks = playlist.callbacks
-      }
-      if (playlist.callback_url !== undefined) {
-        existing.callback_url = playlist.callback_url
-        if (currentPlaylist.value?.id === playlist.id) currentPlaylist.value.callback_url = playlist.callback_url
-      }
+      cachedPlaylists.value[existingIndex] = playlist
 
-      if (existing.updated_at.date !== playlist.updated_at.date) {
-        cachedPlaylists.value[existingIndex] = playlist
+      // Hot-swap if this is the active playlist
+      if (currentPlaylist.value?.id === playlist.id) {
+        currentPlaylist.value = playlist
+        items.value = playlist.items
 
-        // Hot-swap if this is the active playlist
-        if (currentPlaylist.value?.id === playlist.id) {
-          currentPlaylist.value = playlist
-          items.value = playlist.items
-
-          if (currentItemIndex.value !== null && currentItemIndex.value >= items.value.length) {
-            currentItemIndex.value = Math.max(0, items.value.length - 1)
-          }
+        if (currentItemIndex.value !== null && currentItemIndex.value >= items.value.length) {
+          currentItemIndex.value = Math.max(0, items.value.length - 1)
         }
       }
     } else {

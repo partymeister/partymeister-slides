@@ -53,24 +53,24 @@ describe('playlistStore', () => {
       expect(store.cachedPlaylists).toHaveLength(2)
     })
 
-    it('should update an existing playlist when updated_at changes', () => {
+    it('should always update an existing playlist with fresh data', () => {
       const store = usePlaylistStore()
       const playlist = createPlaylist({ name: 'Original' })
       store.cachePlaylist(playlist)
-      const updated = { ...playlist, name: 'Updated', updated_at: { date: '2025-02-01 00:00:00' } }
+      const updated = { ...playlist, name: 'Updated' }
       store.cachePlaylist(updated)
       expect(store.cachedPlaylists).toHaveLength(1)
       expect(store.cachedPlaylists[0].name).toBe('Updated')
     })
 
-    it('should not update when updated_at has not changed', () => {
+    it('should preserve callback metadata from existing cache when not in new data', () => {
       const store = usePlaylistStore()
-      const playlist = createPlaylist({ name: 'Original' })
+      const playlist = createPlaylist({ callbacks: true, callback_url: 'http://example.com/cb' })
       store.cachePlaylist(playlist)
-      const sameTimestamp = { ...playlist, name: 'Should Not Update' }
-      store.cachePlaylist(sameTimestamp)
-      expect(store.cachedPlaylists).toHaveLength(1)
-      expect(store.cachedPlaylists[0].name).toBe('Original')
+      const updated = { ...playlist, name: 'Updated', callbacks: undefined, callback_url: undefined }
+      store.cachePlaylist(updated as any)
+      expect(store.cachedPlaylists[0].callbacks).toBe(true)
+      expect(store.cachedPlaylists[0].callback_url).toBe('http://example.com/cb')
     })
 
     it('should hot-swap items when the active playlist is updated', () => {
@@ -79,7 +79,7 @@ describe('playlistStore', () => {
       store.cachePlaylist(playlist)
       store.setActivePlaylist(playlist.id)
       const newItems = [createPlaylistItem(), createPlaylistItem()]
-      const updated = { ...playlist, items: newItems, updated_at: { date: '2025-02-01 00:00:00' } }
+      const updated = { ...playlist, items: newItems }
       store.cachePlaylist(updated)
       expect(store.items).toHaveLength(2)
     })
@@ -90,7 +90,7 @@ describe('playlistStore', () => {
       store.cachePlaylist(playlist)
       store.setActivePlaylist(playlist.id)
       store.currentItemIndex = 2
-      const updated = { ...playlist, items: [createPlaylistItem()], updated_at: { date: '2025-02-01 00:00:00' } }
+      const updated = { ...playlist, items: [createPlaylistItem()] }
       store.cachePlaylist(updated)
       expect(store.currentItemIndex).toBe(0)
     })
@@ -102,7 +102,7 @@ describe('playlistStore', () => {
       store.setActivePlaylist(playlist.id)
       store.currentItemIndex = 1
       const newItems = [createPlaylistItem(), createPlaylistItem(), createPlaylistItem()]
-      const updated = { ...playlist, items: newItems, updated_at: { date: '2025-02-01 00:00:00' } }
+      const updated = { ...playlist, items: newItems }
       store.cachePlaylist(updated)
       expect(store.currentItemIndex).toBe(1)
     })
