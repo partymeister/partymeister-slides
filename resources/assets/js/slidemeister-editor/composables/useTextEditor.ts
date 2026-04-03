@@ -27,10 +27,15 @@ export function useTextEditor(
     checkpoint()
     editingElementName.value = elementName
 
+    // Strip any auto-linked <a> tags from previous edits
+    const cleanContent = (el.properties.content || '').replace(/<a[^>]*>(.*?)<\/a>/gi, '$1')
+
     editor.value = new Editor({
-      content: el.properties.content,
+      content: cleanContent,
       extensions: [
-        StarterKit,
+        StarterKit.configure({
+          link: false,  // Disable auto-linking of URLs
+        }),
         TextAlign.configure({ types: ['heading', 'paragraph'] }),
         TextStyle,
         Color,

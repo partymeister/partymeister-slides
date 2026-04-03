@@ -221,6 +221,7 @@ defineExpose({
   box-sizing: border-box;
   word-wrap: break-word;
   overflow: hidden;
+  min-height: 100%;
 }
 
 /* EditorContent wrapper must not add extra spacing */
@@ -253,12 +254,9 @@ defineExpose({
   font-size: inherit;
 }
 
-/* Empty paragraphs: ProseMirror adds <br> + <br class="ProseMirror-trailingBreak">
-   inside empty <p> tags, inflating their height. Hide the trailing break so
-   it matches the collapsed height that v-html gives empty <p> tags. */
-.slide-element.editing :deep(.ProseMirror p > br.ProseMirror-trailingBreak) {
-  display: none;
-}
+/* ProseMirror adds <br class="ProseMirror-trailingBreak"> in empty paragraphs
+   to give them height for cursor placement. Keep them visible so Enter
+   creates visible empty lines and users can type in empty elements. */
 
 .slide-element.editing :deep(.ProseMirror h1),
 .slide-element.editing :deep(.ProseMirror h2),
