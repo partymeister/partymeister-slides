@@ -58,8 +58,9 @@ export function useTextEditor(
   function stopEditing(): void {
     if (!editor.value || !editingElementName.value) return
 
-    // Save content back to store
-    const html = editor.value.getHTML()
+    // Save content back to store — insert <br> in empty paragraphs so they
+    // keep their line height when rendered via v-html outside the editor
+    const html = editor.value.getHTML().replace(/<p><\/p>/g, '<p><br></p>')
     editorStore.updateElementProperty(
       editingElementName.value,
       'properties.content',

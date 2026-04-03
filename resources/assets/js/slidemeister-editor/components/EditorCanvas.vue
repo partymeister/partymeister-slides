@@ -224,6 +224,17 @@ defineExpose({
   min-height: 100%;
 }
 
+/* Ensure empty <p> tags have line height in both edit and display mode */
+.element-content p:empty,
+.element-content p:has(> br:only-child) {
+  min-height: 1em;
+}
+
+.element-content p {
+  margin: 0;
+  padding: 0;
+}
+
 /* EditorContent wrapper must not add extra spacing */
 .slide-element.editing > :deep(div) {
   width: 100%;
