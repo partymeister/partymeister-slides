@@ -634,20 +634,15 @@ class PlaylistService extends BaseService
             $i->playlist_id = $this->record->id;
             $i->type = (isset($item->type) ? $item->type : $this->getType($item));
 
-            if (isset($item->transition_identifier)) {
-                $transition = Transition::where('identifier', $item->transition_identifier)
-                                        ->first();
-            } else {
-                $transition = Transition::where('identifier', 255)
-                                        ->first();
-            }
-            if (isset($item->transition_slidemeister_identifier)) {
-                $transitionSlidemeister = Transition::where('identifier', $item->transition_slidemeister_identifier)
-                                                    ->first();
-            } else {
-                $transitionSlidemeister = Transition::where('identifier', 255)
-                                                    ->first();
-            }
+            $transitionIdentifier = isset($item->transition->identifier) ? $item->transition->identifier : (isset($item->transition_identifier) ? $item->transition_identifier : 255);
+            $transition = Transition::where('client_type', 'screens')
+                                    ->where('identifier', $transitionIdentifier)
+                                    ->first();
+
+            $slidemeisterIdentifier = isset($item->transition_slidemeister->identifier) ? $item->transition_slidemeister->identifier : (isset($item->transition_slidemeister_identifier) ? $item->transition_slidemeister_identifier : 255);
+            $transitionSlidemeister = Transition::where('client_type', 'slidemeister-web')
+                                                ->where('identifier', $slidemeisterIdentifier)
+                                                ->first();
 
             if (isset($item->overwrite_slide_type) && $item->overwrite_slide_type != '') {
                 $i->slide_type = $item->overwrite_slide_type;
