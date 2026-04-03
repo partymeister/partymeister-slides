@@ -271,16 +271,21 @@ async function onSave(): Promise<void> {
     const defs = editorStore.toDefinitions()
 
     if (editorStore.editorMode === 'slide') {
-      const payload = {
+      const payload: Record<string, unknown> = {
         name: editorStore.templateName,
         definitions: JSON.stringify(defs),
         cached_html_preview: html,
         cached_html_final: html,
       }
       if (editorStore.entityId !== null) {
-        await api.saveSlide(editorStore.entityId, payload)
+        await api.saveSlide(editorStore.entityId, payload as any)
       } else {
-        const response = await api.createSlide(payload)
+        if (editorStore.slideTemplateId !== null) {
+          const typeMap: Record<string, string> = { coming_up: 'comingup', now: 'now', end: 'end', basic: 'default', competition: 'compo' }
+          payload.slide_template_id = editorStore.slideTemplateId
+          payload.slide_type = typeMap[editorStore.templateType] || 'default'
+        }
+        const response = await api.createSlide(payload as any)
         editorStore.entityId = response.id
         window.location.href = `/slidemeister-editor/slide/${response.id}`
         return

@@ -11,6 +11,7 @@ export const useEditorStore = defineStore('editor', () => {
   const entityId = ref<number | null>(null)
   const editorMode = ref<'template' | 'slide'>('template')
   const templateId = ref<number | null>(null)
+  const slideTemplateId = ref<number | null>(null)
   const templateName = ref('')
   const templateType = ref<TemplateType>('basic')
 
@@ -170,8 +171,10 @@ export const useEditorStore = defineStore('editor', () => {
     const defs: SlideDefinitions = JSON.parse(response.definitions)
     loadDefinitions(defs)
     entityId.value = null
+    slideTemplateId.value = templateId_
     editorMode.value = 'slide'
     templateName.value = `New slide from ${response.name}`
+    templateType.value = response.template_for || 'basic'
   }
 
   async function loadSlideFromApi(id: number): Promise<void> {
@@ -213,6 +216,7 @@ export const useEditorStore = defineStore('editor', () => {
     entityId,
     editorMode,
     templateId,
+    slideTemplateId,
     templateName,
     templateType,
 

@@ -68,8 +68,9 @@ class SlideTemplatesController extends Controller
     {
         $newRecord = $record->replicate();
         $newRecord->name = 'Duplicate of '.$newRecord->name;
+        $newRecord->save();
 
-        return $this->create($newRecord);
+        return redirect()->route('backend.slidemeister-editor.template', ['slide_template' => $newRecord->id]);
     }
 
     /**
