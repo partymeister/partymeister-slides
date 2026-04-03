@@ -6,10 +6,9 @@
     @php
         $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
         $cssFile = $manifest['packages/partymeister-slides/resources/assets/sass/partymeister-slide-renderer.scss']['file'] ?? null;
-        $internalBase = rtrim(config('app.url_internal', config('app.url')), '/');
     @endphp
     @if($cssFile)
-        <link rel="stylesheet" href="{{ $internalBase }}/build/{{ $cssFile }}" />
+        <link rel="stylesheet" href="/build/{{ $cssFile }}" />
     @endif
 
     <style type="text/css">
@@ -65,7 +64,16 @@
         @if ($preview == 'true')
             {!! $record->cached_html_preview !!}
         @else
-            {!! str_replace('/media/',config('partymeister-slides.screens_url').'/media/', $record->cached_html_final) !!}
+            @php
+                // Only prefix relative /media/ paths — skip those already containing a scheme (http/https)
+                $screensUrl = config('partymeister-slides.screens_url');
+                $html = preg_replace(
+                    '#url\((["\']?)(?!https?://)(/media/)#',
+                    'url($1' . $screensUrl . '$2',
+                    $record->cached_html_final
+                );
+            @endphp
+            {!! $html !!}
         @endif
     @endif
 </div>

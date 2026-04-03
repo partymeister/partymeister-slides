@@ -4,10 +4,9 @@
     @php
         $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
         $cssFile = $manifest['packages/partymeister-slides/resources/assets/sass/partymeister-slide-renderer.scss']['file'] ?? null;
-        $internalBase = rtrim(config('app.url_internal', config('app.url')), '/');
     @endphp
     @if($cssFile)
-        <link rel="stylesheet" href="{{ $internalBase }}/build/{{ $cssFile }}" />
+        <link rel="stylesheet" href="/build/{{ $cssFile }}" />
     @endif
     <style>
         body { background: transparent !important; margin: 0; overflow: hidden; }
