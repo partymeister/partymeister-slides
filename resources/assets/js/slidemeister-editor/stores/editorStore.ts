@@ -12,6 +12,7 @@ export const useEditorStore = defineStore('editor', () => {
   const editorMode = ref<'template' | 'slide'>('template')
   const templateId = ref<number | null>(null)
   const slideTemplateId = ref<number | null>(null)
+  const categoryId = ref<number | null>(null)
   const templateName = ref('')
   const templateType = ref<TemplateType>('basic')
 
@@ -175,6 +176,25 @@ export const useEditorStore = defineStore('editor', () => {
     editorMode.value = 'slide'
     templateName.value = `New slide from ${response.name}`
     templateType.value = response.template_for || 'basic'
+
+    // Fetch categories and default to "Announce"
+    try {
+      const res = await api.request<{ data: any[] }>('GET', '/api/category_trees?scope=slides')
+      const trees = res.data || []
+      const slidesTree = trees.find((t: any) => /^slides$/i.test(t.name))
+      const flat = flattenTree(slidesTree?.children || trees)
+      const announce = flat.find((c: any) => /announce/i.test(c.name))
+      categoryId.value = announce?.id || flat[0]?.id || null
+    } catch { /* category will be null */ }
+  }
+
+  function flattenTree(nodes: any[]): { id: number; name: string }[] {
+    const result: { id: number; name: string }[] = []
+    for (const node of nodes) {
+      result.push({ id: node.id, name: node.name })
+      if (node.children?.length) result.push(...flattenTree(node.children))
+    }
+    return result
   }
 
   async function loadSlideFromApi(id: number): Promise<void> {
@@ -217,6 +237,7 @@ export const useEditorStore = defineStore('editor', () => {
     editorMode,
     templateId,
     slideTemplateId,
+    categoryId,
     templateName,
     templateType,
 

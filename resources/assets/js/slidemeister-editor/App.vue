@@ -284,6 +284,7 @@ async function onSave(): Promise<void> {
           const typeMap: Record<string, string> = { coming_up: 'comingup', now: 'now', end: 'end', basic: 'default', competition: 'compo' }
           payload.slide_template_id = editorStore.slideTemplateId
           payload.slide_type = typeMap[editorStore.templateType] || 'default'
+          payload.category_id = editorStore.categoryId
         }
         const response = await api.createSlide(payload as any)
         editorStore.entityId = response.id
