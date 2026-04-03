@@ -27,11 +27,6 @@
                         </div>
                         <div>
                             {{ $t('partymeister-slides.backend.playlists.transition') }}
-                            <select name="transition_id" v-model="file.transition.identifier">
-                                <option v-for="(transition, tIndex) in transitions" :key="transition.identifier" :value="transition.identifier">
-                                    {{ transition.name }}
-                                </option>
-                            </select>
                             <select name="transition_slidemeister_id" v-model="file.transition_slidemeister.identifier">
                                 <option v-for="(transition, tIndex) in slidemeisterTransitions" :key="transition.identifier" :value="transition.identifier">
                                     {{ transition.name }}
@@ -90,7 +85,6 @@ function IsJsonString(str) {
 }
 
 const droppedFiles = ref([]);
-const transitions = ref([]);
 const slidemeisterTransitions = ref([]);
 const callbacks = ref([]);
 const slideTypes = ref([
@@ -197,9 +191,7 @@ onMounted(() => {
 
     axios.get(route('ajax.transitions.index')).then((response) => {
         for (const [index, transition] of response.data.data.entries()) {
-            if (transition.client_type === 'screens') {
-                transitions.value.push(transition);
-            } else {
+            if (transition.client_type === 'slidemeister-web') {
                 slidemeisterTransitions.value.push(transition);
             }
         }
