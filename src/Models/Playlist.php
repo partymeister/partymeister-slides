@@ -97,6 +97,6 @@ class Playlist extends Model
      */
     public function items()
     {
-        return $this->hasMany(PlaylistItem::class);
+        return $this->hasMany(PlaylistItem::class)->orderBy('sort_position');
     }
 }
