@@ -48,6 +48,14 @@ Route::group(['middleware' => ['web', 'web_auth', 'bindings']], function () {
         ]);
     })->name('backend.slidemeister-editor.template');
 
+    Route::get('slidemeister-editor/create-from-template/{slide_template}', function (\Partymeister\Slides\Models\SlideTemplate $slideTemplate) {
+        return view('partymeister-slides::slidemeister-editor.index', [
+            'editor_mode' => 'create_from_template',
+            'entity_id' => $slideTemplate->id,
+            'api_token' => auth()->user()->api_token,
+        ]);
+    })->name('backend.slidemeister-editor.create-from-template');
+
     Route::get('slidemeister-editor/slide/{slide}', function (\Partymeister\Slides\Models\Slide $slide) {
         return view('partymeister-slides::slidemeister-editor.index', [
             'editor_mode' => 'slide',

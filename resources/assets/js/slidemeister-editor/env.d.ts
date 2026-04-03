@@ -8,6 +8,6 @@ declare module '*.vue' {
 interface Window {
   TOKEN: string
   BASE_URL: string
-  EDITOR_MODE: 'start' | 'template' | 'slide'
+  EDITOR_MODE: 'start' | 'template' | 'slide' | 'create_from_template'
   ENTITY_ID: number | null
 }

@@ -165,6 +165,15 @@ export const useEditorStore = defineStore('editor', () => {
     templateName.value = response.name
   }
 
+  async function loadTemplateAsNewSlide(templateId_: number): Promise<void> {
+    const response = await api.getTemplate(templateId_)
+    const defs: SlideDefinitions = JSON.parse(response.definitions)
+    loadDefinitions(defs)
+    entityId.value = null
+    editorMode.value = 'slide'
+    templateName.value = `New slide from ${response.name}`
+  }
+
   async function loadSlideFromApi(id: number): Promise<void> {
     const response = await api.getSlide(id)
     const defs: SlideDefinitions = JSON.parse(response.definitions)
@@ -241,6 +250,7 @@ export const useEditorStore = defineStore('editor', () => {
 
     // Persistence
     loadFromApi,
+    loadTemplateAsNewSlide,
     loadSlideFromApi,
     saveToApi,
   }

@@ -349,6 +349,8 @@ onMounted(async () => {
   fonts.fetchFonts()
   if (editorMode === 'template' && entityId) {
     await editorStore.loadFromApi(entityId)
+  } else if (editorMode === 'create_from_template' && entityId) {
+    await editorStore.loadTemplateAsNewSlide(entityId)
   } else if (editorMode === 'slide' && entityId) {
     await editorStore.loadSlideFromApi(entityId)
   }
