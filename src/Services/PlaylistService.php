@@ -99,11 +99,12 @@ class PlaylistService extends BaseService
             $duration = config('partymeister-competitions-slides.'.$type.'.duration', 20);
             $isAdvancedManually = config('partymeister-competitions-slides.'.$type.'.is_advanced_manually', true);
 
-            $transition = Transition::where('identifier', $transitionIdentifier)
+            $transition = Transition::where('client_type', 'screens')
+                                    ->where('identifier', $transitionIdentifier)
                                     ->first();
 
             $transitionSlidemeister = Transition::where('client_type', 'slidemeister-web')
-                                                ->where('identifier', 255)
+                                                ->where('identifier', $transitionIdentifier)
                                                 ->first();
 
             $callback = null;
@@ -263,11 +264,12 @@ class PlaylistService extends BaseService
             $duration = config('partymeister-competitions-slides.'.$type.'.duration', 20);
             $isAdvancedManually = config('partymeister-competitions-slides.'.$type.'.is_advanced_manually', true);
 
-            $transition = Transition::where('identifier', $transitionIdentifier)
+            $transition = Transition::where('client_type', 'screens')
+                                    ->where('identifier', $transitionIdentifier)
                                     ->first();
 
             $transitionSlidemeister = Transition::where('client_type', 'slidemeister-web')
-                                                ->where('identifier', 255)
+                                                ->where('identifier', $transitionIdentifier)
                                                 ->first();
 
             $callback = null;
@@ -495,17 +497,20 @@ class PlaylistService extends BaseService
             $duration = config('partymeister-competitions-slides.'.$type.'.duration', 20);
             $isAdvancedManually = config('partymeister-competitions-slides.'.$type.'.is_advanced_manually', true);
 
-            $transition = Transition::where('identifier', $transitionIdentifier)
+            $transition = Transition::where('client_type', 'screens')
+                                    ->where('identifier', $transitionIdentifier)
                                     ->first();
 
             $transitionSlidemeister = Transition::where('client_type', 'slidemeister-web')
-                                                ->where('identifier', 255)
+                                                ->where('identifier', $transitionIdentifier)
                                                 ->first();
 
             $callback = null;
 
             switch ($type) {
                 case 'comingup':
+                    $callback = CallbackHelper::eventStarts($event);
+                    // fall through
                 case 'now':
                 case 'end':
                 case 'default':

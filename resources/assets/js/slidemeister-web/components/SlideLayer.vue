@@ -75,9 +75,15 @@ const incomingRef = ref<InstanceType<typeof SlideRenderer> | null>(null)
 let inFlight = false
 let safetyTimeout: ReturnType<typeof setTimeout> | null = null
 
-function getTransitionPair(_identifier?: string): [string, string] {
-  // TODO: restore identifier-based lookup after debugging
-  return DEFAULT_TRANSITION // always crossfade for now
+function getTransitionPair(identifier?: string): [string, string] {
+  if (identifier === '255') {
+    const keys = Object.keys(TRANSITION_MAP)
+    return TRANSITION_MAP[keys[Math.floor(Math.random() * keys.length)]]
+  }
+  if (identifier !== undefined && TRANSITION_MAP[identifier]) {
+    return TRANSITION_MAP[identifier]
+  }
+  return DEFAULT_TRANSITION
 }
 
 /**
