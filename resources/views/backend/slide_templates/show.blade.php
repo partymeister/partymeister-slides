@@ -3,7 +3,6 @@
     @include('partymeister-slides::layouts.partials.slide_fonts')
     {{-- Slim CSS: bootstrap reboot + animate.css + slidemeister rules (~88KB vs 466KB) --}}
     {{-- Load via both APP_URL (browser) and APP_URL_INTERNAL (screenshot containers) --}}
-    @vite(['packages/partymeister-slides/resources/assets/sass/partymeister-slide-renderer.scss'])
     @php
         $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
         $cssFile = $manifest['packages/partymeister-slides/resources/assets/sass/partymeister-slide-renderer.scss']['file'] ?? null;
