@@ -27,8 +27,11 @@ export function useTextEditor(
     checkpoint()
     editingElementName.value = elementName
 
-    // Strip any auto-linked <a> tags from previous edits
-    const cleanContent = (el.properties.content || '').replace(/<a[^>]*>(.*?)<\/a>/gi, '$1')
+    // Strip auto-linked <a> tags and <br> from empty paragraphs (we add
+    // <br> back on save for v-html display; TipTap would double them)
+    const cleanContent = (el.properties.content || '')
+      .replace(/<a[^>]*>(.*?)<\/a>/gi, '$1')
+      .replace(/<p><br\s*\/?><\/p>/gi, '<p></p>')
 
     editor.value = new Editor({
       content: cleanContent,
