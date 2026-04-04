@@ -141,6 +141,11 @@ export function useEcho(
           }
         }
 
+        // Clear playNow state when switching to a playlist
+        if (playlistStore.playNow) {
+          playlistStore.exitPlayNow()
+        }
+
         const found = playlistStore.setActivePlaylist(e.playlist_id)
         if (!found) {
           console.warn('[Echo] PlaylistSeekRequest: playlist not found in cache', e.playlist_id)
