@@ -75,10 +75,12 @@ const incomingRef = ref<InstanceType<typeof SlideRenderer> | null>(null)
 let inFlight = false
 let safetyTimeout: ReturnType<typeof setTimeout> | null = null
 
+// Calm transitions only for random mode — no rotate, bounce, flip, wobble, roll
+const RANDOM_POOL: string[] = ['0', '2', '5', '6', '8']
+
 function getTransitionPair(identifier?: string): [string, string] {
   if (identifier === '255') {
-    const keys = Object.keys(TRANSITION_MAP)
-    return TRANSITION_MAP[keys[Math.floor(Math.random() * keys.length)]]
+    return TRANSITION_MAP[RANDOM_POOL[Math.floor(Math.random() * RANDOM_POOL.length)]]
   }
   if (identifier !== undefined && TRANSITION_MAP[identifier]) {
     return TRANSITION_MAP[identifier]
