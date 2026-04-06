@@ -132,7 +132,14 @@ function triggerSiegmeister() {
     try { metadata = JSON.parse(metadata) } catch { return }
   }
 
-  if (!Array.isArray(metadata)) return
+  // Handle both array format and legacy object format (keyed by element name)
+  if (!Array.isArray(metadata)) {
+    if (typeof metadata === 'object' && metadata !== null) {
+      metadata = Object.values(metadata)
+    } else {
+      return
+    }
+  }
 
   const container = siegmeisterOverlayRef.value?.containerRef
   if (!container) return

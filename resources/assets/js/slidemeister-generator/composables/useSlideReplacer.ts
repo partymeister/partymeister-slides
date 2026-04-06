@@ -542,10 +542,10 @@ function generateSlideWithMeta(
 }
 
 function collectBarCoordinates(elements: Record<string, SlideElement>): string {
-  const coords: Record<string, PrizegivingBarCoordinates> = {}
-  for (const [name, el] of Object.entries(elements)) {
+  const coords: PrizegivingBarCoordinates[] = []
+  for (const el of Object.values(elements)) {
     if (el.properties.prizegivingbarCoordinates) {
-      coords[name] = el.properties.prizegivingbarCoordinates
+      coords.push(el.properties.prizegivingbarCoordinates)
     }
   }
   return JSON.stringify(coords)
