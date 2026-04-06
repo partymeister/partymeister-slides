@@ -125,24 +125,38 @@ const engine = usePlaylistEngine(
 
 function triggerSiegmeister() {
   const item = playlistStore.effectiveCurrentItem
-  if (!item?.metadata) return
+  console.log('[Siegmeister] item:', item?.slide_type, 'metadata:', item?.metadata)
+  if (!item?.metadata) {
+    console.warn('[Siegmeister] No metadata on current item')
+    return
+  }
 
   let metadata = item.metadata
   if (typeof metadata === 'string') {
-    try { metadata = JSON.parse(metadata) } catch { return }
+    try { metadata = JSON.parse(metadata) } catch (e) {
+      console.warn('[Siegmeister] Failed to parse metadata:', e)
+      return
+    }
   }
 
   // Handle both array format and legacy object format (keyed by element name)
   if (!Array.isArray(metadata)) {
     if (typeof metadata === 'object' && metadata !== null) {
+      console.log('[Siegmeister] Converting object metadata to array')
       metadata = Object.values(metadata)
     } else {
+      console.warn('[Siegmeister] Metadata is not array or object:', typeof metadata)
       return
     }
   }
 
+  console.log('[Siegmeister] Bar count:', metadata.length, 'bars:', metadata)
+
   const container = siegmeisterOverlayRef.value?.containerRef
-  if (!container) return
+  if (!container) {
+    console.warn('[Siegmeister] No container ref')
+    return
+  }
 
   // Clear any existing bars before rendering new ones
   siegmeister.clearBars(container)
