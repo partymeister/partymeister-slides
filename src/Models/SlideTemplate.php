@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Kra8\Snowflake\HasShortflakePrimary;
+use Mattiverse\Userstamps\Traits\Userstamps;
 use Motor\Admin\Models\User;
 use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
 use Motor\Core\Traits\Searchable;
 use Partymeister\Slides\Database\Factories\SlideTemplateFactory;
-use RichanFongdasen\EloquentBlameable\BlameableTrait;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -63,12 +63,12 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class SlideTemplate extends Model implements HasMedia
 {
-    use BlameableTrait;
     use Filterable;
     use HasFactory;
     use HasShortflakePrimary;
     use InteractsWithMedia;
     use Searchable;
+    use Userstamps;
 
     protected static function newFactory()
     {
