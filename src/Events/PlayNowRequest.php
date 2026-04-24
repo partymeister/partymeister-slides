@@ -22,15 +22,9 @@ class PlayNowRequest implements ShouldBroadcastNow
      */
     public $item;
 
-    /**
-     * Create a new event instance.
-     *
-     * PlayNowRequest constructor.
-     *
-     * @param $type
-     * @param $item
-     */
-    public function __construct($type, $item)
+    private ?int $slideClientId;
+
+    public function __construct($type, $item, ?int $slideClientId = null)
     {
         switch ($type) {
             case 'file':
@@ -52,15 +46,13 @@ class PlayNowRequest implements ShouldBroadcastNow
                 ];
                 break;
         }
+        $this->slideClientId = $slideClientId;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array
-     */
     public function broadcastOn(): array
     {
-        return [new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'))];
+        $clientId = $this->slideClientId ?? session('screens.active');
+
+        return [new Channel(config('cache.prefix').'.slidemeister-web.'.$clientId)];
     }
 }

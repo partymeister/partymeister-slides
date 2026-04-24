@@ -26,27 +26,19 @@ class PlaylistSeekRequest implements ShouldBroadcastNow
      */
     public $index;
 
-    /**
-     * Create a new event instance.
-     *
-     * PlaylistSeekRequest constructor.
-     *
-     * @param  Playlist  $playlist
-     * @param    $index
-     */
-    public function __construct(Playlist $playlist, $index = false)
+    private ?int $slideClientId;
+
+    public function __construct(Playlist $playlist, $index = false, ?int $slideClientId = null)
     {
         $this->playlist_id = $playlist->id;
         $this->index = $index;
+        $this->slideClientId = $slideClientId;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array
-     */
     public function broadcastOn(): array
     {
-        return [new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'))];
+        $clientId = $this->slideClientId ?? session('screens.active');
+
+        return [new Channel(config('cache.prefix').'.slidemeister-web.'.$clientId)];
     }
 }

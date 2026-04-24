@@ -15,22 +15,17 @@ class SiegmeisterRequest implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     *
-     * PlaylistNextRequest constructor.
-     */
-    public function __construct()
+    private ?int $slideClientId;
+
+    public function __construct(?int $slideClientId = null)
     {
+        $this->slideClientId = $slideClientId;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array
-     */
     public function broadcastOn(): array
     {
-        return [new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'))];
+        $clientId = $this->slideClientId ?? session('screens.active');
+
+        return [new Channel(config('cache.prefix').'.slidemeister-web.'.$clientId)];
     }
 }

@@ -20,25 +20,18 @@ class PlaylistNextRequest implements ShouldBroadcastNow
      */
     public $hard = false;
 
-    /**
-     * Create a new event instance.
-     *
-     * PlaylistNextRequest constructor.
-     *
-     * @param  bool  $hard
-     */
-    public function __construct($hard = false)
+    private ?int $slideClientId;
+
+    public function __construct($hard = false, ?int $slideClientId = null)
     {
         $this->hard = $hard;
+        $this->slideClientId = $slideClientId;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array
-     */
     public function broadcastOn(): array
     {
-        return [new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'))];
+        $clientId = $this->slideClientId ?? session('screens.active');
+
+        return [new Channel(config('cache.prefix').'.slidemeister-web.'.$clientId)];
     }
 }

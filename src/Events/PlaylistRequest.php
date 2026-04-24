@@ -22,26 +22,20 @@ class PlaylistRequest implements ShouldBroadcastNow
 
     public string $callback_url;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param  Playlist  $playlist
-     * @param    $callbacks
-     */
-    public function __construct(Playlist $playlist, $callbacks)
+    private ?int $slideClientId;
+
+    public function __construct(Playlist $playlist, $callbacks, ?int $slideClientId = null)
     {
         $this->playlist_id = $playlist->id;
         $this->callbacks = $callbacks;
         $this->callback_url = config('app.url').'/api-rpc/callback/';
+        $this->slideClientId = $slideClientId;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array
-     */
     public function broadcastOn(): array
     {
-        return [new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'))];
+        $clientId = $this->slideClientId ?? session('screens.active');
+
+        return [new Channel(config('cache.prefix').'.slidemeister-web.'.$clientId)];
     }
 }

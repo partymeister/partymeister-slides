@@ -14,6 +14,8 @@ use Partymeister\Slides\Http\Controllers\Api\PlaylistItemsController;
 use Partymeister\Slides\Http\Controllers\Api\TransitionsController;
 use Partymeister\Slides\Http\Controllers\Api\SlideClientsController;
 use Partymeister\Slides\Http\Controllers\Api\SlideClients\CommunicationController;
+use Partymeister\Slides\Http\Controllers\Api\SlideClients\ControlController;
+use Partymeister\Slides\Http\Middleware\VerifySlidemeisterControlToken;
 use Partymeister\Slides\Services\XMLService;
 
 /**
@@ -30,6 +32,43 @@ Route::group([
     Route::apiResource('playlist_items', PlaylistItemsController::class);
     Route::apiResource('transitions', TransitionsController::class);
     Route::apiResource('slide_clients', SlideClientsController::class);
+});
+
+/**
+ * External slidemeister control API.
+ *
+ * Shared-token authentication via X-Slidemeister-Token header.
+ * Intended for third-party operator webapps that drive the viewer
+ * without an admin session. SlideClient taken from route binding,
+ * not from session('screens.active').
+ */
+Route::group([
+    'middleware' => ['bindings', VerifySlidemeisterControlToken::class],
+    'prefix'     => 'api',
+    'as'         => 'api.slidemeister-control.',
+], function () {
+    // Read surface — enough to build a UI without the admin api_token
+    Route::get('slidemeister-control/slide_clients', [ControlController::class, 'slideClients'])
+        ->name('slide_clients.index');
+    Route::get('slidemeister-control/playlists', [ControlController::class, 'playlists'])
+        ->name('playlists.index');
+    Route::get('slidemeister-control/playlists/{playlist}', [ControlController::class, 'showPlaylist'])
+        ->name('playlists.show');
+    Route::get('slidemeister-control/slides', [ControlController::class, 'slides'])
+        ->name('slides.index');
+    Route::get('slidemeister-control/slides/{slide}', [ControlController::class, 'showSlide'])
+        ->name('slides.show');
+
+    // Control surface — per slide client, stateless
+    Route::prefix('slide_clients/{slide_client}/control')->group(function () {
+        Route::get('state', [ControlController::class, 'state'])->name('state');
+        Route::post('playlist', [ControlController::class, 'playlist'])->name('playlist');
+        Route::post('playnow', [ControlController::class, 'playnow'])->name('playnow');
+        Route::post('seek', [ControlController::class, 'seek'])->name('seek');
+        Route::post('seek_continue', [ControlController::class, 'seekContinue'])->name('seek_continue');
+        Route::post('skip', [ControlController::class, 'skip'])->name('skip');
+        Route::post('siegmeister', [ControlController::class, 'siegmeister'])->name('siegmeister');
+    });
 });
 
 /**
